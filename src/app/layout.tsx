@@ -1,6 +1,20 @@
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import dynamic from "next/dynamic";
+import { cookies } from "next/headers";
+import ThemeTabs from "@/components/tabTheme";
+import { CarouselDemo } from "@/components/carousel";
+
+import { NavigationMenuDemo } from "@/components/nav";
+import { SessionProvider } from "next-auth/react";
+import Provider from "./provider";
+
+
+const AppThemeProvider = dynamic(() => import("@/components/context/theme"), {
+  ssr: false,
+});
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,9 +28,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
+  const theme = cookies().get("__theme__")?.value || "system";
+  
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" suppressHydrationWarning className={theme} style={theme !== "system" ? { colorScheme: theme } : {}}>
+
+      <body className={`${inter.className} overflow-x-hidden h-full`}>
+        <Provider>
+          {children}
+        </Provider>
+        <AppThemeProvider
+          attribute="class"
+          defaultTheme={theme}
+          enableSystem > <div className="fixed w-0 invisible"></div></AppThemeProvider>
+          
+      </body>
     </html>
   );
 }
