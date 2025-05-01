@@ -13,7 +13,7 @@ import { FaPaste } from "react-icons/fa";
 import QRCode from "react-qr-code"
 
 
-export default function DialogPayment({ data,pay,qrCodePrev,total }: { total:number,qrCodePrev?:string,pay:boolean,data?: { email: string, cpf: string, userId: string, method: string } }) {
+export default function DialogPayment({ data,pay,qrCodePrev,total }: { total:number,qrCodePrev?:string,pay:boolean,data?: { delivery:boolean,email: string, cpf: string, userId: string, method: string } }) {
   const [qrCode, setQrCode] = useState()
   const [copiado,setCopiado] = useState(false)
   const nav = useRouter()
@@ -38,7 +38,8 @@ export default function DialogPayment({ data,pay,qrCodePrev,total }: { total:num
                 products: dataT,
                 userId: data.userId,
                 total: Number(total.toFixed(2)),
-                method: data.method
+                method: data.method,
+                entrega: data.delivery
               },
               "transaction_amount": Number(total.toFixed(2)),
               "description": "Compra de suplementos",

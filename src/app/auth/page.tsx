@@ -17,7 +17,7 @@ export default function AuthPage(){
     
     <div className=" break:w-1/3 dark  sm:w-2/3 m-w-2/3  rounded-lg flex flex-col space-y-4 m-auto">
       <div className="p-3  rounded-lg">
-        <img src="/chaves.png" className="w-48 h-40 mx-auto"/>
+        
       </div>
       <div className="flex flex-col space-y-3">
         <div className="flex border outline-zinc-300 rounded-lg p-3  items-center space-x-2 w-full">

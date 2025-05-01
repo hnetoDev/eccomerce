@@ -26,11 +26,10 @@ export default function PaginationCustom({page,setPage}:{page:number,setPage:Dis
       }}> &#60; </button>
     </PaginationItem>
     <PaginationItem>
-       <div>
         <h1>
           1
         </h1>
-       </div>
+       
     </PaginationItem>
     <PaginationItem>
       <PaginationEllipsis />

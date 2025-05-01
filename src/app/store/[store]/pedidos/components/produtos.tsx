@@ -19,7 +19,7 @@ export default function ProdutosComprados({ produtos,total }: { total:number,pro
         <ScrollArea className="h-3/4">
           {produtos.map(p =>{
             return <div key={p.id} className="flex mt-3 rounded-lg dark:hover:bg-zinc-900 p-2 space-x-3">
-              <img src={`${process.env.NEXT_PUBLIC_API_URL}/public/${p.img}`} className="w-20 h-20 rounded-lg"/>
+              <img src={p.img} className="w-20 h-20 rounded-lg"/>
               <div className="">
                 <h1 className="font-extrabold">{p.name}</h1>
                 <h1 className="text-zinc-500">R$ {p.price}</h1>

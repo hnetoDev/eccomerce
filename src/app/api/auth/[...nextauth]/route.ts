@@ -17,7 +17,23 @@ const nextOptions : NextAuthOptions = {
     newUser:'/auth'
   },
   callbacks:{
-    
+    async jwt({token,user}){
+      if(user){
+        token.id = user.id
+        token.email = user.email
+        token.name = user.name
+        token.picture = user.image
+      }
+      return token;
+    },
+    async session({session,token,newSession}) {
+      if(session.user){
+        session.user.name = token.id as string
+        session.user.email = token.email as string
+     
+      }
+      return session;
+    },
     async signIn({account,profile}){
       console.log({account,profile})
       if(account?.provider === 'google'){
@@ -28,7 +44,8 @@ const nextOptions : NextAuthOptions = {
             'Content-type':'application/json'
           },body:JSON.stringify({
             profile,
-            account
+            account,
+            storeId:"cb9af065-82d3-4a8b-a696-971674f3569f"
           })
         })
         
@@ -41,8 +58,8 @@ const nextOptions : NextAuthOptions = {
     GoogleProvider({
       clientId:process.env.GOOGLE_CLIENT_ID!,
       clientSecret:process.env.GOOGLE_CLIENT_SECRET!,
-      
-    },),
+    },
+  ),
     /* CredentialsProvider({
       credentials: {
         email: {},

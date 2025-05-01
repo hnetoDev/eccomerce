@@ -1,5 +1,6 @@
 'use client'
-import InputMask from 'react-input-mask';
+
+
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -23,6 +24,7 @@ import { FaShopify } from 'react-icons/fa';
 import DialogPayment from '@/components/dialog';
 import CircularIndeterminate from '@/components/progress';
 import { useRouter } from 'next/navigation';
+import ReactInputMask from 'react-input-mask';
 
 export default function StepperCustom() {
   const router = useRouter()
@@ -38,7 +40,7 @@ export default function StepperCustom() {
   const [cartao, setCartao] = React.useState<boolean>(false)
   const form = useForm();
   const [dataUser, setDataUser] = React.useState<{
-    id: string, cpf: string, email: string, endereco: {
+    id: string, cpf: string,phone:string ,email: string, endereco: {
       cep: string,
       bairro: string,
       rua: string,
@@ -47,6 +49,7 @@ export default function StepperCustom() {
     }
   }>()
   const session = useSession();
+  alert(session.data?.user?.name)
   React.useEffect(() => {
     function getData() {
       const dataCart = localStorage.getItem('cartItem');
@@ -115,6 +118,7 @@ export default function StepperCustom() {
         body: JSON.stringify({
           id: dataUser.id,
           cpf: data.cpf,
+          phone:data.phone,
           rua: data.rua,
           bairro: data.bairro,
           cidade: data.cidade,
@@ -226,7 +230,7 @@ export default function StepperCustom() {
 
   const childrens = [
     {
-      steps: <div className='flex items-center justify-center space-x-2' key={1}><ShoppingCartIcon className='text-white w-6 h-6' /><h1 className='text-white invisible w-0 md:w-full md:visible '>Carrinho</h1></div>,
+      steps: <div className='flex items-center justify-center space-x-2' key={1}><ShoppingCartIcon className=' w-6 h-6' /><h1 className=' invisible w-0 md:w-full md:visible '>Carrinho</h1></div>,
       children: <div key={1} className="flex flex-col">
         <div className="flex break:flex-row flex-col space-y-4 break:space-y-0 justify-center items-center w-full break:space-x-4">
           <div className="break:w-1/2 space-y-2">
@@ -239,7 +243,7 @@ export default function StepperCustom() {
                 {data?.map(d => <div key={d.id} className="p-3 hover:bg-zinc-100 dark:hover:bg-zinc-900 hover:rounded-lg bg-opacity-65   w-full justify-between flex">
                   <div className="flex space-x-2 break:space-x-6 items-center  justify-between w-[70vw]">
                     <div className='flex space-x-3'>
-                      <img src={`${process.env.NEXT_PUBLIC_API_URL}/public/${d.img}`} className="break:w-24 w-20 rounded-lg" />
+                      <img src={d.img} className="break:w-24 w-20 rounded-lg" />
                       <div className="flex w-full flex-col md:flex-row md:space-x-3 items-start md:items-center break:space-x-6  justify-between">
                         <h1 className="text-md font-bold">{d.name}</h1>
                         <div className="flex space-x-1">
@@ -273,10 +277,13 @@ export default function StepperCustom() {
             <button onClick={() => {
               async function getUser() {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/findByEmail/${session.data?.user?.email}`, {
-                  method: 'GET',
+                  method: 'POST',
                   headers: {
                     'Content-type': 'application/json'
-                  }
+                  },
+                  body:JSON.stringify({
+                    storeId:"cb9af065-82d3-4a8b-a696-971674f3569f"
+                  })
                 })
                 if (res.ok) {
                   setDataUser((await res.json()))
@@ -294,7 +301,7 @@ export default function StepperCustom() {
       </div>
     },
     {
-      steps: <div className='flex items-center justify-center space-x-2' key={2}><PersonIcon className='w-6 h-6 text-white' /><h1 className='text-white w-0 invisible md:w-full md:visible'>Identificação</h1></div>,
+      steps: <div className='flex items-center justify-center space-x-2' key={2}><PersonIcon className='w-6 h-6 ' /><h1 className='w-0 invisible md:w-full md:visible'>Identificação</h1></div>,
       children: <div key={1} className="flex break:flex-row flex-col w-full space-y-2 items-center justify-center">
         <div className='flex flex-col rounded-lg break:w-1/2  items-center justify-center p-3'>
           <h1 >Perfil</h1>
@@ -358,7 +365,11 @@ export default function StepperCustom() {
         </div> : edite ? <form onSubmit={handleSubmit} className='flex space-y-2 flex-col w-full break:w-1/2'>
           <div className='w-full'>
             <h1>Digite seu CPF</h1>
-            <InputMask mask={'999.999.999-99'} type="text" {...form.register('cpf')} className='p-2 w-full bg-transparent rounded-lg border ' defaultValue={dataUser?.cpf} />
+            <ReactInputMask mask={'999.999.999-99'} type="text" {...form.register('cpf')} className='p-2 w-full bg-transparent rounded-lg border ' defaultValue={dataUser?.cpf} />
+          </div>
+          <div className='w-full'>
+            <h1>Digite seu numero</h1>
+            <ReactInputMask mask={'(99) 999999999'} type="text" {...form.register('phone')} className='p-2 w-full bg-transparent rounded-lg border ' defaultValue={dataUser?.phone} />
           </div>
           <div className='space-y-2'>
             <h1>Digite seu endereço:</h1>
@@ -388,7 +399,11 @@ export default function StepperCustom() {
         </form> :  <form onSubmit={handleSubmit} className='flex space-y-2 flex-col w-full break:w-1/2'>
           <div className='w-full'>
             <h1>Digite seu CPF</h1>
-            <InputMask mask={'999.999.999-99'} type="text" {...form.register('cpf')} className='p-2 w-full bg-transparent rounded-lg border ' />
+            <ReactInputMask mask={'999.999.999-99'} type="text" {...form.register('cpf')} className='p-2 w-full bg-transparent rounded-lg border ' />
+          </div>
+          <div className='w-full'>
+            <h1>Digite seu numero</h1>
+            <ReactInputMask mask={'(99) 999999999'} type="text" {...form.register('phone')} className='p-2 w-full bg-transparent rounded-lg border ' defaultValue={dataUser?.phone} />
           </div>
           <div className='space-y-2'>
             <h1>Digite seu endereço:</h1>
@@ -407,11 +422,33 @@ export default function StepperCustom() {
             handleSubmit(),
               handleNext()
           }}>Continuar</button>
-        </form> : <CircularIndeterminate/>}
+        </form> : <form onSubmit={handleSubmit} className='flex space-y-2 flex-col w-full break:w-1/2'>
+          <div className='w-full'>
+            <h1>Digite seu CPF</h1>
+            <ReactInputMask mask={'999.999.999-99'} type="text" {...form.register('cpf')} className='p-2 w-full bg-transparent rounded-lg border ' />
+          </div>
+          <div className='space-y-2'>
+            <h1>Digite seu endereço:</h1>
+            <div className='flex space-y-2 flex-col w-full'>
+              <p className='text-sm text-zinc-500'>Cidade:</p>
+              <input type="text" className='p-2 rounded-lg border bg-transparent '  {...form.register('cidade')} />
+              <p className='text-sm text-zinc-500'>Rua:</p>
+              <input type="text" className='p-2 rounded-lg border bg-transparent '  {...form.register('rua')} />
+              <p className='text-sm text-zinc-500'>Bairro:</p>
+              <input type="text" className='p-2 rounded-lg border bg-transparent '  {...form.register('bairro')} />
+              <p className='text-sm text-zinc-500'>Numero:</p>
+              <input type="text" maxLength={6} className='p-2 rounded-lg border bg-transparent '  {...form.register('numero')} />
+            </div>
+          </div>
+          <button type='submit' className='p-3 bg-orange-500 font-extrabold rounded-lg w-full' onClick={() => {
+            handleSubmit(),
+              handleNext()
+          }}>Continuar</button>
+        </form>}
       </div>
     },
     {
-      steps: <div className='flex items-center justify-center space-x-2' key={3}><MdPayment className='w-6 h-6 text-white' /><h1 className='text-white invisible w-0 md:w-full md:visible'>Pagamento</h1></div>,
+      steps: <div className='flex items-center justify-center space-x-2' key={3}><MdPayment className='w-6 h-6 ' /><h1 className=' invisible w-0 md:w-full md:visible'>Pagamento</h1></div>,
       children: <div key={1} className="flex flex-col space-y-4 break:w-1/2 w-full m-auto justify-center items-center">
         <h1 className='font-extrabold text-xl'>Escolha um Metodo de pagamento</h1>
         <div className='space-y-2 w-full'>
@@ -494,8 +531,8 @@ export default function StepperCustom() {
             }} />
 
 
+        {dataUser?.id ? <DialogPayment total={total} pay={true} data={{delivery:delivery,email:dataUser.email,cpf:dataUser.cpf,userId:dataUser.id,method:pix? 'pix' : dinheiro ? 'dinheiro' : 'cartao'}}/> : null}
         </div>
-        {dataUser?.id ? <DialogPayment total={total} pay={true} data={{email:dataUser.email,cpf:dataUser.cpf,userId:dataUser.id,method:pix? 'pix' : dinheiro ? 'dinheiro' : 'cartao'}}/> : null}
        
       </div >
     }

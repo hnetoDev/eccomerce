@@ -48,7 +48,7 @@ export function NavigationClient({ orientation,logged,img,data }: { data?:Collec
                 return <div key={d.id} className="flex flex-col">
                   <Link href={{pathname:`/app/collections/${d.name}`}} className="text-xl font-bold p-3 text-orange-500">{d.name}</Link>
                   <div className="flex flex-col ">
-                   {d.prods.map(p =>{
+                   {d.produtos.map(p =>{
                     return <Link href={{pathname:`/app/produtos/${p.id}`}} className="text-zinc-300 p-3 hover:bg-zinc-500 hover:bg-opacity-10" key={p.id}>{p.name}</Link>
                    })}
                   </div>
@@ -65,7 +65,7 @@ export function NavigationClient({ orientation,logged,img,data }: { data?:Collec
                 return <div key={d.id} className="flex flex-col space-y-4 space">
                   <Link href={{pathname:`/app/collections/${d.id}`}} className="text-xl font-bold p-3 text-orange-500">{d.name}</Link>
                   <div className="flex flex-col ">
-                   {d.prods.map(p =>{
+                   {d.produtos.map(p =>{
                     return <Link href={{pathname:`/app/produtos/${p.id}`}} className="text-zinc-300 p-3 hover:bg-zinc-500 hover:bg-opacity-10" key={p.id}>{p.name}</Link>
                    })}
                   </div>
