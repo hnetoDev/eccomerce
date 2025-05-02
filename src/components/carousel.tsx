@@ -37,8 +37,6 @@ export function CarouselDemo() {
           <h1 className=" text-sm text-white font-bold">Parcelado em ate 3x sem juros</h1>
         </CarouselItem>
       </CarouselContent>
-      <CarouselPrevious className="text-white" />
-      <CarouselNext className="text-white" />
     </Carousel>
   )
 }

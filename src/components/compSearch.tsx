@@ -42,7 +42,7 @@ export function ComboboxDemo() {
   }
   let time:NodeJS.Timeout;
   return (
-    <Command className="w-[80vw]">
+    <Command className="w-screen">
   <CommandInput onChangeCapture={(v)=>{
     clearTimeout(time)
     if(v.currentTarget.value.length < 1){

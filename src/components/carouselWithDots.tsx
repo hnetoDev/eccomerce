@@ -24,7 +24,7 @@ export default function CarouselWithDots() {
 
   // Função para navegar para um slide específico ao clicar no dot
   const scrollTo = useCallback(
-    (index) => emblaApi && emblaApi.scrollTo(index),
+    (index :number) => emblaApi && emblaApi.scrollTo(index),
     [emblaApi]
   );
 

@@ -43,7 +43,7 @@ export default function SheetCustom() {
     if (dataQuery) {
       setData(dataQuery.Collection)
     }
-  }, [open, dataQuery])
+  }, [dataQuery])
 
 
   const SheetCloser = ({ children }: { children: JSX.Element }) => {

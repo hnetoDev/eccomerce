@@ -160,7 +160,7 @@ export default function CartCustom({ addToCart, children, id, name, price, img, 
       </div>
       <MdOutlineShoppingBag onClick={attState} className="w-6 h-6" />
     </div>}</SheetTrigger>
-    <SheetContent side={'right'} >
+    <SheetContent side={'right'} className="w-[90vw]" >
       <SheetHeader>
         <SheetTitle><div className="flex items-center justify-center space-x-4"> <MdOutlineShoppingBag className="w-7 h-7" /><h1>Seu carrinho</h1></div></SheetTitle>
 
@@ -200,7 +200,7 @@ export default function CartCustom({ addToCart, children, id, name, price, img, 
             <h1 className="font-extrabold">R$ {total.toFixed(2)}</h1>
           </div>
           <SheetClose onClick={() => {
-            nav.push('/app/payment')
+            nav.push('/paymentTest')
           }} className="bg-orange-500 text-white font-extrabold flex justify-center items-center  w-full rounded-lg p-3">Finalizar compra</SheetClose>
         </div>
       </div>

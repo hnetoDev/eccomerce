@@ -1,11 +1,12 @@
 // app/layout.tsx
 import { getStoreData } from '@/lib/getStore'
 import { ThemeProvider } from './context'
-import { Inter } from 'next/font/google';
+import { Inter, Poppins } from 'next/font/google';
 import { Metadata } from 'next';
 import QueryProvider from './queryProvider';
+import Provider from './provider';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Poppins({ subsets: ["latin"], weight: '500' });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,10 +18,11 @@ export default async function RootLayout({ children, searchParams }: any) {
 
   return (
     <html className='overflow-x-hidden' lang="pt-BR">
-      <body className=''>
-        <QueryProvider>
+      <body className={`${inter.className}`}>
+
+        
           {children}
-        </QueryProvider>
+        
 
       </body>
     </html>

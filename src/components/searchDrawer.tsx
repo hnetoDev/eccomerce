@@ -22,7 +22,7 @@ export default function SearchDrawer(){
       <DrawerTitle></DrawerTitle>
       <DrawerDescription></DrawerDescription>
     </DrawerHeader>
-    <div className="w-full flex justify-center items-center">
+    <div className="w-screen flex justify-center items-center">
       <ComboboxDemo/>
     </div>
   </DrawerContent>
