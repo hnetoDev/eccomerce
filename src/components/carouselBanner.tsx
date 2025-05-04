@@ -67,13 +67,13 @@ export function CarouselBanner({ banner }: { banner: string[] }) {
         <CarouselContent className="break:h-[27rem] h-[22rem]  ">
           
             <CarouselItem  className=" justify-center flex items-center">
-              <img src={'aaa'} className=" rounded-xl break:h-[27rem] h-[22rem] w-full" />
+              <img src={'/images/google.png'} className=" rounded-xl break:h-[27rem] h-[22rem] w-full" />
             </CarouselItem>
             <CarouselItem  className=" justify-center flex items-center">
-              <img src={'aaa'} className=" rounded-xl break:h-[27rem] h-[22rem] w-full" />
+              <img src={'/images/banner2.jpg'} className=" rounded-xl break:h-[27rem] h-[22rem] w-full" />
             </CarouselItem>
             <CarouselItem  className=" justify-center flex items-center">
-              <img src={'aaa'} className=" rounded-xl break:h-[27rem] h-[22rem] w-full" />
+              <img src={'/images/banner3.png'} className=" rounded-xl break:h-[27rem] h-[22rem] w-full" />
             </CarouselItem>
     
 

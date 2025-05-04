@@ -44,22 +44,22 @@ export default function CarouselWithDots() {
         <div className="embla__container ">
           <div className="embla__slide  rounded-lg px-4 ">
             <div className='bg-orange-500 rounded-lg'>
-              <Image width={200} height={200} src="/banner3.png" alt="Slide 1" />
+              <Image width={2000} height={2000} src="/images/banner.png" alt="Slide 1" className=" rounded-xl break:h-[27rem] h-[22rem] w-full"  />
             </div>
           </div>
           <div className="embla__slide  rounded-lg px-4 ">
             <div className='bg-orange-500 rounded-lg'>
-              <Image width={200} height={200} src="/banner3.png" alt="Slide 1" />
+              <Image width={2000} height={2000} src="/images/banner2.jpg" alt="Slide 1" className=" rounded-xl break:h-[27rem] h-[22rem] w-full"  />
             </div>
           </div>
           <div className="embla__slide  rounded-lg px-4 ">
             <div className='bg-orange-500 rounded-lg'>
-              <Image width={200} height={200} src="/banner3.png" alt="Slide 1" />
+              <Image width={2000} height={2000} src="/images/banner3.png" alt="Slide 1" className=" rounded-xl break:h-[27rem] h-[22rem] w-full"  />
             </div>
           </div>
           <div className="embla__slide  rounded-lg px-4 ">
             <div className='bg-orange-500 rounded-lg'>
-              <Image width={200} height={200} src="/banner3.png" alt="Slide 1" />
+              <Image width={2000} height={2000} src="/images/banner3.png" alt="Slide 1"  className=" rounded-xl break:h-[27rem] h-[22rem] w-full" />
             </div>
           </div>
           

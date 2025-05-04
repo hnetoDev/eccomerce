@@ -34,7 +34,8 @@ export default function StoreHome() {
 
 
   return (
-    <div className="overflow-x-hidden" style={{ margin: '0px' }}>
+    <div className="" style={{ margin: '0px' }}>
+      <div></div>
       <div className="mt-4">
         <CarouselWithDots />
       </div>

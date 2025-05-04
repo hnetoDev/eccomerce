@@ -83,7 +83,7 @@
 
 .scrolll{
   ::-webkit-scrollbar-track {
-    background-color: #2b2a2a;
+    background-color: #691d1d;
     border-radius: 10px;
   }
 
@@ -97,6 +97,45 @@
   ::-webkit-scrollbar-thumb {
     background: #505050;
   }
+}
+
+@keyframes pushRight{
+  0%{
+    opacity: 0;
+    transform: translateX(+20px);
+  }
+  100%{
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+@keyframes pushTop{
+  0%{
+    opacity: 0;
+    transform: translateY(+30px);
+  }
+  100%{
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+@keyframes visiblee{
+  0%{
+    opacity: 0;
+
+  }
+  100%{
+    opacity: 1;
+  }
+}
+
+.visibleee{
+  animation: visiblee 0.5s ease-in-out;
+}
+
+.pushRight{
+  animation: pushRight 0.5s ease-in-out;
 }
 
 

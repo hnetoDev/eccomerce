@@ -1,7 +1,7 @@
 // app/layout.tsx
 import { getStoreData } from '@/lib/getStore'
 import { ThemeProvider } from './context'
-import { Inter, Poppins } from 'next/font/google';
+import { Inter, Poppins, Open_Sans} from 'next/font/google';
 import { Metadata } from 'next';
 import QueryProvider from './queryProvider';
 import Provider from './provider';
@@ -17,8 +17,8 @@ export default async function RootLayout({ children, searchParams }: any) {
 
 
   return (
-    <html className='overflow-x-hidden' lang="pt-BR">
-      <body className={`${inter.className}`}>
+    <html className='' lang="pt-BR">
+      <body className={`${inter.className} `}>
 
         
           {children}

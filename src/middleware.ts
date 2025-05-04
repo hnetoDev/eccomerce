@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export function middleware(req: NextRequest) {
   const host = req.headers.get('host') || ''
-  const subdomain = "test"
+  const subdomain = "teste"
   // const subdomain = host.replace('.helius.shop', '')
 
   const url = req.nextUrl.clone()
@@ -12,5 +12,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|favicon.ico).*)'],
+  matcher: ['/((?!_next|favicon.ico|images|assets|api|.*\\..*).*)'],
 }

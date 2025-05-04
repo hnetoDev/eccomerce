@@ -158,7 +158,7 @@ export default function CartCustom({ addToCart, children, id, name, price, img, 
       <div className="bg-orange-500 w-5 h-5 flex items-center justify-center absolute rounded-full p-2 -right-2 -bottom-2">
         <p className="text-sm font-bold">{data ? `${data.length}` : '0'}</p>
       </div>
-      <MdOutlineShoppingBag onClick={attState} className="w-6 h-6" />
+      <MdOutlineShoppingBag onClick={attState} className="w-6 h-6 text-muted-foreground" />
     </div>}</SheetTrigger>
     <SheetContent side={'right'} className="w-[90vw]" >
       <SheetHeader>
@@ -177,14 +177,14 @@ export default function CartCustom({ addToCart, children, id, name, price, img, 
             <img src={d.img} className="w-20  rounded-lg" />
             <div className="flex flex-col justify-between">
               <h1 className="text-md font-bold">{d.name}</h1>
-              <div className="flex space-x-1">
-                <div onClick={() => { handleDown(d.id) }} className="bg-zinc-300 border dark:bg-zinc-800 dark:hover:bg-zinc-900 dark:hover:bg-opacity-65 flex text-lg hover:bg-zinc-400 hover:cursor-pointer font-bold justify-center items-center p-1 rounded-full w-6 h-6">
+              <div className="flex border w-max rounded-xl space-x-1">
+                <div onClick={() => { handleDown(d.id) }} className=" dark:bg-zinc-800 dark:hover:bg-zinc-900 dark:hover:bg-opacity-65 flex text-lg hover:bg-zinc-400 hover:cursor-pointer font-bold justify-center items-center p-1 rounded-full w-6 h-6">
                   -
                 </div>
-                <div className="bg-zinc-300 border dark:bg-zinc-800   flex justify-center text-sm items-center p-1 rounded-full w-6 h-6">
+                <div className=" dark:bg-zinc-800   flex justify-center text-sm items-center p-1 rounded-full w-6 h-6">
                   {d.qtd}
                 </div>
-                <div onClick={() => { handleUp(d.id) }} className="bg-zinc-300 border dark:bg-zinc-800 dark:hover:bg-zinc-900 dark:hover:bg-opacity-65 flex text-lg hover:bg-zinc-400 hover:cursor-pointer  justify-center items-center p-1 rounded-full w-6 h-6">
+                <div onClick={() => { handleUp(d.id) }} className=" dark:bg-zinc-800 dark:hover:bg-zinc-900 dark:hover:bg-opacity-65 flex text-lg hover:bg-zinc-400 hover:cursor-pointer  justify-center items-center p-1 rounded-full w-6 h-6">
                   +
                 </div>
               </div>
@@ -193,11 +193,20 @@ export default function CartCustom({ addToCart, children, id, name, price, img, 
           </div>
           <IoTrashOutline onClick={() => { handleDelete(d.id) }} className="text-end hover:cursor-pointer  " />
         </div>)}</ScrollArea>}
-        <div className="w-full space-y-2
+        <div className="w-full
         ">
-          <div className="flex justify-between">
-            <h1 className="font-extrabold">Total</h1>
-            <h1 className="font-extrabold">R$ {total.toFixed(2)}</h1>
+          <div className=" rounded-t-3xl pt-3 bg-muted  mt-6">
+            <div className="flex px-3 justify-between">
+              <h1 className="">subTotal:</h1>
+              <h1 className="">R$ {total.toFixed(2)}</h1>
+            </div>
+            <div className="flex  flex-col border-t p-3 rounded-b-3xl mt-2 justify-between">
+              <p className="text-end  text-sm text-green-500">10% de desconto no PIX</p>
+              <div className="w-full flex justify-between">
+                <h1 className="font-extrabold">Total</h1>
+                <h1 className="space-x-4 "><span className="text-muted-foreground text-sm line-through">R$ {total.toFixed(2)}</span><span className="font-bold">R$ {(total - (total * 10/100)).toFixed(2)}</span></h1>
+              </div>
+            </div>
           </div>
           <SheetClose onClick={() => {
             nav.push('/paymentTest')
