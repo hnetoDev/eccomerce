@@ -50,7 +50,7 @@ export default function PaymentPage() {
   }, [])
 
 
-  return <div className="w-full dark:bg-black/60 md:bg-zinc-100 flex flex-col pb-5   justify-between pt-6 ">
+  return <div className="w-full dark:bg-black/60 md:bg-zinc-100 flex flex-col pb-5 lg:px-12 md:px-12 xl:px-28 justify-between pt-6 ">
     <div className="space-y-4">
       <div>
         <h1 className="text-center">Checkout</h1>

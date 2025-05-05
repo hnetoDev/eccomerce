@@ -147,13 +147,18 @@ export default function CartCheckout({ metodoRecebimento, total, setTotal, cep, 
         <h1 className="text-zinc-400 text-wrap text-center">Carrinho Vazio</h1>
         <h1 className="text-zinc-400 text-wrap text-center"><span className="text-blue-500"><Link href={'/'}>Adicionar itens</Link></span> para aproveitar nossas promoções</h1>
       </div>
-    </div> : <div className="border-b pb-4 w-full md:space-y-4">{data?.map(d => <div key={d.id} className="p-3 md:p-6 md:bg-background rounded-3xl  dark:hover:bg-zinc-900 hover:rounded-lg bg-opacity-65  w-full justify-between flex">
-      <div className="flex space-x-2 nd">
+    </div> : <div className="border-b pb-4 w-full md:space-y-4">{data?.map(d => <div key={d.id} className="p-3 md:p-6 w-full md:bg-background rounded-3xl  dark:hover:bg-zinc-900  bg-opacity-65  w-full justify-between flex">
+      <div className="flex space-x-2 w-full">
         <Image alt="" width={200} height={200} src={d.img} className="md:w-32 md:h-32 w-24 h-24  rounded-lg" />
-        <div className="flex flex-col justify-between">
+        <div className="flex flex-col w-full justify-between">
           <div>
             <h1 className="text-md font-bold">{d.name}</h1>
             <div className="flex items-center"><h1 className="font-extrabold text-orange-500 text-sm">R$ {Number(d.price).toFixed(2)}</h1><p className="text-sm text-zinc-500">/cada</p></div>
+          </div>
+          <div className="w-full flex  items-center space-x-4">
+            <h1 className="text-sm text-muted-foreground">Total:</h1>
+            <div className="w-full h-0.5 bg-muted"></div>
+            <h1 className="font-bold">R${Number(Number(d.price) * d.qtd).toFixed(2)}</h1>
           </div>
           <div className="flex border p-1 md:p-3 w-max rounded-lg space-x-1">
             <div onClick={() => { handleDown(d.id) }} className=" dark:hover:bg-opacity-65 flex text-lg hover:cursor-pointer font-bold justify-center items-center p-1 rounded-full w-6 h-6">
@@ -166,6 +171,7 @@ export default function CartCheckout({ metodoRecebimento, total, setTotal, cep, 
               +
             </div>
           </div>
+
         </div>
       </div>
       <XCircle onClick={() => { handleDelete(d.id) }} className="text-end w-6 h-6 text-red-600 hover:cursor-pointer  " />

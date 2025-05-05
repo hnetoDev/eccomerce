@@ -39,7 +39,7 @@ export default function CarouselProd({ images }: { images: string[] | undefined 
           {images ? images.map((image, index) => (
             <div key={index} className="embla__slide  rounded-lg ">
               <div className='rounded-lg'>
-                <Image width={200} height={200} src={image} className='w-full h-96 rounded-lg' alt="Slide 1" />
+                <Image width={800} height={800} src={image} className='w-full h-96 rounded-lg' alt="Slide 1" />
               </div>
             </div>
           )) : null}
