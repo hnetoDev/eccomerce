@@ -13,15 +13,15 @@ export default function Footer() {
       <div className="bg-orange-500  py-12">
         <h1 className="text-center text-4xl font-bold text-white ">Receba novidades da hacker man</h1>
         <div className="flex items-center justify-center space-x-2 mt-5">
-          <div className={`  duration-200 flex bg-white rounded-3xl  focus-within:border-orange-500  p-3 items-center space-x-2 w-1/2`}>
+          <div className={`  duration-200 flex bg-white rounded-3xl  focus-within:border-orange-500  py-4 md:px-8 p-3 items-center space-x-2 w-1/2`}>
             <MdOutlineEmail size={20} className="text-muted-foreground" />
             <input type="text" onChange={() => {
             }} placeholder="exemple@gmail.com" className=" bg-transparent p-0 w-full border-0 outline-0" />
           </div>
-          <button className="bg-primary text-orange-500 p-3 rounded-3xl">Enviar</button>
+          <button className="bg-primary text-orange-500 py-4 p-3 md:px-8 rounded-3xl">Enviar</button>
         </div>
       </div>
-      <div className="bg-orange-100 w-full flex flex-col ">
+      <div className="bg-orange-500/10 w-full flex flex-col ">
         <div className=" flex md:flex-row flex-col px-12   md:p-20 md:space-x-20 md:space-y-0 space-y-16 justify-between">
           <div className="md:w-1/3 flex flex-col ">
             <div className="md:w-full md:visible md:relative w-0 fixed invisible">

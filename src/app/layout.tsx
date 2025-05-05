@@ -17,8 +17,8 @@ export default async function RootLayout({ children, searchParams }: any) {
 
 
   return (
-    <html className='' lang="pt-BR">
-      <body className={`${inter.className} `}>
+    <html className=' h-screen overflow-x-hidden  w-screen' lang="pt-BR">
+      <body className={`${inter.className} h-screen overflow-x-hidden  w-screen `}>
 
         
           {children}

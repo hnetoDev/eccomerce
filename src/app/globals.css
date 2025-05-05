@@ -170,6 +170,7 @@
 
     margin: 0px;
     padding: 0px;
+    
     ::-webkit-scrollbar-track {
       background-color: #F4F4F4;
     }
