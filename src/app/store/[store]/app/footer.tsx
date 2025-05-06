@@ -10,26 +10,27 @@ import { PiXLogo } from "react-icons/pi";
 export default function Footer() {
   return (
     <div className="w-full mt-6">
-      <div className="bg-orange-500  py-12">
-        <h1 className="text-center text-4xl font-bold text-white ">Receba novidades da hacker man</h1>
+      <div className="bg-primary  py-12">
+        <h1 className="text-center text-4xl font-bold text-white ">Receba novidades da <span className="text-black">MenthosFit</span></h1>
         <div className="flex items-center justify-center space-x-2 mt-5">
-          <div className={`  duration-200 flex bg-white rounded-3xl  focus-within:border-orange-500  py-4 md:px-8 p-3 items-center space-x-2 w-1/2`}>
+          <div className={`  duration-200 flex bg-white rounded-3xl  focus-within:border-primary  py-4 md:px-8 p-3 items-center space-x-2 w-1/2`}>
             <MdOutlineEmail size={20} className="text-muted-foreground" />
             <input type="text" onChange={() => {
             }} placeholder="exemple@gmail.com" className=" bg-transparent p-0 w-full border-0 outline-0" />
           </div>
-          <button className="bg-primary text-orange-500 py-4 p-3 md:px-8 rounded-3xl">Enviar</button>
+          <button className="bg-black text-primary  py-4 p-3 md:px-8 rounded-3xl">Enviar</button>
         </div>
       </div>
-      <div className="bg-orange-500/10 w-full flex flex-col ">
+      <div className="bg-primary/10 w-full flex flex-col ">
         <div className=" flex md:flex-row flex-col px-12   md:p-20 md:space-x-20 md:space-y-0 space-y-16 justify-between">
           <div className="md:w-1/3 flex flex-col ">
             <div className="md:w-full md:visible md:relative w-0 fixed invisible">
-              <h1 className="text-3xl font-bold">Hacker man</h1>
+              <Image src={'/images/logoMenthos.png'} alt="Logo da loja" width={400} height={300} className="rounded-lg w-40 overflow-y-visible " />
+              <h1 className="text-3xl font-bold mt-2">MenthosFit</h1>
               <p className="text-muted-foreground text-sm mt-2">Aqui fica a descrição da loja fala alguma coisa sobre  tal, explica teu diferencial e etc seja criativo adsad asdiada oa ei</p>
             </div>
             <div className="flex-col  mt-5">
-              <div className="flex space-x-4 border border-orange-500 rounded-2xl w-full md:w-44 h-12 justify-center items-center  mt-3">
+              <div className="flex space-x-4 border border-primary rounded-2xl w-full md:w-44 h-12 justify-center items-center  mt-3">
                 <Link href={'https://www.instagram.com/'} target="_blank">
                   <FaInstagram size={20} className=" cursor-pointer hover:h-6 w-6 duration-200 transition-all" />
                 </Link>
@@ -59,28 +60,28 @@ export default function Footer() {
             <p className="text-muted-foreground text-sm">Seg a Sex das 8h às 12h | das 13h30 às 18h</p>
             <div className="space-y-4 mt-8">
               <div className="flex items-center space-x-4">
-                <FaWhatsapp className="w-6 h-6 text-orange-500" />
+                <FaWhatsapp className="w-6 h-6 text-primary" />
                 <div>
                   <h1>Whatsapp:</h1>
                   <Link href="https://api.whatsapp.com/send?phone=5511999999999&text=Ol%C3%A1%20gostaria%20de%20fazer%20um%20pedido" target="_blank" className="text-sm text-muted-foreground">(11) 99999-9999</Link>
                 </div>
               </div>
               <div className="flex space-x-4 items-center">
-                <Phone className="w-6 h-6 text-orange-500" />
+                <Phone className="w-6 h-6 text-primary" />
                 <div>
                   <h1>Telefone</h1>
                   <p className="text-sm text-muted-foreground">(11) 99999-9999</p>
                 </div>
               </div>
               <div className="flex space-x-4 items-center">
-                <MdOutlineEmail className="w-6 h-6 text-orange-500" />
+                <MdOutlineEmail className="w-6 h-6 text-primary" />
                 <div>
                   <h1>Email:</h1>
                   <p className="text-sm text-muted-foreground">hnetorocha@gmail.com</p>
                 </div>
               </div>
               <div className="flex space-x-4 items-center">
-                <CiLocationOn className="w-6 h-6 text-orange-500" />
+                <CiLocationOn className="w-6 h-6 text-primary" />
                 <div>
                   <h1>Endereço:</h1>
                   <p className="text-sm text-muted-foreground">rua adsasas,45 asdadas adsa fee</p>

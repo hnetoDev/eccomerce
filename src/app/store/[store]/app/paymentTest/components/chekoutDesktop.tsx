@@ -5,9 +5,9 @@ import { useSession } from "next-auth/react"
 import { redirect } from "next/navigation"
 import { useEffect, useState } from "react"
 import { IoBackspace, IoTrashOutline } from "react-icons/io5"
-import { BarcodeIcon, CheckCircle2, CheckCircle2Icon, CheckCircleIcon, CreditCard, HelpCircle, LockIcon, ShoppingCartIcon, TicketPercentIcon, UserCircle, UserX } from "lucide-react"
+import { BarcodeIcon, CheckCircle2, CheckCircle2Icon, CheckCircleIcon, CircleUser, CreditCard, HelpCircle, LockIcon, ShoppingCartIcon, TicketPercentIcon, UserCircle, UserX } from "lucide-react"
 import { PersonIcon } from "@radix-ui/react-icons"
-import { MdOutlineEmail, MdOutlinePhone, MdOutlinePix, MdPayment, MdPersonOutline } from "react-icons/md"
+import { MdOutlineEmail, MdOutlinePhone, MdOutlinePix, MdPassword, MdPayment, MdPersonOutline, MdPix } from "react-icons/md"
 import Stepper from "./stepper2"
 import { FaCircleCheck } from "react-icons/fa6";
 import InputMask from "react-input-mask"
@@ -40,10 +40,10 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
 
 
 
-  return <div className="w-full  flex justify-between space-x-8 px-12 ">
-    <div className="w-2/3 rounded-2xl z-20">
+  return <div className="w-full  flex justify-between space-x-8 pb-20 px-12 ">
+    <div className="w-[62%] rounded-xl z-20">
       {currentStep === 0 ? <CartCheckout total={total} setTotal={setTotal} cep={cep} setCep={setCep} setMetodoRecebimento={setMetodoRecebimento} metodoRecebimento={metodoRecebimento} /> : null}
-      {currentStep === 1 ? <div className="visibleee">
+      {currentStep === 1 ? <div className="visibleee bg-background p-6 rounded-xl">
         {session.data?.user ? <>
           <div className="border flex rounded-lg p-3">
             <div className="flex items-center space-x-2">
@@ -62,82 +62,131 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
               {userLoged ? null : <div>
                 <div className="">
                   <h1 className="font-bold">Dados pessoais</h1>
-                  <div className=" gap-4 grid md:grid-cols-2 mt-5">
-                    <div className="space-y-1">
-                      <h1 className="text-muted-foreground text-sm">Nome <span className="text-red-500">*</span></h1>
-                      <div className={`  duration-200 flex border-b border-muted  focus-within:border-orange-500  p-3 items-center space-x-2 w-full`}>
-                        <MdPersonOutline size={20} className="text-muted-foreground" />
-                        <input type="text" onChange={() => {
-                          setEName(false)
-                        }} placeholder="Jorge Ribeiro" className=" bg-transparent p-0 w-full border-0 outline-0" />
-                      </div>
-                      {eName ? <p className='text-sm text-red-500'><span className=''>X </span> Campo obrigatório</p> : null}
+                  <div className="flex w-full space-x-3  justify-center items-center mt-5">
+                    <CircleUser className="w-12 h-12  text-muted-foreground" />
+                    <div className="space-y-3">
+                      <div className="h-1 w-20  rounded-md bg-muted-foreground"></div>
+                      <div className="h-1 w-24  rounded-md bg-muted-foreground"></div>
                     </div>
-                    <div className="space-y-1">
-                      <h1 className="text-muted-foreground text-sm">Email <span className="text-red-500">*</span></h1>
-                      <div className={`  duration-200 flex border-b border-muted  focus-within:border-orange-500  p-3 items-center space-x-2 w-full`}>
+                  </div>
+                  <div className="mt-8">
+                    <div className="space-y-2">
+                      <h1 className=" text-sm text-muted-foreground">Digite seu Email para continuar<span className="text-red-500">*</span></h1>
+                      <div className={`  duration-200 flex border border-muted rounded-xl  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
                         <MdOutlineEmail size={20} className="text-muted-foreground" />
                         <input type="text" onChange={() => {
                           setEEmail(false)
                         }} placeholder="exemple@gmail.com" className=" bg-transparent p-0 w-full border-0 outline-0" />
+                        <button>Continuar</button>
                       </div>
                       {eEmail ? <p className='text-sm text-red-500'><span className=''>X </span> Preencha com um e-mail válido</p> : null}
                     </div>
-                    <div className="space-y-1">
-                      <h1 className="text-muted-foreground text-sm">Telefone</h1>
-                      <div className={`  duration-200 flex border-b border-muted  focus-within:border-orange-500  p-3 items-center space-x-2 w-full`}>
-                        <MdOutlinePhone size={20} className="text-muted-foreground" />
-                        <InputMask mask={"(99) 99999-9999"} value={phone} placeholder="(__) _____-____" type="text" onChange={(v) => {
-                          setEName(false)
+                    <div className="space-y-2 mt-4">
+                      <h1 className=" text-sm text-muted-foreground">Senha<span className="text-red-500">*</span></h1>
+                      <div className={`  duration-200 flex border border-muted rounded-xl  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
+                        <MdPassword size={20} className="text-muted-foreground" />
+                        <input type="text" onChange={() => {
+                          setEEmail(false)
+                        }} placeholder="*******" className=" bg-transparent p-0 w-full border-0 outline-0" />
 
-                        }} className=" bg-transparent p-0 w-full border-0 outline-0" />
                       </div>
-
-                    </div>
-                    <div className="space-y-1">
-                      <h1 className="text-muted-foreground text-sm">CPF</h1>
-                      <div className={`  duration-200 flex border-b border-muted  focus-within:border-orange-500  p-3 items-center space-x-2 w-full`}>
-                        <LockIcon size={20} className="text-muted-foreground" />
-                        <InputMask mask={"999.999.999-99"} type="text" value={cpf} onChange={(v) => {
-                          setECPF(false)
-                          setCPF(v.target.value)
-                        }} placeholder="___.___.___-__" className=" bg-transparent w-full border-0 outline-0" />
-                      </div>
-                      {eCPF ? <p className='text-sm text-red-500'><span className=''>X </span>CPF inválido</p> : null}
+                      {eEmail ? <p className='text-sm text-red-500'><span className=''>X </span> Preencha com um e-mail válido</p> : null}
                     </div>
                   </div>
+
                 </div>
               </div>}
             </div>
           </div>
         </>}
       </div> : null}
-      {currentStep === 2 ? <div className="flex visibleee flex-col mt-6 ">
-        <h1 className="text-muted-foreground">Escolha o método de pagamento:</h1>
-        <div className="grid mt-5 grid-cols-2 gap-4">
-          <button className={`p-6  w-full justify-center duration-200 transition-all items-center border rounded-full flex space-x-2`}>
-            <CreditCard className="w-6 h-6 text-muted-foreground" />
-            <h1 className="text-muted-foreground">Crédito</h1>
-          </button>
-          <button className={`p-6  w-full justify-center duration-200 transition-all items-center border rounded-full flex space-x-2`}>
-            <BarcodeIcon className="w-6 h-6 text-muted-foreground" />
-            <h1 className="text-muted-foreground">Boleto</h1>
-          </button>
-          <button className={`p-6  w-full justify-center duration-200 transition-all items-center border rounded-full flex space-x-2`}>
-            <MdOutlinePix className="w-6 h-6 text-muted-foreground" />
-            <h1 className="text-muted-foreground">Pix</h1>
-          </button>
-          <button className={`p-6  w-full justify-center duration-200 transition-all items-center border bg-orange-500 rounded-full flex space-x-2`}>
-            <FaWhatsapp className="w-6 h-6 text-white" />
-            <h1 className="text-white">whatsapp</h1>
-          </button>
+      {currentStep === 2 ? <div className="flex bg-background visibleee flex-col p-6 rounded-xl ">
+        <h1 className="font-bold">Escolha o método de pagamento:</h1>
+        <div className="grid mt-5  grid-cols-2 gap-4">
+
+          <div onClick={() => {
+            setMetodoPayment('PIX')
+          }} className={`${metodoPayment === "PIX" ? 'border-primary' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
+            <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoPayment === 'PIX' ? " border-primary " : "bg-background border-gray-300"
+              }`}>
+              <div
+                className={`w-4 h-4 duration-300 transition-all  rounded-full  ${metodoPayment === 'PIX'
+                  ? "bg-primary "
+
+                  : "bg-background "
+                  }`}
+              ></div>
+            </div>
+            <div className="flex justify-center items-center space-x-2">
+              <MdPix className="w-6 h-6 text-muted-foreground" />
+              <h1 className='text-sm'>Pix</h1>
+            </div>
+          </div>
+          <div onClick={() => {
+            setMetodoPayment('CREDITO')
+          }} className={`${metodoPayment === "CREDITO" ? 'border-primary' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
+            <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoPayment === 'CREDITO' ? " border-primary " : "bg-background border-gray-300"
+              }`}>
+              <div
+                className={`w-4 h-4 duration-300 transition-all  rounded-full  ${metodoPayment === 'CREDITO'
+                  ? "bg-primary "
+
+                  : "bg-background "
+                  }`}
+              ></div>
+            </div>
+            <div className="flex justify-center items-center space-x-2">
+              <CreditCard className="w-6 h-6 text-muted-foreground" />
+              <h1 className='text-sm'>Cartão</h1>
+            </div>
+          </div>
+          <div onClick={() => {
+            setMetodoPayment('BOLETO')
+          }} className={`${metodoPayment === "BOLETO" ? 'border-primary' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
+            <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoPayment === "BOLETO" ? " border-primary " : "bg-background border-gray-300"
+              }`}>
+              <div
+                className={`w-4 h-4 duration-300 transition-all  rounded-full  ${metodoPayment === "BOLETO"
+                  ? "bg-primary "
+
+                  : "bg-background "
+                  }`}
+              ></div>
+            </div>
+            <div className="flex justify-center items-center space-x-2">
+              <BarcodeIcon className="w-6 h-6 text-muted-foreground" />
+              <h1 className='text-sm'>Boleto</h1>
+            </div>
+          </div>
+          <div onClick={() => {
+            setMetodoPayment('WPP')
+          }} className={`${metodoPayment === "WPP" ? 'border-primary' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
+            <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoPayment === 'WPP' ? " border-primary " : "bg-background border-gray-300"
+              }`}>
+              <div
+                className={`w-4 h-4 duration-300 transition-all  rounded-full  ${metodoPayment === 'WPP'
+                  ? "bg-primary "
+
+                  : "bg-background "
+                  }`}
+              ></div>
+            </div>
+            <div className="flex justify-center items-center space-x-2">
+              <FaWhatsapp className="w-6 h-6 text-muted-foreground" />
+              <h1 className='text-sm'>Whatsapp</h1>
+            </div>
+          </div>
 
         </div>
+        {metodoPayment === "PIX" ? <div className="mt-12 space-y-4 flex flex-col justify-center items-center">
+          <img src="/images/pix.svg" className="w-40   rounded-lg" />
+          <h1 className="text-muted-foreground w-2/3 text-center text-sm">Ao finalizar o pagamento será gerado o QRCode, pague antes do vencimento para aprovar seu pedido</h1>
+        </div> : null}
         {metodoPayment === "CREDITO" ? <div className="mt-12 space-y-4">
           <h1>Cartão de crédito:</h1>
           <div className="space-y-1">
             <h1 className="text-muted-foreground text-sm">Nome do titular <span className="text-red-500">*</span></h1>
-            <div className={`  duration-200 flex border-b border-muted  focus-within:border-orange-500  p-3 items-center space-x-2 w-full`}>
+            <div className={`  duration-200 flex border  rounded-xl border-muted  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
 
               <input type="text" onChange={() => {
                 setEName(false)
@@ -146,21 +195,24 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
             {eName ? <p className='text-sm text-red-500'><span className=''>X </span> Campo obrigatório</p> : null}
           </div>
           <div className="flex justify-between items-center w-full">
-            <div className="space-y-1">
+            <div className="space-y-1 w-full">
               <h1 className="text-muted-foreground text-sm">Numero do cartão <span className="text-red-500">*</span></h1>
-              <div className={`  duration-200 flex border-b border-muted  focus-within:border-orange-500  p-3 items-center space-x-2 w-full`}>
-                <input type="text" onChange={() => {
-                  setEName(false)
-                }} className=" bg-transparent p-0 w-full border-0 outline-0" />
+              <div className="w-full flex justify-between space-x-2 items-center">
+                <div className={`  duration-200 flex border  rounded-xl border-muted  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
+                  <input type="text" onChange={() => {
+                    setEName(false)
+                  }} className=" bg-transparent p-0 w-full border-0 outline-0" />
+                </div>
+                <img width={100} height={40} alt="Bandeira do cartão" src="/images/masterCard.svg" className="w-12 h-12 m-auto  rounded-lg" />
               </div>
-              {eName ? <p className='text-sm text-red-500'><span className=''>X </span> Campo obrigatório</p> : null}
+
             </div>
-            <img width={100} height={40} alt="Bandeira do cartão" src="/images/masterCard.svg" className="w-12 h-12  rounded-lg" />
+           
           </div>
           <div className="flex justify-between space-x-2">
             <div className="space-y-1">
               <h1 className="text-muted-foreground text-sm">data de expiração <span className="text-red-500">*</span></h1>
-              <div className={`  duration-200 flex border-b border-muted  focus-within:border-orange-500  p-3 items-center space-x-2 w-full`}>
+              <div className={`  duration-200 flex border  rounded-xl border-muted  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
 
                 <input type="text" onChange={() => {
                   setEName(false)
@@ -170,7 +222,7 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
             </div>
             <div className="space-y-1">
               <h1 className=" w-full justify-between text-muted-foreground text-sm flex space-x-4"><span>CCV<span className="text-red-500">*</span></span><span><HelpCircle className="w-6 h-6" /></span></h1>
-              <div className={`  duration-200 flex border-b border-muted  focus-within:border-orange-500  p-3 items-center space-x-2 w-full`}>
+              <div className={`  duration-200 flex border  rounded-xl border-muted  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
 
                 <input type="number" onChange={() => {
                   setEName(false)
@@ -182,10 +234,10 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
         </div> : null}
 
       </div> : null}
-      {currentStep === 3 ? <div className="flex flex-col visibleee space-y-4">
+      {currentStep === 3 ? <div className="flex bg-background p-6 rounded-xl flex-col visibleee space-y-4">
         <div>
           <h1 className="font-bold">Resumo do pedido</h1>
-          <div className="space-y-4 mt-5 rounded-3xl ">
+          <div className="space-y-4 mt-5 rounded-xl ">
             {data?.map(d => <div key={d.id} className=" hover:bg-zinc-100 rounded-lg dark:hover:bg-zinc-900 hover:rounded-lg bg-opacity-65  w-full justify-between flex">
               <div className="flex  items-center space-x-2">
                 <Image width={100} height={100} alt="Produto" src={d.img} className="w-28 h-28  rounded-lg" />
@@ -193,7 +245,7 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
                   <h1 className="">{d.name}</h1>
                   <div>
                     <h1 className="text-muted-foreground">Quantidade: {d.qtd}</h1>
-                    <div className="flex items-center"><h1 className="font-extrabold text-orange-500 border-orange-500">R$ {d.price}</h1><p className="text-sm text-zinc-500">/cada</p></div>
+                    <div className="flex items-center"><h1 className="font-extrabold text-primary border-primary">R$ {d.price}</h1><p className="text-sm text-zinc-500">/cada</p></div>
                   </div>
                 </div>
               </div>
@@ -205,7 +257,7 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
           <h1 className="font-bold">Dados do comprador</h1>
           <div className="flex w-full mt-5 justify-between items-center">
             <div className="flex space-x-3 items-center">
-              <UserCircle className="text-orange-500 border-orange-500 w-8 h-8" />
+              <UserCircle className="text-primary border-primary w-8 h-8" />
               <div>
                 <h1>Hélio Neto</h1>
                 <h1 className="text-muted-foreground">hnetorocha@gmail.com</h1>
@@ -213,7 +265,7 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
               </div>
             </div>
             <div className="">
-              <FaCircleCheck className="text-orange-500 border-orange-500 w-8 h-8" />
+              <FaCircleCheck className="text-primary border-primary w-8 h-8" />
             </div>
           </div>
         </div>
@@ -222,11 +274,11 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
           <div>
             <div className="flex w-full mt-5 justify-between items-center" >
               <div className="flex space-x-3 items-center">
-                <CiLocationOn className="text-orange-500 border-orange-500 w-8 h-8" />
+                <CiLocationOn className="text-primary border-primary w-8 h-8" />
                 <h1>Retirar na loja</h1>
               </div>
               <div className="">
-                <FaCircleCheck className="text-orange-500 border-orange-500 w-8 h-8" />
+                <FaCircleCheck className="text-primary border-primary w-8 h-8" />
               </div>
             </div>
             <div className="mt-6">
@@ -252,7 +304,7 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
               </div>
             </div>
             <div className="">
-              <FaCircleCheck className="text-orange-500 border-orange-500 w-8 h-8" />
+              <FaCircleCheck className="text-primary border-primary w-8 h-8" />
             </div>
           </div>
         </div>
@@ -265,17 +317,17 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
               <h1>74998097796</h1>
             </div>
             <div className="">
-              <FaCircleCheck className="text-orange-500 border-orange-500 w-8 h-8" />
+              <FaCircleCheck className="text-primary border-primary w-8 h-8" />
             </div>
           </div>
         </div>
 
       </div> : null}
     </div>
-    <div className="w-1/3 bg-background  shadow-lg p-3 h-max  rounded-3xl">
+    <div className="w-[38%] bg-background  shadow-lg p-3 h-max  rounded-xl">
 
 
-      <div className=" rounded-2xl dark:bg-zinc-900 bg-zinc-50 p-6 space-y-2">
+      <div className=" rounded-xl dark:bg-zinc-900 bg-zinc-50 p-6 space-y-2">
         <div className="flex px-3 justify-between">
           <h1 className="">subTotal:</h1>
           <h1 className="">R$ {total.toFixed(2)}</h1>
@@ -284,7 +336,7 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
           <h1 className="">frete:</h1>
           <h1 className="">R$ {total.toFixed(2)}</h1>
         </div>
-        <div className="flex  flex-col border-t p-3 rounded-b-3xl mt-2 justify-between">
+        <div className="flex  flex-col border-t p-3 rounded-b-xl mt-2 justify-between">
           <p className="text-end  text-sm text-green-500">10% de desconto no PIX</p>
           <div className="w-full flex justify-between">
             <h1 className="font-extrabold">Total</h1>
@@ -300,7 +352,7 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
       </div>
       <button onClick={() => {
         setCurrentStep(prev => prev + 1)
-      }} className="w-full p-5 bg-orange-500 rounded-2xl mt-2 flex items-center justify-center">
+      }} className="w-full p-5 bg-primary rounded-xl mt-2 flex items-center justify-center">
         <h1 className="text-white font-bold">{currentStep === 0 ? 'Finalizar compra' : currentStep === 3 ? 'Pagar agora' : 'Próximo'}</h1>
       </button>
     </div>

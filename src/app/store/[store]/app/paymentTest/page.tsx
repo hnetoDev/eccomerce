@@ -4,7 +4,7 @@ import { redirect } from "next/navigation"
 import { useEffect, useState } from "react"
 import { IoBackspace, IoTrashOutline } from "react-icons/io5"
 import StepperCustom from "./components/stepper"
-import { BarcodeIcon, CheckCircle2, CheckCircle2Icon, CheckCircleIcon, CreditCard, HelpCircle, LockIcon, ShoppingCartIcon, UserCircle, UserX } from "lucide-react"
+import { BarcodeIcon, CheckCircle2, CheckCircle2Icon, CheckCircleIcon, CopyIcon, CreditCard, HelpCircle, LockIcon, ShoppingCartIcon, UserCircle, UserX } from "lucide-react"
 import { PersonIcon } from "@radix-ui/react-icons"
 import { MdOutlineEmail, MdOutlinePhone, MdOutlinePix, MdPayment, MdPersonOutline } from "react-icons/md"
 import Stepper from "./components/stepper2"
@@ -38,6 +38,7 @@ export default function PaymentPage() {
   const [metodoPayment, setMetodoPayment] = useState<string>("CREDITO")
   const [metodoRecebimento, setMetodoRecebimento] = useState<string>("ENTREGA")
   const steps = ["Carrinho", "Dados", "Pagamento", "Resumo"];
+  const [finaly, setFinaly] = useState<boolean>(false)
 
   useEffect(() => {
     const data = localStorage.getItem('cartItem')
@@ -51,10 +52,22 @@ export default function PaymentPage() {
 
 
   return <div className="w-full dark:bg-black/60 md:bg-zinc-100 flex flex-col pb-5 lg:px-12 md:px-12 xl:px-28 justify-between pt-6 ">
-    <div className="space-y-4">
+    {finaly ? <div className="flex  justify-center space-x-4  w-full">     
+       <div className="bg-background p-6 space-y-4 rounded-xl h-max flex flex-col justify-center items-center">
+        <img src="/images/pix.svg" className="w-40" />
+        <h1 className="text-muted-foreground">Pague R${total.toFixed(2)}</h1>
+        <button className="bg-orange-500 w-full space-x-3 text-white p-3 rounded-xl flex justify-center items-center"><h1>Ja paguei</h1><CopyIcon/></button>
+
+      </div>
+      <div className="bg-background p-6 rounded-xl space-y-2">
+        <div className="bg-black rounded-xl w-60 h-60"></div>
+        <button className="bg-orange-500 w-full space-x-3 text-white p-3 rounded-xl flex justify-center items-center"><CopyIcon/><h1>Copiar copia e cola</h1></button>
+      </div>
+
+    </div> : <div className="space-y-4 mt-6">
       <div>
-        <h1 className="text-center">Checkout</h1>
-        <div className="px-4 w-full   flex justify-center items-center">
+        <h1 className="text-center">Pagina de pagamentos</h1>
+        <div className="px-4 w-full mt-2   flex justify-center items-center">
           <Stepper steps={steps} currentStep={currentStep} />
         </div>
       </div>
@@ -64,9 +77,11 @@ export default function PaymentPage() {
       <div className="w-full visible relative md:w-0 md:invisible md:fixed">
         <CheckoutMobile metodoPayment={metodoPayment} metodoRecebimento={metodoRecebimento} setPhone={setPhone} cpf={cpf} cep={cep} total={total} phone={phone} email={email} setCurrentStep={setCurrentStep} currentStep={currentStep} name={name} setCPF={setCPF} setCep={setCep} setEmail={setEmail} setMetodoPayment={setMetodoPayment} setMetodoRecebimento={setMetodoRecebimento} setName={setName} setTotal={setTotal} />
       </div>
-    </div>
 
-    
+    </div>}
+
+
+
 
 
   </div>

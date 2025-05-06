@@ -34,7 +34,7 @@ export default function CarouselWithDots() {
           {scrollSnaps.map((_, index) => (
             <button
               key={index}
-              className={`embla__dot ${index === selectedIndex ? 'embla__dot--active border-white border-3' : 'border'
+              className={`embla__dot ${index === selectedIndex ? 'embla__dot--active bg-primary border-white border-3' : 'border'
                 }`}
               onClick={() => scrollTo(index)}
             />
@@ -43,27 +43,16 @@ export default function CarouselWithDots() {
       <div className="embla__viewport   rounded-lg " ref={emblaRef}>
         <div className="embla__container ">
           <div className="embla__slide  rounded-lg px-4 ">
-            <div className='bg-orange-500 rounded-lg'>
-              <Image width={2000} height={2000} src="/images/banner.png" alt="Slide 1" className=" rounded-xl break:h-[27rem] h-[22rem] w-full"  />
+            <div className='bg-primary rounded-lg'>
+              <Image width={2000} height={2000} src="/images/menthos.png" alt="Slide 1" className=" rounded-xl break:h-[27rem] h-[22rem] w-full"  />
             </div>
           </div>
           <div className="embla__slide  rounded-lg px-4 ">
-            <div className='bg-orange-500 rounded-lg'>
-              <Image width={2000} height={2000} src="/images/banner2.jpg" alt="Slide 1" className=" rounded-xl break:h-[27rem] h-[22rem] w-full"  />
+            <div className='bg-primary rounded-lg'>
+              <Image width={2000} height={2000} src="/images/bannerMenthos.png" alt="Slide 1" className=" rounded-xl break:h-[27rem] h-[22rem] w-full"  />
             </div>
           </div>
-          <div className="embla__slide  rounded-lg px-4 ">
-            <div className='bg-orange-500 rounded-lg'>
-              <Image width={2000} height={2000} src="/images/banner3.png" alt="Slide 1" className=" rounded-xl break:h-[27rem] h-[22rem] w-full"  />
-            </div>
-          </div>
-          <div className="embla__slide  rounded-lg px-4 ">
-            <div className='bg-orange-500 rounded-lg'>
-              <Image width={2000} height={2000} src="/images/banner3.png" alt="Slide 1"  className=" rounded-xl break:h-[27rem] h-[22rem] w-full" />
-            </div>
-          </div>
-          
-
+           
         </div>
       </div>
 

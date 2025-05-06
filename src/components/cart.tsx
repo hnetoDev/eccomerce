@@ -155,12 +155,12 @@ export default function CartCustom({ addToCart, children, id, name, price, img, 
 
   return <Sheet>
     <SheetTrigger className={`${addToCart ? 'w-full' : null}`}>{addToCart ? <div className="w-full" onClick={handleClick}>{children}</div> : <div className="relative">
-      <div className="bg-orange-500 w-5 h-5 flex items-center justify-center absolute rounded-full p-2 -right-2 -bottom-2">
-        <p className="text-sm font-bold">{data ? `${data.length}` : '0'}</p>
+      <div className="bg-primary w-6 h-6 flex items-center justify-center absolute rounded-full p-2 -right-2 -bottom-2">
+        <p className="text-sm text-white font-bold">{data ? `${data.length}` : '0'}</p>
       </div>
       <MdOutlineShoppingBag onClick={attState} className="md:w-8 md:h-8 w-6 h-6 text-muted-foreground" />
     </div>}</SheetTrigger>
-    <SheetContent side={'right'} className="w-[90vw]" >
+    <SheetContent side={'right'} className="w-[90vw] md:w-[2000px]" >
       <SheetHeader>
         <SheetTitle><div className="flex items-center justify-center space-x-4"> <MdOutlineShoppingBag className="w-7 h-7" /><h1>Seu carrinho</h1></div></SheetTitle>
 
@@ -178,17 +178,17 @@ export default function CartCustom({ addToCart, children, id, name, price, img, 
             <div className="flex flex-col justify-between">
               <h1 className="text-md font-bold">{d.name}</h1>
               <div className="flex border w-max rounded-xl space-x-1">
-                <div onClick={() => { handleDown(d.id) }} className=" dark:bg-zinc-800 dark:hover:bg-zinc-900 dark:hover:bg-opacity-65 flex text-lg hover:bg-zinc-200 hover:cursor-pointer font-bold justify-center items-center p-1 rounded-l-full w-6 h-6">
+                <div onClick={() => { handleDown(d.id) }} className="  dark:hover:bg-zinc-900 dark:hover:bg-opacity-65 flex text-lg hover:bg-zinc-200 hover:cursor-pointer font-bold justify-center items-center p-1 rounded-l-full w-6 h-6">
                   -
                 </div>
-                <div className=" dark:bg-zinc-800   flex justify-center text-sm items-center p-1 rounded-full w-6 h-6">
+                <div className="    flex justify-center text-sm items-center p-1 rounded-full w-6 h-6">
                   {d.qtd}
                 </div>
-                <div onClick={() => { handleUp(d.id) }} className=" dark:bg-zinc-800 dark:hover:bg-zinc-900 dark:hover:bg-opacity-65 flex text-lg hover:bg-zinc-200 hover:cursor-pointer  justify-center items-center p-1 rounded-r-full w-6 h-6">
+                <div onClick={() => { handleUp(d.id) }} className="  dark:hover:bg-zinc-900 dark:hover:bg-opacity-65 flex text-lg hover:bg-zinc-200 hover:cursor-pointer  justify-center items-center p-1 rounded-r-full w-6 h-6">
                   +
                 </div>
               </div>
-              <div className="flex items-center"><h1 className="font-extrabold text-orange-500 text-sm">R$ {d.price}</h1><p className="text-sm text-zinc-500">/cada</p></div>
+              <div className="flex items-center"><h1 className="font-extrabold text-primary text-sm">R$ {d.price}</h1><p className="text-sm text-zinc-500">/cada</p></div>
             </div>
           </div>
           <IoTrashOutline onClick={() => { handleDelete(d.id) }} className="text-end hover:cursor-pointer  " />
@@ -210,7 +210,7 @@ export default function CartCustom({ addToCart, children, id, name, price, img, 
           </div>
           <SheetClose onClick={() => {
             nav.push('/app/paymentTest')
-          }} className="bg-orange-500 text-white font-extrabold flex justify-center items-center  w-full rounded-lg p-3">Finalizar compra</SheetClose>
+          }} className="bg-primary text-white font-extrabold flex justify-center items-center  w-full rounded-lg p-3">Finalizar compra</SheetClose>
         </div>
       </div>
     </SheetContent>

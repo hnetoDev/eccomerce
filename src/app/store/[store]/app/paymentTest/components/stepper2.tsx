@@ -13,7 +13,7 @@ export default function Stepper({currentStep,steps}:{currentStep:number,steps:st
 
         {/* Linha de progresso (azul) */}
         <div
-          className="absolute top-4 left-6 h-0.5 duration-300 max-w-[85%] bg-orange-500 z-10 transition-all"
+          className="absolute top-4 left-6 h-0.5 duration-300 max-w-[85%] bg-primary z-10 transition-all"
           style={{ width: `${(currentStep / (steps.length - 1)) * 88}%` }}
         ></div>
 
@@ -21,22 +21,22 @@ export default function Stepper({currentStep,steps}:{currentStep:number,steps:st
         {steps.map((label, index) => (
           <div key={index} className="z-20  justify-between flex flex-col items-center">
             <div className={` p-1.5 duration-300 transition-all bg-background rounded-full  border-2 ${index < currentStep
-              ? " border-orange-500 "
+              ? " border-primary "
               : index === currentStep
                 ? "bg-background   "
                 : "bg-background border-zinc-300 dark:border-muted-foreground"
               }`}>
               <div
                 className={`w-4 h-4 duration-300 transition-all  rounded-full  ${index < currentStep
-                  ? "bg-orange-500  "
+                  ? "bg-primary  "
                   : index === currentStep
-                    ? "bg-orange-500  "
+                    ? "bg-primary  "
                     : "bg-background  "
                   }`}
               ></div>
             </div>
             <span
-              className={`text-sm mt-1 ${index <= currentStep ? "text-orange-500  font-medium" : " text-zinc-400 dark:text-muted-foreground"
+              className={`text-sm mt-1 ${index <= currentStep ? "text-primary  font-medium" : " text-zinc-400 dark:text-muted-foreground"
                 }`}
             >
               {label}

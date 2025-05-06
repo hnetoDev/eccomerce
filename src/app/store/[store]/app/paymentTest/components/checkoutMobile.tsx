@@ -55,11 +55,11 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
             <div onClick={() => {
               setMetodoRecebimento('ENTREGA')
             }} className="flex space-x-2 justify-center items-center">
-              <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoRecebimento === 'ENTREGA' ? " border-orange-500 " : "bg-background border-gray-300"
+              <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoRecebimento === 'ENTREGA' ? " border-primary " : "bg-background border-gray-300"
                 }`}>
                 <div
                   className={`w-4 h-4 duration-300 transition-all  rounded-full  ${metodoRecebimento === 'ENTREGA'
-                    ? "bg-orange-500 "
+                    ? "bg-primary "
 
                     : "bg-background "
                     }`}
@@ -70,11 +70,11 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
             <div onClick={() => {
               setMetodoRecebimento('RETIRADA')
             }} className="flex space-x-2 justify-center items-center">
-              <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoRecebimento === 'RETIRADA' ? " border-orange-500 " : "bg-background border-gray-300"
+              <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoRecebimento === 'RETIRADA' ? " border-primary " : "bg-background border-gray-300"
                 }`}>
                 <div
                   className={`w-4 h-4 duration-300 transition-all  rounded-full  ${metodoRecebimento === 'RETIRADA'
-                    ? "bg-orange-500  "
+                    ? "bg-primary  "
 
                     : "bg-background "
                     }`}
@@ -85,7 +85,7 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
           </div>
           {metodoRecebimento === 'ENTREGA' ? <div className="space-y-1 mt-6">
             <h1 className="text-muted-foreground text-sm">Calcular frete<span className="text-red-500">*</span></h1>
-            <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-orange-500 p-3 items-center space-x-2 w-full`}>
+            <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
               <CiLocationOn className="text-muted-foreground w-5 h-5" />
               <InputMask mask={"99999-999"} value={cep} placeholder="Digite o CEP" type="text" onChange={(v) => {
                 setCep(v.target.value)
@@ -97,7 +97,7 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
             <div>
 
               <div className="flex space-x-3 items-center">
-                <CiLocationOn className="text-orange-500 w-8 h-8" />
+                <CiLocationOn className="text-primary w-8 h-8" />
                 <div className="mt-6">
                   <h1>Hélio Neto</h1>
                   <h1>hnetorocha@gmail.com</h1>
@@ -150,7 +150,7 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
                   <div className=" gap-4 grid md:grid-cols-2 mt-5">
                     <div className="space-y-1">
                       <h1 className="text-muted-foreground text-sm">Nome <span className="text-red-500">*</span></h1>
-                      <div className={`  duration-200 flex border-b border-muted  focus-within:border-orange-500  p-3 items-center space-x-2 w-full`}>
+                      <div className={`  duration-200 flex border-b border-muted  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
                         <MdPersonOutline size={20} className="text-muted-foreground" />
                         <input type="text" onChange={() => {
                           setEName(false)
@@ -160,7 +160,7 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
                     </div>
                     <div className="space-y-1">
                       <h1 className="text-muted-foreground text-sm">Email <span className="text-red-500">*</span></h1>
-                      <div className={`  duration-200 flex border-b border-muted  focus-within:border-orange-500  p-3 items-center space-x-2 w-full`}>
+                      <div className={`  duration-200 flex border-b border-muted  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
                         <MdOutlineEmail size={20} className="text-muted-foreground" />
                         <input type="text" onChange={() => {
                           setEEmail(false)
@@ -170,7 +170,7 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
                     </div>
                     <div className="space-y-1">
                       <h1 className="text-muted-foreground text-sm">Telefone</h1>
-                      <div className={`  duration-200 flex border-b border-muted  focus-within:border-orange-500  p-3 items-center space-x-2 w-full`}>
+                      <div className={`  duration-200 flex border-b border-muted  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
                         <MdOutlinePhone size={20} className="text-muted-foreground" />
                         <InputMask mask={"(99) 99999-9999"} value={phone} placeholder="(__) _____-____" type="text" onChange={(v) => {
                           setEName(false)
@@ -181,7 +181,7 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
                     </div>
                     <div className="space-y-1">
                       <h1 className="text-muted-foreground text-sm">CPF</h1>
-                      <div className={`  duration-200 flex border-b border-muted  focus-within:border-orange-500  p-3 items-center space-x-2 w-full`}>
+                      <div className={`  duration-200 flex border-b border-muted  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
                         <LockIcon size={20} className="text-muted-foreground" />
                         <InputMask mask={"999.999.999-99"} type="text" value={cpf} onChange={(v) => {
                           setECPF(false)
@@ -212,7 +212,7 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
             <MdOutlinePix className="w-6 h-6 text-muted-foreground" />
             <h1 className="text-muted-foreground">Pix</h1>
           </button>
-          <button className={`p-6  w-full justify-center duration-200 transition-all items-center border bg-orange-500 rounded-full flex space-x-2`}>
+          <button className={`p-6  w-full justify-center duration-200 transition-all items-center border bg-primary rounded-full flex space-x-2`}>
             <FaWhatsapp className="w-6 h-6 text-white" />
             <h1 className="text-white">whatsapp</h1>
           </button>
@@ -222,7 +222,7 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
           <h1>Cartão de crédito:</h1>
           <div className="space-y-1">
             <h1 className="text-muted-foreground text-sm">Nome do titular <span className="text-red-500">*</span></h1>
-            <div className={`  duration-200 flex border-b border-muted  focus-within:border-orange-500  p-3 items-center space-x-2 w-full`}>
+            <div className={`  duration-200 flex border-b border-muted  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
 
               <input type="text" onChange={() => {
                 setEName(false)
@@ -233,7 +233,7 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
           <div className="flex justify-between items-center w-full">
             <div className="space-y-1">
               <h1 className="text-muted-foreground text-sm">Numero do cartão <span className="text-red-500">*</span></h1>
-              <div className={`  duration-200 flex border-b border-muted  focus-within:border-orange-500  p-3 items-center space-x-2 w-full`}>
+              <div className={`  duration-200 flex border-b border-muted  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
                 <input type="text" onChange={() => {
                   setEName(false)
                 }} className=" bg-transparent p-0 w-full border-0 outline-0" />
@@ -245,7 +245,7 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
           <div className="flex justify-between space-x-2">
             <div className="space-y-1">
               <h1 className="text-muted-foreground text-sm">data de expiração <span className="text-red-500">*</span></h1>
-              <div className={`  duration-200 flex border-b border-muted  focus-within:border-orange-500  p-3 items-center space-x-2 w-full`}>
+              <div className={`  duration-200 flex border-b border-muted  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
 
                 <input type="text" onChange={() => {
                   setEName(false)
@@ -255,7 +255,7 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
             </div>
             <div className="space-y-1">
               <h1 className=" w-full justify-between text-muted-foreground text-sm flex space-x-4"><span>CCV<span className="text-red-500">*</span></span><span><HelpCircle className="w-6 h-6" /></span></h1>
-              <div className={`  duration-200 flex border-b border-muted  focus-within:border-orange-500  p-3 items-center space-x-2 w-full`}>
+              <div className={`  duration-200 flex border-b border-muted  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
 
                 <input type="number" onChange={() => {
                   setEName(false)
@@ -278,7 +278,7 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
                   <h1 className="">{d.name}</h1>
                   <div>
                     <h1 className="text-muted-foreground">Quantidade: {d.qtd}</h1>
-                    <div className="flex items-center"><h1 className="font-extrabold text-orange-500 border-orange-500">R$ {d.price}</h1><p className="text-sm text-zinc-500">/cada</p></div>
+                    <div className="flex items-center"><h1 className="font-extrabold text-primary border-primary">R$ {d.price}</h1><p className="text-sm text-zinc-500">/cada</p></div>
                   </div>
                 </div>
               </div>
@@ -290,7 +290,7 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
           <h1 className="font-bold">Dados do comprador</h1>
           <div className="flex w-full mt-5 justify-between items-center">
             <div className="flex space-x-3 items-center">
-              <UserCircle className="text-orange-500 border-orange-500 w-8 h-8" />
+              <UserCircle className="text-primary border-primary w-8 h-8" />
               <div>
                 <h1>Hélio Neto</h1>
                 <h1 className="text-muted-foreground">hnetorocha@gmail.com</h1>
@@ -298,7 +298,7 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
               </div>
             </div>
             <div className="">
-              <FaCircleCheck className="text-orange-500 border-orange-500 w-8 h-8" />
+              <FaCircleCheck className="text-primary border-primary w-8 h-8" />
             </div>
           </div>
         </div>
@@ -307,11 +307,11 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
           <div>
             <div className="flex w-full mt-5 justify-between items-center" >
               <div className="flex space-x-3 items-center">
-                <CiLocationOn className="text-orange-500 border-orange-500 w-8 h-8" />
+                <CiLocationOn className="text-primary border-primary w-8 h-8" />
                 <h1>Retirar na loja</h1>
               </div>
               <div className="">
-                <FaCircleCheck className="text-orange-500 border-orange-500 w-8 h-8" />
+                <FaCircleCheck className="text-primary border-primary w-8 h-8" />
               </div>
             </div>
             <div className="mt-6">
@@ -337,7 +337,7 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
               </div>
             </div>
             <div className="">
-              <FaCircleCheck className="text-orange-500 border-orange-500 w-8 h-8" />
+              <FaCircleCheck className="text-primary border-primary w-8 h-8" />
             </div>
           </div>
         </div>
@@ -350,14 +350,14 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
               <h1>74998097796</h1>
             </div>
             <div className="">
-              <FaCircleCheck className="text-orange-500 border-orange-500 w-8 h-8" />
+              <FaCircleCheck className="text-primary border-primary w-8 h-8" />
             </div>
           </div>
         </div>
 
       </div> : null}
     </div>
-    <div className=" w-full flex flex-col space-x-2 border-orange-500 border md:w-0 md:invisible md:fixed  bg-background rounded-t-3xl p-6 ">
+    <div className=" w-full flex flex-col space-x-2 border-primary border md:w-0 md:invisible md:fixed  bg-background rounded-t-3xl p-6 ">
       <div className="flex space-x-2 w-full">
         <button onClick={() => {
           setCurrentStep(prev => {
@@ -366,7 +366,7 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
             }
             return prev - 1
           })
-        }} className={`border w-full ${currentStep === 0 ? "opacity-35" : ''} border-orange-500 p-5 rounded-3xl`}>
+        }} className={`border w-full ${currentStep === 0 ? "opacity-35" : ''} border-primary p-5 rounded-3xl`}>
           <h1>Voltar</h1>
         </button>
         <button onClick={() => {
@@ -376,7 +376,7 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
             }
             return prev + 1
           })
-        }} className="border w-full bg-orange-500 border-orange-500 p-5 rounded-3xl">
+        }} className="border w-full bg-primary border-primary p-5 rounded-3xl">
           <h1 className="text-white"> {currentStep === 3 ? 'Finalizar compra' : 'Próximo'}</h1>
         </button>
       </div>

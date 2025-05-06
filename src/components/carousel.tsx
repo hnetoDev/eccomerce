@@ -22,7 +22,7 @@ export function CarouselDemo() {
       ]}
       opts={{
         loop: true
-      }} className="bg-orange-500 py-1">
+      }} className="bg-primary py-1">
       <CarouselContent className="">
         <CarouselItem className=" justify-center space-x-4 flex items-center">
           <QrCodeIcon className="text-white" />

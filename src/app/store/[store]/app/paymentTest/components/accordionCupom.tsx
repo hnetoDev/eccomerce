@@ -19,7 +19,7 @@ export default function AccordionCupom() {
       <AccordionContent className="border-b-0">
         <div className="space-y-2 mt-1">
           <h1 className="text-muted-foreground text-sm">Código do cupom<span className="text-red-500">*</span></h1>
-          <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-orange-500 p-3 items-center space-x-2 w-full`}>
+          <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
             <TicketPercentIcon className="text-muted-foreground w-5 h-6" />
             <input placeholder="JANEIRO10%OFF" type="text" onChange={(v) => {
             }} className=" bg-transparent p-0 w-full border-0 outline-0" />

@@ -1,6 +1,7 @@
 'use client'
 import { useTheme } from "@/app/context"
 import CardProd from "@/components/cardProd"
+import CardSection from "@/components/cardSection"
 import { CarouselDemo } from "@/components/carousel"
 import { CarouselBanner } from "@/components/carouselBanner"
 import CarouselWithDots from "@/components/carouselWithDots"
@@ -11,6 +12,8 @@ import { useQuery } from "@tanstack/react-query"
 import Head from "next/head"
 import Image from "next/image"
 import { useState } from "react"
+import '@/app/globals.css'
+import CardSectionCategoria from "@/components/cardSectionCategorias"
 
 const fetchStoreData = async (name: string): Promise<DataInit> => {
   alert('fetch 2 vez desnecessario')
@@ -36,9 +39,27 @@ export default function StoreHome() {
 
 
   return (
-    <div className="h-screen w-screen" style={{ margin: '0px' }}>
-      <div className="mt-4">
+    <div className=" w-screen" style={{ margin: '0px' }}>
+      <div className=" px-4">
         <CarouselWithDots />
+      </div>
+      <div className="px-8 mt-8 overflow-x-auto hide-scrollbar">
+        <CardSection />
+      </div>
+      <div className="mt-12 w-full px-24 flex-col flex justify-center items-center">
+        <h1 className="font-bold text-center text-2xl  md:text-5xl">Compre por categoria</h1>
+        <div className="mt-8">
+          <CardSectionCategoria />
+        </div>
+      </div>
+      <div className="mt-12 w-full px-24 flex-col flex justify-center items-center">
+        <div className="w-full flex justify-between items-center">
+          <h1 className="font-bold text-2xl text-start  md:text-3xl">Mais vendidos</h1>
+          <h1 className="text-muted-foreground text-start  text-sm">ver mais</h1>
+        </div>
+        <div className="mt-8">
+          <CardSectionCategoria />
+        </div>
       </div>
 
       <div className="px-5 mt-2">
@@ -54,6 +75,18 @@ export default function StoreHome() {
           }) : null}
         </div>
       </div>
+
+
+
+    </div>
+  )
+} ''
+
+
+
+
+/*
+
       <div className=" px-6">
         <h1></h1>
         <div className="grid grid-cols-2">
@@ -70,12 +103,4 @@ export default function StoreHome() {
         </div>
       </div>
 
-
-    </div>
-  )
-} ''
-
-
-
-
-//4430276360
+*/
