@@ -17,6 +17,7 @@ import { CgDetailsLess } from "react-icons/cg";
 import { FaRegSadCry } from "react-icons/fa";
 import { IoTrashOutline } from "react-icons/io5";
 import { MdOutlineShoppingBag } from 'react-icons/md';
+import Image from "next/image";
 export default function CartCustom({ addToCart, children, id, name, price, img, qtd }: { id?: string, name?: string, price?: string, img?: string, qtd?: number, children?: React.ReactNode, addToCart: boolean }) {
   const [data, setData] = useState<{ name: string, img: string, id: string, price: string, qtd: number }[]>();
   const [empty, setEmpty] = useState<boolean>(true);
@@ -174,7 +175,7 @@ export default function CartCustom({ addToCart, children, id, name, price, img, 
           </div>
         </div> : <ScrollArea className="   h-[75vh]  ">{data?.map(d => <div key={d.id} className="p-3 hover:bg-zinc-100 dark:hover:bg-zinc-900 hover:rounded-lg bg-opacity-65  w-full justify-between flex">
           <div className="flex space-x-2">
-            <img src={d.img} className="w-20  rounded-lg" />
+            <Image alt="" width={100} height={100} src={d.img} className="w-20 h-24  rounded-lg" />
             <div className="flex flex-col justify-between">
               <h1 className="text-md font-bold">{d.name}</h1>
               <div className="flex border w-max rounded-xl space-x-1">
@@ -195,8 +196,8 @@ export default function CartCustom({ addToCart, children, id, name, price, img, 
         </div>)}</ScrollArea>}
         <div className="w-full
         ">
-          <div className=" rounded-t-3xl pt-3 bg-zinc-50 dark:bg-muted  mt-6">
-            <div className="flex px-3 justify-between">
+          <div className=" rounded-t-3xl px-3 pt-3 bg-zinc-50 dark:bg-muted  mt-6">
+            <div className="flex px-3 pt-3 justify-between">
               <h1 className="">subTotal:</h1>
               <h1 className="">R$ {total.toFixed(2)}</h1>
             </div>

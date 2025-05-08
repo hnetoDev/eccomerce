@@ -21,6 +21,7 @@ import InputMask from "react-input-mask"
 import Link from "next/link";
 import { CiLocationOn } from "react-icons/ci";
 import Image from "next/image";
+import LeveTambem from "./leveTambem";
 export default function CartCheckout({ metodoRecebimento, total, setTotal, cep, setCep, setMetodoRecebimento }: { total: number, setTotal: Dispatch<SetStateAction<number>>, cep: string, setCep: Dispatch<SetStateAction<string>>, metodoRecebimento: string, setMetodoRecebimento: Dispatch<SetStateAction<string>> }) {
   const [data, setData] = useState<{ name: string, img: string, id: string, price: string, qtd: number }[]>();
   const [empty, setEmpty] = useState<boolean>(true);
@@ -181,6 +182,10 @@ export default function CartCheckout({ metodoRecebimento, total, setTotal, cep, 
         <Link className="text-center text-primary font-bold" href={{ pathname: '/' }}> &lt; Continuar comprando</Link>
       </div>
     </div>}
+
+    <div className="mt-16">
+      <LeveTambem />
+    </div>
 
   </div>
 

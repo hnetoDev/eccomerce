@@ -73,7 +73,7 @@ export default function LayoutApp({ children }: { children: React.ReactNode }) {
         <CartCustom addToCart={false} />
       </div>
     </div>
-    <div className="w-0 md:w-full md:sticky md:visible invisible shadow-xl fixed   z-50 bg-background px-8 py-3 top-0 flex flex-col justify-between items-center">
+    <div className="w-0 md:w-full md:sticky md:visible invisible shadow-xl fixed xl:px-16 2xl:px-40   z-50 bg-background px-8 py-3 top-0 flex flex-col justify-between items-center">
       <div className="w-full flex justify-between items-center">
 
         <div className="w-2/4 items-center flex space-x-8">
@@ -112,7 +112,9 @@ export default function LayoutApp({ children }: { children: React.ReactNode }) {
       </div>
     </div>
 
-    {children}
+    
+      {children}
+    
 
 
     <Footer />

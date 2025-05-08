@@ -11,7 +11,7 @@ export default function Footer() {
   return (
     <div className="w-full mt-6">
       <div className="bg-primary  py-12">
-        <h1 className="text-center text-4xl font-bold text-white ">Receba novidades da <span className="text-black">MenthosFit</span></h1>
+        <div className="w-full px-8"><h1 className="text-center text-4xl font-bold text-white ">Receba novidades da <span className="text-black">MenthosFit</span></h1></div>
         <div className="flex items-center justify-center space-x-2 mt-5">
           <div className={`  duration-200 flex bg-white rounded-3xl  focus-within:border-primary  py-4 md:px-8 p-3 items-center space-x-2 w-1/2`}>
             <MdOutlineEmail size={20} className="text-muted-foreground" />
@@ -25,23 +25,26 @@ export default function Footer() {
         <div className=" flex md:flex-row flex-col px-12   md:p-20 md:space-x-20 md:space-y-0 space-y-16 justify-between">
           <div className="md:w-1/3 flex flex-col ">
             <div className="md:w-full md:visible md:relative w-0 fixed invisible">
-              <Image src={'/images/logoMenthos.png'} alt="Logo da loja" width={400} height={300} className="rounded-lg w-40 overflow-y-visible " />
+              <Link href={{ pathname: '/' }}>
+                <Image src={'/images/logoMenthosBlack.png'} alt="Logo da loja" width={130} height={30} className="rounded-lg dark:w-0 w-32 dark:fixed dark:invisible  overflow-y-visible " />
+                <Image src={'/images/logoMenthos.png'} alt="Logo da loja" width={130} height={30} className="rounded-lg w-0 fixed invisible dark:w-32 dark:relative dark:visible  overflow-y-visible " />
+              </Link>
               <h1 className="text-3xl font-bold mt-2">MenthosFit</h1>
               <p className="text-muted-foreground text-sm mt-2">Aqui fica a descrição da loja fala alguma coisa sobre  tal, explica teu diferencial e etc seja criativo adsad asdiada oa ei</p>
             </div>
             <div className="flex-col  mt-5">
               <div className="flex space-x-4 border border-primary rounded-2xl w-full md:w-44 h-12 justify-center items-center  mt-3">
                 <Link href={'https://www.instagram.com/'} target="_blank">
-                  <FaInstagram size={20} className=" cursor-pointer hover:h-6 w-6 duration-200 transition-all" />
+                  <FaInstagram size={20} className=" cursor-pointer hover:h-6 w-6 hover:text-primary duration-200 transition-all" />
                 </Link>
                 <Link href={'https://www.facebook.com/'} target="_blank">
-                  <FaFacebook size={20} className=" cursor-pointer hover:h-6 w-6 duration-200 transition-all" />
+                  <FaFacebook size={20} className=" cursor-pointer hover:h-6 w-6 hover:text-primary duration-200 transition-all" />
                 </Link>
                 <Link href={'https://www.tiktok.com/'} target="_blank">
-                  <IoLogoTiktok size={20} className=" cursor-pointer hover:h-6 w-6 duration-200 transition-all" />
+                  <IoLogoTiktok size={20} className=" cursor-pointer hover:h-6 w-6 hover:text-primary duration-200 transition-all" />
                 </Link>
                 <Link href={'https://www.tiktok.com/'} target="_blank">
-                  <PiXLogo size={20} className=" cursor-pointer hover:h-6 w-6 duration-200 transition-all" />
+                  <PiXLogo size={20} className=" cursor-pointer hover:h-6 w-6 hover:text-primary duration-200 transition-all" />
                 </Link>
               </div>
             </div>

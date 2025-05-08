@@ -18,7 +18,7 @@ import CartCheckout from "./cartCheckout"
 import AccordionCupom from "./accordionCupom"
 
 
-export default function CheckoutMobile({ data, name, cpf, phone, email, cep, total, setEmail, setCPF, setMetodoRecebimento, setCep, setName, setPhone, setTotal, metodoPayment, setMetodoPayment, metodoRecebimento, currentStep, setCurrentStep }: {
+export default function CheckoutMobile({setFinaly,setAllReadyUser,setLoadingEmail,allReadyUser,userLoged,loadingEmail, data, name, cpf, phone, email, cep, total, setEmail, setCPF, setMetodoRecebimento, setCep, setName, setPhone, setTotal, metodoPayment, setMetodoPayment, metodoRecebimento, currentStep, setCurrentStep }: {
   data?: {
     name: string;
     img: string;
@@ -31,14 +31,15 @@ export default function CheckoutMobile({ data, name, cpf, phone, email, cep, tot
   setName: React.Dispatch<React.SetStateAction<string>>, setCPF: React.Dispatch<React.SetStateAction<string>>,
   setTotal: React.Dispatch<React.SetStateAction<number>>, metodoPayment: string, setMetodoPayment: React.Dispatch<React.SetStateAction<string>>,
   metodoRecebimento: string, setMetodoRecebimento: React.Dispatch<React.SetStateAction<string>>, setCurrentStep: React.Dispatch<React.SetStateAction<number>>,
-  currentStep: number
+  currentStep: number,
+  setLoadingEmail: React.Dispatch<React.SetStateAction<boolean>>, loadingEmail:boolean, setAllReadyUser: React.Dispatch<React.SetStateAction<string>>, allReadyUser: string, userLoged: boolean,
+  setFinaly: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   const [eName, setEName] = useState<boolean>(false)
   const [eEmail, setEEmail] = useState<boolean>(false)
   const [eCPF, setECPF] = useState<boolean>(false)
   const [ePhone, setEPhone] = useState<boolean>(false)
   const session = useSession()
-  const [userLoged, setUserLoged] = useState<boolean>(false)
 
 
 

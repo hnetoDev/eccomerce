@@ -44,12 +44,14 @@ export default function CarouselWithDots() {
         <div className="embla__container ">
           <div className="embla__slide  rounded-lg px-4 ">
             <div className='bg-primary rounded-lg'>
-              <Image width={2000} height={2000} src="/images/menthos.png" alt="Slide 1" className=" rounded-xl break:h-[27rem] h-[22rem] w-full"  />
+              <Image width={2000} height={2000} src="/images/menthos.png" alt="Slide 1" className=" rounded-xl break:h-[27rem] h-[22rem] w-0  invisible fixed md:relative md:visible md:w-full"  />
+              <Image width={2000} height={2000} src="/images/cardMobile.png" alt="Slide 1" className=" rounded-xl md:w-0 md:fixed md:invisible visible relative break:h-[27rem] h-[22rem] w-full"  />
             </div>
           </div>
           <div className="embla__slide  rounded-lg px-4 ">
             <div className='bg-primary rounded-lg'>
-              <Image width={2000} height={2000} src="/images/bannerMenthos.png" alt="Slide 1" className=" rounded-xl break:h-[27rem] h-[22rem] w-full"  />
+              <Image width={2000} height={2000} src="/images/bannerMenthos.png" alt="Slide 1" className=" rounded-xl break:h-[27rem] h-[22rem] w-0  invisible fixed md:relative md:visible md:w-full"  />
+              <Image width={2000} height={2000} src="/images/cardMobile2.png" alt="Slide 1" className=" rounded-xl md:w-0 md:fixed md:invisible visible relative break:h-[27rem] h-[22rem] w-full"  />
             </div>
           </div>
            

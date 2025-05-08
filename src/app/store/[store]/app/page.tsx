@@ -14,6 +14,9 @@ import Image from "next/image"
 import { useState } from "react"
 import '@/app/globals.css'
 import CardSectionCategoria from "@/components/cardSectionCategorias"
+import CardSectionMais from "@/components/cardMaisVendidos"
+import CardSectionInfo from "@/components/cardSectionInfo"
+import Link from "next/link"
 
 const fetchStoreData = async (name: string): Promise<DataInit> => {
   alert('fetch 2 vez desnecessario')
@@ -40,28 +43,46 @@ export default function StoreHome() {
 
   return (
     <div className=" w-screen" style={{ margin: '0px' }}>
-      <div className=" px-4">
+      <div className="mt-4 px-4">
         <CarouselWithDots />
       </div>
       <div className="px-8 mt-8 overflow-x-auto hide-scrollbar">
         <CardSection />
       </div>
-      <div className="mt-12 w-full px-24 flex-col flex justify-center items-center">
-        <h1 className="font-bold text-center text-2xl  md:text-5xl">Compre por categoria</h1>
-        <div className="mt-8">
+      <div className="mt-12 w-full md:px-24 flex-col flex justify-center items-center">
+        <h1 className="font-bold text-center text-xl  md:text-5xl">Compre por categoria  💪💙</h1>
+        <div className="mt-8 px-8 overflow-x-auto hide-scrollbar w-full hide-scollbar">
           <CardSectionCategoria />
         </div>
       </div>
-      <div className="mt-12 w-full px-24 flex-col flex justify-center items-center">
+      <div className="mt-12 w-full px-8 md:px-16  flex-col flex justify-center items-center">
         <div className="w-full flex justify-between items-center">
           <h1 className="font-bold text-2xl text-start  md:text-3xl">Mais vendidos</h1>
-          <h1 className="text-muted-foreground text-start  text-sm">ver mais</h1>
+          <Link href={'/'} className="flex space-x-4 items-center  group">
+            <h1 className="group-hover:text-primary">Ver mais</h1>
+          </Link>
         </div>
-        <div className="mt-8">
-          <CardSectionCategoria />
+        <div className="mt-2 w-full overflow-x-auto overflow-y-hidden hide-scrollbar flex justify-start items-start">
+          {data?.Collection ? <CardSectionMais collection={data?.Collection} /> : null}
+
         </div>
       </div>
+      <div className="mt-12 mb-12 w-full md:px-20 px-8 flex-col flex justify-center items-center">
+        <CardSectionInfo />
+      </div>
 
+
+
+
+
+    </div>
+  )
+}
+
+
+
+
+/*
       <div className="px-5 mt-2">
         <div className="flex mt-2 space-x-2 w-full scroll-none hide-scrollbar overflow-x-scroll items-center">
           {data ? data.Collection.map((c, i) => {
@@ -76,16 +97,6 @@ export default function StoreHome() {
         </div>
       </div>
 
-
-
-    </div>
-  )
-} ''
-
-
-
-
-/*
 
       <div className=" px-6">
         <h1></h1>

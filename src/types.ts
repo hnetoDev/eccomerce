@@ -32,6 +32,7 @@ export type DataInit = {
 }
 
 export type Theme = {
+  storeId:string
   name:string
   primaryColor: string
   backgroundColor: string

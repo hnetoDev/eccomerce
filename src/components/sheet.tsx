@@ -57,7 +57,7 @@ export default function SheetCustom() {
           <Image width={50} height={50} src={theme.logoUrl} className=" rounded-lg" alt="logo" />
         </SheetTitle>
         <div className="flex flex-col w-full">
-          <h1 className="text-orange-500 text-start font-bold text-sm py-2">Home</h1>
+          <h1 className="text-primary text-start font-bold text-sm py-2">Home</h1>
           {data ? data.map(c => {
             return <AccordionCustom SheetClose={SheetCloser} key={c.id} data={c} />
           }) : null}

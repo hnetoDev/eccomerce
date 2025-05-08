@@ -15,7 +15,7 @@ export default function AccordionCustom({SheetClose,data}:{SheetClose:any,data:C
 
   return <Accordion type="single" collapsible>
   <AccordionItem value="item-1">
-    <AccordionTrigger  className="font-bold text-orange-500">{data.name}</AccordionTrigger>
+    <AccordionTrigger  className="font-bold text-primary">{data.name}</AccordionTrigger>
     <AccordionContent>
       <div className="flex flex-col justify-start gap-4">
         <Link href={{pathname:`/app/collections/${data.name}`}}>

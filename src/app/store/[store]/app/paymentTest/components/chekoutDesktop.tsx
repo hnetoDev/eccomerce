@@ -1,31 +1,40 @@
 
 
 'use client'
-import { useSession } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
 import { redirect } from "next/navigation"
 import { useEffect, useState } from "react"
 import { IoBackspace, IoTrashOutline } from "react-icons/io5"
-import { BarcodeIcon, CheckCircle2, CheckCircle2Icon, CheckCircleIcon, CircleUser, CreditCard, HelpCircle, LockIcon, ShoppingCartIcon, TicketPercentIcon, UserCircle, UserX } from "lucide-react"
+import { BarcodeIcon, CheckCircle2, CheckCircle2Icon, CheckCircleIcon, CircleUser, CreditCard, HelpCircle, LockIcon, Pencil, ShoppingCartIcon, TicketPercentIcon, UserCircle, UserX } from "lucide-react"
 import { PersonIcon } from "@radix-ui/react-icons"
 import { MdOutlineEmail, MdOutlinePhone, MdOutlinePix, MdPassword, MdPayment, MdPersonOutline, MdPix } from "react-icons/md"
 import Stepper from "./stepper2"
 import { FaCircleCheck } from "react-icons/fa6";
 import InputMask from "react-input-mask"
-import { FaBars, FaWhatsapp } from "react-icons/fa"
+import { FaBars, FaEdit, FaWhatsapp } from "react-icons/fa"
 import Image from "next/image"
-import { CiLocationOn } from "react-icons/ci"
+import { CiDeliveryTruck, CiLocationOn } from "react-icons/ci"
 import CartCheckout from "./cartCheckout"
 import AccordionCupom from "./accordionCupom"
+import { getSubdomain } from "@/app/utils/getSubdomain"
+import { Loader } from "@/components/loader"
 
 
-export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, total, setEmail, setCPF, setMetodoRecebimento, setCep, setName, setPhone, setTotal, metodoPayment, setMetodoPayment, metodoRecebimento, currentStep, setCurrentStep }: {
+export default function CheckoutDesktop({ setEPassword, ePassword, password, setPassword, handlePayment, setFinaly, setLoadingEmail, setAllReadyUser, allReadyUser, loadingEmail, userLoged, data, name, cpf, phone, email, cep, total, setEmail, setCPF, setMetodoRecebimento, setCep, setName, setPhone, setTotal, metodoPayment, setMetodoPayment, metodoRecebimento, currentStep, setCurrentStep }: {
   data?: {
     name: string;
     img: string;
     id: string;
     price: string;
     qtd: number;
-  }[], setEmail: React.Dispatch<React.SetStateAction<string>>, setCep: React.Dispatch<React.SetStateAction<string>>, setPhone: React.Dispatch<React.SetStateAction<string>>, name: string, cpf: string, phone: string, email: string, cep: string, total: number, setName: React.Dispatch<React.SetStateAction<string>>, setCPF: React.Dispatch<React.SetStateAction<string>>, setTotal: React.Dispatch<React.SetStateAction<number>>, metodoPayment: string, setMetodoPayment: React.Dispatch<React.SetStateAction<string>>, metodoRecebimento: string, setMetodoRecebimento: React.Dispatch<React.SetStateAction<string>>, setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number
+  }[], setEmail: React.Dispatch<React.SetStateAction<string>>, setCep: React.Dispatch<React.SetStateAction<string>>, setPhone: React.Dispatch<React.SetStateAction<string>>, name: string, cpf: string, phone: string, email: string, cep: string, total: number, setName: React.Dispatch<React.SetStateAction<string>>, setCPF: React.Dispatch<React.SetStateAction<string>>, setTotal: React.Dispatch<React.SetStateAction<number>>, metodoPayment: string, setMetodoPayment: React.Dispatch<React.SetStateAction<string>>, metodoRecebimento: string, setMetodoRecebimento: React.Dispatch<React.SetStateAction<string>>, setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number,
+  setLoadingEmail: React.Dispatch<React.SetStateAction<boolean>>, loadingEmail: boolean, setAllReadyUser: React.Dispatch<React.SetStateAction<string>>, allReadyUser: string, userLoged: boolean,
+  setFinaly: React.Dispatch<React.SetStateAction<boolean>>,
+  setPassword: React.Dispatch<React.SetStateAction<string>>,
+  setEPassword: React.Dispatch<React.SetStateAction<boolean>>,
+  ePassword: boolean,
+  password: string,
+  handlePayment: () => Promise<void>
 }) {
 
 
@@ -34,7 +43,39 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
   const [eCPF, setECPF] = useState<boolean>(false)
   const [ePhone, setEPhone] = useState<boolean>(false)
   const session = useSession()
-  const [userLoged, setUserLoged] = useState<boolean>(false)
+
+
+
+  const verifyEmail = async () => {
+    const subdominio = getSubdomain()
+    if (email.length < 5 || !email.includes('@') || !email.includes('.')) {
+      return setEEmail(true)
+    }
+    setLoadingEmail(true)
+    const verify = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/verifyEmail`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        email,
+        storeName: subdominio
+      })
+    })
+    if (verify.ok) {
+      const verifyData = await verify.json()
+      if (verifyData) {
+        setAllReadyUser('FIND')
+        setLoadingEmail(false)
+        return
+      }
+      setAllReadyUser("NOTFIND")
+      setLoadingEmail(false)
+      return
+    }
+    return
+
+  }
 
 
 
@@ -43,7 +84,7 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
   return <div className="w-full  flex justify-between space-x-8 pb-20 px-12 ">
     <div className="w-[62%] rounded-xl z-20">
       {currentStep === 0 ? <CartCheckout total={total} setTotal={setTotal} cep={cep} setCep={setCep} setMetodoRecebimento={setMetodoRecebimento} metodoRecebimento={metodoRecebimento} /> : null}
-      {currentStep === 1 ? <div className="visibleee bg-background p-6 rounded-xl">
+      {currentStep === 1 ? <div className="visibleee rounded-xl">
         {session.data?.user ? <>
           <div className="border flex rounded-lg p-3">
             <div className="flex items-center space-x-2">
@@ -56,10 +97,10 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
             </div>
           </div>
         </> : <>
-          <div className="w-full">
+          <div className="w-full flex flex-col">
 
             <div className="">
-              {userLoged ? null : <div>
+              {userLoged ? null : <div className="bg-background p-6 rounded-2xl">
                 <div className="">
                   <h1 className="font-bold">Dados pessoais</h1>
                   <div className="flex w-full space-x-3  justify-center items-center mt-5">
@@ -70,32 +111,180 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
                     </div>
                   </div>
                   <div className="mt-8">
-                    <div className="space-y-2">
-                      <h1 className=" text-sm text-muted-foreground">Digite seu Email para continuar<span className="text-red-500">*</span></h1>
-                      <div className={`  duration-200 flex border border-muted rounded-xl  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
-                        <MdOutlineEmail size={20} className="text-muted-foreground" />
-                        <input type="text" onChange={() => {
-                          setEEmail(false)
-                        }} placeholder="exemple@gmail.com" className=" bg-transparent p-0 w-full border-0 outline-0" />
-                        <button>Continuar</button>
-                      </div>
-                      {eEmail ? <p className='text-sm text-red-500'><span className=''>X </span> Preencha com um e-mail válido</p> : null}
-                    </div>
+                    <h1 className="">{allReadyUser === 'WAITING' ? 'Digite seu email para continuar' : allReadyUser === "FIND" ? 'Digite sua senha para fazer login em sua conta' : allReadyUser === "NOTFIND" ? 'Preencha os dados para continuar' : null}</h1>
                     <div className="space-y-2 mt-4">
-                      <h1 className=" text-sm text-muted-foreground">Senha<span className="text-red-500">*</span></h1>
-                      <div className={`  duration-200 flex border border-muted rounded-xl  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
-                        <MdPassword size={20} className="text-muted-foreground" />
-                        <input type="text" onChange={() => {
+                      <h1 className=" text-sm text-muted-foreground">Email<span className="text-red-500">*</span></h1>
+                      <div className={` ${eEmail ? 'bg-red-50' : ''} duration-200 flex border border-muted rounded-xl  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
+                        <MdOutlineEmail size={20} className="text-muted-foreground" />
+                        <input type="text" disabled={allReadyUser === 'FIND' ? true : false} onChange={(v) => {
                           setEEmail(false)
-                        }} placeholder="*******" className=" bg-transparent p-0 w-full border-0 outline-0" />
-
+                          setEmail(v.target.value)
+                        }} placeholder="exemple@gmail.com" className=" bg-transparent p-0 w-full border-0 outline-0" />
+                        {loadingEmail ? <Loader /> : allReadyUser === 'WAITING' ? <button onClick={() => {
+                          verifyEmail()
+                        }} className="text-primary">Continuar</button> : allReadyUser === 'FIND' ? <Pencil onClick={() => {
+                          setAllReadyUser('WAITING')
+                        }} className="text-primary cursor-pointer" /> : null}
                       </div>
                       {eEmail ? <p className='text-sm text-red-500'><span className=''>X </span> Preencha com um e-mail válido</p> : null}
                     </div>
+                    {
+                      allReadyUser === 'FIND' ? <div className="space-y-2 mt-2">
+                        <h1 className=" text-sm text-muted-foreground">Senha<span className="text-red-500">*</span></h1>
+                        <div className={`  duration-200 flex border border-muted rounded-xl  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
+                          <MdPassword size={20} className="text-muted-foreground" />
+                          <input type="password" onChange={() => {
+                            setEEmail(false)
+                          }} placeholder="*******" className=" bg-transparent p-0 w-full border-0 outline-0" />
+
+                        </div>
+                        {ePassword ? <p className='text-sm text-red-500'><span className=''>X A senha tem no minimo 6 caracteres</span></p> : null}
+                        <p className="text-sm text-muted-foreground underline">Esqueci minha senha</p>
+
+                      </div> : allReadyUser === 'NOTFIND' ? <div className="flex space-y-4">
+                        <div className="space-y-2 mt-4">
+                          <h1 className=" text-sm text-muted-foreground">Senha<span className="text-red-500">*</span></h1>
+                          <div className={`  duration-200 flex border border-muted rounded-xl  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
+                            <MdPassword size={20} className="text-muted-foreground" />
+                            <input type="password" onChange={() => {
+                              setEEmail(false)
+                            }} placeholder="*******" className=" bg-transparent p-0 w-full border-0 outline-0" />
+                          </div>
+                          {ePassword ? <p className='text-sm text-red-500'><span className=''>X A senha tem no minimo 6 caracteres</span></p> : null}
+                        </div>
+
+                      </div> : null
+                    }
+                    {allReadyUser === 'FIND' ? <div className="w-full flex justify-end mt-4">
+                      <button onClick={() => {
+                        if (!email || !password) {
+                          return setEPassword(true)
+                        }
+                        if (password.length < 6) {
+                          return setEPassword(true)
+                        }
+                        signIn('credentials', {
+                          redirect: false,
+                          email,
+                          password
+                        })
+                      }} className="bg-primary text-white rounded-lg p-3">Continuar</button>
+                    </div> : null}
+
+
                   </div>
 
                 </div>
               </div>}
+            </div>
+            <div className="mt-4 p-6 bg-background rounded-2xl">
+              <div className="flex justify-between items-center w-full">
+                <h1 className="font-bold">Dados de entrega</h1>
+                <CiDeliveryTruck className="w-6 h-6" />
+              </div>
+              <div className="flex mt-4 space-x-4">
+                <div onClick={() => {
+                  setMetodoRecebimento('ENTREGA')
+                }} className={`${metodoRecebimento === "ENTREGA" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
+                  <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoRecebimento === 'ENTREGA' ? " border-primary " : "bg-background border-gray-300"
+                    }`}>
+                    <div
+                      className={`w-4 h-4 duration-300 transition-all  rounded-full  ${metodoRecebimento === 'ENTREGA'
+                        ? "bg-primary "
+
+                        : "bg-background "
+                        }`}
+                    ></div>
+                  </div>
+                  <div className="flex justify-center items-center space-x-2">
+                    <CiDeliveryTruck className="w-6 h-6 text-muted-foreground" />
+                    <h1 className='text-sm'>Entrega</h1>
+                  </div>
+                </div>
+
+                <div onClick={() => {
+                  setMetodoRecebimento('RETIRADA')
+                }} className={`${metodoRecebimento === "RETIRADA" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
+                  <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoRecebimento === 'RETIRADA' ? " border-primary " : "bg-background border-gray-300"
+                    }`}>
+                    <div
+                      className={`w-4 h-4 duration-300 transition-all  rounded-full  ${metodoRecebimento === 'RETIRADA'
+                        ? "bg-primary "
+
+                        : "bg-background "
+                        }`}
+                    ></div>
+                  </div>
+                  <div className="flex justify-center items-center space-x-2">
+                    <CiLocationOn className="w-6 h-6 text-muted-foreground" />
+                    <h1 className='text-sm'>Retirada</h1>
+                  </div>
+                </div>
+              </div>
+              {metodoRecebimento === "RETIRADA" ? <div className="mt-4">
+                <div className="flex w-full mt-5 justify-between items-center" >
+                  <div className="flex space-x-3 items-center">
+                    <CiLocationOn className="text-primary border-primary w-8 h-8" />
+                    <h1 className="text-sm text-muted-foreground">Rua dasvxcv 45, Piritiba ba, proximo a adada ada</h1>
+                  </div>
+                </div>
+                <div className="bg-primary/5 mt-2 border rounded-sm mt p-2 w-full border-dashed">
+                  <h1 className="text-sm text-primary text-center">Você deve buscar seu pedido na loja, na opção RETIRADA!</h1>
+                </div>
+              </div> : metodoRecebimento === 'ENTREGA' ? <div className="mt-4">
+                {!userLoged ? <div>
+                  <div className="border-2 rounded-xl w-full border-primary border-dashed bg-primary/5 p-3 items-center flex justify-between">
+                    <div className="flex items-center w-1/2 justify-center space-x-2">
+                      <CiLocationOn className="text-primary border-primary w-8 h-8" />
+                      <h1 className="text-sm text-muted-foreground">Rua dasvxcv 45, Piritiba ba, proximo a adada ada</h1>
+                    </div>
+                    <FaCircleCheck className="text-primary border-primary w-5 h-5" />
+                  </div>
+                  <h1></h1>
+                </div> : <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-1 ">
+                    <h1 className="text-muted-foreground text-sm">Cep<span className="text-red-500">*</span></h1>
+                    <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
+                      <CiLocationOn className="text-muted-foreground w-5 h-5" />
+                      <InputMask mask={"99999-999"} value={cep} placeholder="_____-___" type="text" onChange={(v) => {
+                        setCep(v.target.value)
+                      }} className=" bg-transparent p-0 w-full border-0 outline-0" />
+                    </div>
+                  </div>
+                  <div className="space-y-1 ">
+                    <h1 className="text-muted-foreground text-sm">Estado<span className="text-red-500"> *</span></h1>
+                    <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
+                      <input type="text" onChange={(v) => {
+                        setCep(v.target.value)
+                      }} className=" bg-transparent p-0 w-full border-0 outline-0" />
+                    </div>
+                  </div>
+                  <div className="space-y-1 ">
+                    <h1 className="text-muted-foreground text-sm">Cidade<span className="text-red-500"> *</span></h1>
+                    <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
+                      <input type="text" onChange={(v) => {
+                        setCep(v.target.value)
+                      }} className=" bg-transparent p-0 w-full border-0 outline-0" />
+                    </div>
+                  </div>
+                  <div className="space-y-1 col-span-2 ">
+                    <h1 className="text-muted-foreground text-sm">Endereço<span className="text-red-500"> *</span></h1>
+                    <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
+                      <input type="text" onChange={(v) => {
+                        setCep(v.target.value)
+                      }} className=" bg-transparent p-0 w-full border-0 outline-0" />
+                    </div>
+                  </div>
+                  <div className="space-y-1 ">
+                    <h1 className="text-muted-foreground text-sm">Número<span className="text-red-500"> *</span></h1>
+                    <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
+                      <input type="text" onChange={(v) => {
+                        setCep(v.target.value)
+                      }} className=" bg-transparent p-0 w-full border-0 outline-0" />
+                    </div>
+                  </div>
+                </div>}
+              </div> : null}
             </div>
           </div>
         </>}
@@ -103,10 +292,9 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
       {currentStep === 2 ? <div className="flex bg-background visibleee flex-col p-6 rounded-xl ">
         <h1 className="font-bold">Escolha o método de pagamento:</h1>
         <div className="grid mt-5  grid-cols-2 gap-4">
-
           <div onClick={() => {
             setMetodoPayment('PIX')
-          }} className={`${metodoPayment === "PIX" ? 'border-primary' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
+          }} className={`${metodoPayment === "PIX" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
             <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoPayment === 'PIX' ? " border-primary " : "bg-background border-gray-300"
               }`}>
               <div
@@ -124,7 +312,7 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
           </div>
           <div onClick={() => {
             setMetodoPayment('CREDITO')
-          }} className={`${metodoPayment === "CREDITO" ? 'border-primary' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
+          }} className={`${metodoPayment === "CREDITO" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
             <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoPayment === 'CREDITO' ? " border-primary " : "bg-background border-gray-300"
               }`}>
               <div
@@ -142,7 +330,7 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
           </div>
           <div onClick={() => {
             setMetodoPayment('BOLETO')
-          }} className={`${metodoPayment === "BOLETO" ? 'border-primary' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
+          }} className={`${metodoPayment === "BOLETO" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
             <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoPayment === "BOLETO" ? " border-primary " : "bg-background border-gray-300"
               }`}>
               <div
@@ -160,7 +348,7 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
           </div>
           <div onClick={() => {
             setMetodoPayment('WPP')
-          }} className={`${metodoPayment === "WPP" ? 'border-primary' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
+          }} className={`${metodoPayment === "WPP" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
             <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoPayment === 'WPP' ? " border-primary " : "bg-background border-gray-300"
               }`}>
               <div
@@ -207,7 +395,7 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
               </div>
 
             </div>
-           
+
           </div>
           <div className="flex justify-between space-x-2">
             <div className="space-y-1">
@@ -259,9 +447,9 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
             <div className="flex space-x-3 items-center">
               <UserCircle className="text-primary border-primary w-8 h-8" />
               <div>
-                <h1>Hélio Neto</h1>
-                <h1 className="text-muted-foreground">hnetorocha@gmail.com</h1>
-                <h1 className="text-muted-foreground">74998097796</h1>
+                <h1>{name}</h1>
+                <h1 className="text-muted-foreground">{email}</h1>
+                <h1 className="text-muted-foreground">{phone}</h1>
               </div>
             </div>
             <div className="">
@@ -291,9 +479,26 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
         </div>
         <div className=" border-t py-4 mt-8 w-full ">
           <h1 className="font-bold">Pagamento</h1>
-          <div className="flex w-full mt-5 justify-between items-center">
+          {metodoPayment === 'PIX' ? <div className="flex w-full mt-5 justify-between items-center">
             <div className="flex space-x-2">
-              <img width={100} height={40} alt="Bandeira do cartão" src="https://firebasestorage.googleapis.com/v0/b/helius-db9a2.appspot.com/o/Mastercard-Logo.wine.svg?alt=media&token=6b7bb68b-8c2c-48e1-bb5a-1c8c8333203e" className="w-12 h-12  rounded-lg" />
+              <img width={100} height={40} alt="Bandeira do cartão" src="/images/pix.svg" className="w-12 h-12  rounded-lg" />
+              <div>
+                <h1 className="text-muted-foreground">
+                  PIX
+                </h1>
+                <h1 className="">
+                  {cpf}
+                </h1>
+              </div>
+            </div>
+            <div className="">
+              <FaCircleCheck className="text-primary border-primary w-8 h-8" />
+            </div>
+          </div> : null}
+
+          {metodoPayment === 'CREDITO' ? <div className="flex w-full mt-5 justify-between items-center">
+            <div className="flex space-x-2">
+              <img width={100} height={40} alt="Bandeira do cartão" src="/images/masterCard.svg" className="w-12 h-12  rounded-lg" />
               <div>
                 <h1 className="text-muted-foreground">
                   Master card
@@ -306,25 +511,31 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
             <div className="">
               <FaCircleCheck className="text-primary border-primary w-8 h-8" />
             </div>
-          </div>
-        </div>
-        <div className=" border-t py-4 mt-8 w-full ">
-          <h1 className="font-bold">Dados de entrega</h1>
-          <div className="flex w-full mt-5 justify-between items-center">
-            <div>
-              <h1>Hélio Neto</h1>
-              <h1>hnetorocha@gmail.com</h1>
-              <h1>74998097796</h1>
+          </div> : null}
+          {metodoPayment === 'BOLETO' ? <div className="flex w-full mt-5 justify-between items-center"></div> : null}
+          {metodoPayment === 'WPP' ? <div className="flex w-full mt-5 justify-between items-center">
+            <div className="flex items-center space-x-2">
+              <FaWhatsapp className="text-primary border-primary w-8 h-8" />
+              <div>
+                <h1 className="text-muted-foreground">
+                  Whatsapp
+                </h1>
+                <h1 className="">
+                  74998097796
+                </h1>
+              </div>
             </div>
             <div className="">
               <FaCircleCheck className="text-primary border-primary w-8 h-8" />
             </div>
-          </div>
+          </div> : null}
+
         </div>
+
 
       </div> : null}
     </div>
-    <div className="w-[38%] bg-background  shadow-lg p-3 h-max  rounded-xl">
+    {currentStep < 4 ? <div className="w-[38%] bg-background  shadow-lg p-3 h-max  rounded-xl">
 
 
       <div className=" rounded-xl dark:bg-zinc-900 bg-zinc-50 p-6 space-y-2">
@@ -352,10 +563,14 @@ export default function CheckoutDesktop({ data, name, cpf, phone, email, cep, to
       </div>
       <button onClick={() => {
         setCurrentStep(prev => prev + 1)
+        if (currentStep === 3) {
+          handlePayment()
+          setFinaly(true)
+        }
       }} className="w-full p-5 bg-primary rounded-xl mt-2 flex items-center justify-center">
         <h1 className="text-white font-bold">{currentStep === 0 ? 'Finalizar compra' : currentStep === 3 ? 'Pagar agora' : 'Próximo'}</h1>
       </button>
-    </div>
+    </div> : null}
   </div>
 
 
