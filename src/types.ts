@@ -88,3 +88,14 @@ export type Product = {
     }[]
   }[]
 }
+
+
+type ProductCart = {
+  name: string,
+  id: string,
+  img: string,
+  price: number,
+  qtd: number,
+  pricePromo?: number,
+  variantName?: string,
+}

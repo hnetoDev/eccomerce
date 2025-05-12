@@ -13,6 +13,7 @@ import { Poppins } from "next/font/google"
 import { Metadata } from "next"
 import Provider from "@/app/provider"
 import QueryProvider from "@/app/queryProvider"
+import AppThemeProvider from "@/components/context/theme"
 
 const inter = Poppins({ subsets: ["latin"], weight: '500' });
 

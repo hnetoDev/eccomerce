@@ -7,13 +7,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { HeartIcon } from "lucide-react";
 
-export default function CardProd({ id, name, price, pricePromo, img }: { id: string, img: string[], name: string, price: string, pricePromo: string }) {
-  return <div className="min-w-56 relative flex flex-col duration-200 transition-all hover:shadow-lg rounded-xl p-6 space-y-2">
+export default function CardProdLanding({ id, name, price, pricePromo, img }: { id: string, img: string[], name: string, price: string, pricePromo: string }) {
+  return <div className="w-64 relative h-[26rem] flex flex-col justify-between duration-200 transition-all hover:shadow-lg rounded-xl p-6 space-y-2">
     <div className="absolute px-3 py-1 rounded-xl z-10 left-8 top-10  bg-primary">
       <h1 className="text-white text-sm"> 24% OFF</h1>
     </div>
     
-    <div className="w-full relative group overflow-hidden h-64  rounded-lg">
+    <div className="w-full relative h-44 group overflow-hidden  rounded-lg">
     <div className="absolute bg-background/30 z-10 px-2 py-2 rounded-xl right-2 bottom-2">
       <HeartIcon onClick={()=>{
         alert(img[0])
@@ -23,7 +23,7 @@ export default function CardProd({ id, name, price, pricePromo, img }: { id: str
     </div>
       {/*<Image src={img[0]} width={400} height={400} alt="imagem produto" className="rounded-lg -z-10 w-full h-64   group-hover:fixed group-hover:invisible " />
       <Image src={img[1]} width={400} height={400} alt="imagem produto" className="rounded-lg w-full  h-64 group-hover:visible invisible " /> */}
-      {img ? <Link href={{pathname:`/app/produtos/${id}`}}><Image src={img[0]} width={400} height={400} alt="imagem produto" className="rounded-lg -z-10 w-full h-64 group-hover:scale-110 duration-300 transition-all" /></Link> : <div className="bg-muted rounded-lg w-full"></div>}
+      {img ? <Link href={{pathname:`/app/produtos/${id}`}}><Image src={img[0]} width={400} height={400} alt="imagem produto" className="rounded-lg -z-10 w-full h-44 group-hover:scale-110 duration-300 transition-all" /></Link> : <div className="bg-muted rounded-lg w-full"></div>}
     </div>
     <div className="flex  flex-col">
     <Link className="cursor-pointer" href={{pathname:`/app/produtos/${id}`}}>

@@ -21,6 +21,7 @@ import { HoverCard } from "@/components/popoverCollections";
 import { useSession } from "next-auth/react";
 import PopoverUser from "@/components/popoverAccount";
 import ThemeTabs from "@/components/tabTheme";
+import InputSearch from "@/components/inputSearch";
 
 const fetchStoreData = async (name: string): Promise<DataInit> => {
   alert('fetch1vez')
@@ -85,19 +86,22 @@ export default function LayoutApp({ children }: { children: React.ReactNode }) {
             <ThemeTabs />
           </div>
         </div>
-        <div className={`  duration-200 flex bg-muted rounded-3xl  focus-within:border-primary px-5  p-3 items-center space-x-2 w-full`}>
+        <div className="w-full">
+          <InputSearch />
+        </div>
+        {/*        <div className={`  duration-200 flex bg-muted rounded-3xl  focus-within:border-primary px-5  p-3 items-center space-x-2 w-full`}>
           <input type="text" onChange={() => {
           }} placeholder="O que você procura?" className=" bg-transparent text-muted-foreground p-0 w-full border-0 outline-0" />
           <SearchIcon className="text-primary" />
-        </div>
+        </div>*/}
         <div className="flex justify-end w-2/4 space-x-4 items-center">
-          {session.data?.user ? <PopoverUser /> : <div className="flex cursor-pointer rounded-3xl items-center justify-center space-x-2">
+          {session.data?.user ? <PopoverUser /> : <Link href={`/authenticator`} className="flex cursor-pointer rounded-3xl items-center justify-center space-x-2">
             <UserCircle className="w-8 h-8 text-muted-foreground" />
             <div className="flex flex-col ">
               <h1 className="text-sm text-muted-foreground ">Entre</h1>
               <h1 className="text-sm text-muted-foreground">ou cadastre</h1>
             </div>
-          </div>}
+          </Link>}
 
           <div className=" border-l px-4 flex items-center justify-center"><CartCustom addToCart={false} /></div>
         </div>
@@ -105,16 +109,16 @@ export default function LayoutApp({ children }: { children: React.ReactNode }) {
       <div className="mt-2 ">
         {collections ? <div className="flex space-x-12 justify-center items-center">
           {collections.slice(0, 7).map((c) => {
-            return <h1 key={c} className="text-muted-foreground cursor-pointer hover:text-primary">{c}</h1>
+            return <Link href={{ pathname: `/app/collections/${c}` }} key={c} className="text-muted-foreground text-sm cursor-pointer hover:text-primary">{c}</Link>
           })}
           <HoverCard collection={collections} />
         </div> : null}
       </div>
     </div>
 
-    
-      {children}
-    
+
+    {children}
+
 
 
     <Footer />

@@ -35,6 +35,7 @@ export default function CartCustom({ addToCart, children, id, name, price, img, 
         console.log(data);
         setEmpty(false)
         localStorage.setItem('cartItem', res ? JSON.stringify([...repetido, ...res]) : JSON.stringify([...repetido]))
+        attState()
         return calcTotal()
       }
 
@@ -43,6 +44,7 @@ export default function CartCustom({ addToCart, children, id, name, price, img, 
     setEmpty(false)
     setData(dataCart ? [...JSON.parse(dataCart), { id, name, price, img, qtd: 1 }] : [{ id, name, price, img, qtd: 1 }])
     localStorage.setItem('cartItem', dataCart ? JSON.stringify([...JSON.parse(dataCart), { id, name, price, img, qtd: 1 }]) : JSON.stringify([{ id, name, price, img, qtd: 1 }]))
+    attState()
     return calcTotal()
   }
   useEffect(() => {
@@ -176,8 +178,8 @@ export default function CartCustom({ addToCart, children, id, name, price, img, 
         </div> : <ScrollArea className="   h-[75vh]  ">{data?.map(d => <div key={d.id} className="p-3 hover:bg-zinc-100 dark:hover:bg-zinc-900 hover:rounded-lg bg-opacity-65  w-full justify-between flex">
           <div className="flex space-x-2">
             <Image alt="" width={100} height={100} src={d.img} className="w-20 h-24  rounded-lg" />
-            <div className="flex flex-col justify-between">
-              <h1 className="text-md font-bold">{d.name}</h1>
+            <div className="flex flex-col justify-around">
+              <h1 className="text-md">{d.name}</h1>
               <div className="flex border w-max rounded-xl space-x-1">
                 <div onClick={() => { handleDown(d.id) }} className="  dark:hover:bg-zinc-900 dark:hover:bg-opacity-65 flex text-lg hover:bg-zinc-200 hover:cursor-pointer font-bold justify-center items-center p-1 rounded-l-full w-6 h-6">
                   -

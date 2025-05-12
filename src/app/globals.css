@@ -31,7 +31,7 @@
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-    --primary: 192 100% 41%;
+    --primary: 190 85% 53%;
     --primary-foreground: 0 0% 98%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
@@ -60,7 +60,7 @@
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 192 100% 41%;
+    --primary: 190 85% 53%;
     --primary-foreground: 240 5.9% 10%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
@@ -286,6 +286,22 @@
 
 }
 
+.embla_slide_responsivo {
+  flex: 0 0 100%;
+  /* Cada slide ocupa 100% da largura do container */
+  min-width: 0;
+  /* Evita que o slide quebre */
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .embla__slide_responsivo {
+    flex: 0 0 25%;
+  }
+}
+
+
+
+
 .embla__dot:hover {
   background-color: #9e9e9e;
 }
@@ -310,4 +326,69 @@
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
   /* Chrome, Safari e Edge */
+}
+
+
+.product-carousel .dots {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.product-carousel .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin: 0 4px;
+  cursor: pointer;
+}
+
+.product-carousel .dot.active {
+  background-color: #333;
+}
+
+.product-carousel .carousel-container {
+  overflow: hidden;
+  position: relative;
+}
+
+.product-carousel .carousel-track {
+  display: flex;
+}
+
+.product-carousel .product-card {
+  flex-shrink: 0;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 1024px) {
+  .product-carousel .product-card {
+    width: 20%; /* 5 items per slide on desktop */
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .product-carousel .product-card {
+    width: 25%; /* 4 items per slide on tablet */
+  }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+  .product-carousel .product-card {
+    width: 33.333%; /* 3 items per slide on small tablet */
+  }
+}
+
+@media (min-width: 480px) and (max-width: 639px) {
+  .product-carousel .product-card {
+    width: 50%; /* 2 items per slide on mobile landscape */
+  }
+}
+
+@media (max-width: 479px) {
+  .product-carousel .product-card {
+    width: 100%; /* 1 item per slide on mobile portrait */
+  }
 }

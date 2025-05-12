@@ -3,9 +3,8 @@ import { ChevronDown, UserCircle } from 'lucide-react';
 
 function PopoverUser({ }) {
   return (
-    <div>
       <Popover>
-        <PopoverTrigger>
+        <PopoverTrigger className=''>
           <div className="flex cursor-pointer rounded-3xl items-center justify-center space-x-2">
             <UserCircle className="w-8 h-8 text-muted-foreground" />
             <div className="flex flex-col ">
@@ -20,7 +19,6 @@ function PopoverUser({ }) {
           <p>Esse é o conteúdo do popover!</p>
         </PopoverContent>
       </Popover>
-    </div>
   );
 }
 

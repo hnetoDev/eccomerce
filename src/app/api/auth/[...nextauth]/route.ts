@@ -12,9 +12,9 @@ const nextOptions : NextAuthOptions = {
   },
   secret:process.env.NEXTAUTH_SECRET,
   pages:{
-    signIn:'/auth',
-    signOut:'/auth',
-    newUser:'/auth'
+    signIn:'/app/authenticator',
+    signOut:'/app/authenticator',
+    newUser:'/app/authenticator',
   },
   callbacks:{
     async jwt({token,user}){
@@ -28,6 +28,7 @@ const nextOptions : NextAuthOptions = {
     },
     async session({session,token,newSession}) {
       if(session.user){
+        session.user.name = token.picture as string
         session.user.name = token.id as string
         session.user.email = token.email as string
      
@@ -51,6 +52,9 @@ const nextOptions : NextAuthOptions = {
         
         return res.ok
       }
+      if(account?.provider === 'credentials'){
+        return true
+      }
       return false;
     }
   },
@@ -60,15 +64,32 @@ const nextOptions : NextAuthOptions = {
       clientSecret:process.env.GOOGLE_CLIENT_SECRET!,
     },
   ),
-    /* CredentialsProvider({
+  CredentialsProvider({
       credentials: {
         email: {},
         password:{},
+        storeId:{}
       },
       async authorize(credentials,req) {
-
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/authCredentials`,{
+          method:'POST',
+          headers:{
+            'Content-Type':'application/json'
+          },
+          body:JSON.stringify({
+            storeName:credentials?.storeId, 
+            email:credentials?.email,
+            password:credentials?.password
+          })
+        })
+        if(res.ok){
+          const user = await res.json()
+          console.log('Logado')
+          return user
+        }
+        return null
       }
-    }) */
+    })
   ]
 }
 const handler = NextAuth(nextOptions)

@@ -5,7 +5,7 @@ import { CiDeliveryTruck } from "react-icons/ci";
 import CartCustom from "./cart";
 import CardProd from "./cardProd";
 
-export default function CardSectionMais({ collection }: {
+export default function CardSectionMaisTest({ collection }: {
   collection?: {
     id: string;
     name: string;
@@ -19,7 +19,7 @@ export default function CardSectionMais({ collection }: {
   }[]
 }) {
   return (
-    <div className="w-screen mb-4 space-x-6 overflow-x-scroll hide-scrollbar flex justify-start items-start">
+    <div className="w-full mb-4 space-x-6 px-12 overflow-x-scroll hide-scrollbar flex justify-start items-start">
 
       {collection ? collection.map((c, i) => {
         return c.produtos.map((p, i) => {

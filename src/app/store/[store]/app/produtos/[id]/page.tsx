@@ -10,23 +10,31 @@ import Image from "next/image"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { MdOutlineAddShoppingCart } from "react-icons/md"
+import { useQuery } from "@tanstack/react-query"
+import CardSection2 from "@/components/cardSection2"
+import CardSection3 from "@/components/cardSection3"
+
+async function getProduct(id: string): Promise<Product> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/findOne/${id}`)
+  if (!res.ok) throw new Error('Erro ao buscar dados')
+  return await res.json();
+}
 
 export default function PageProd({ params }: { params: { id: string } }) {
 
-  const [data, setData] = useState<Product>()
+
+  const { data, isLoading, error } = useQuery<Product>({
+    queryKey: ['product'],
+    enabled: !!params.id,
+    queryFn: () => getProduct(params.id),
+  })
+
   const [imageSelected, setImageSelected] = useState<string>()
   const [desconto, setDesconto] = useState<number[] | undefined>(undefined)
   const [selectedVariant, setSelectedVariant] = useState<{ name: string, value: string }[]>()
   const [productSelect, setProductSelect] = useState<Product['ProductsVariants'][0]>()
-  useEffect(() => {
-    async function getData() {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/product/findOne/${params.id}`)
-      if (res.ok) {
-        setData((await res.json()))
-      }
-    }
-    getData()
-  }, [params.id])
+  const [qtd, setQtd] = useState<number>(1)
+
 
   useEffect(() => {
     setImageSelected(data?.image ? data.image[0] : undefined)
@@ -107,9 +115,88 @@ export default function PageProd({ params }: { params: { id: string } }) {
     });
   };
 
-  return <div className="flex bg-zinc-50 flex-col mt-4">
+  return <div className="w-full py-8 px-16 bg-zinc-50">
+    <div className="w-full flex justify-center items-center">
+      <CardSection3 />
+    </div>
+    <div className="flex mt-4 w-full space-x-6">
+      <div className="w-7/12 bg-background shadow-lg p-6 rounded-xl flex">
+        <div>
+          {data?.image ? <CarouselProd images={data?.image} /> : <div className="w-full">
+            <div className="w-full bg-muted h-96 rounded-lg"></div>
+            <div className={` cursor-pointer border mt-2 w-12 h-12 duration-200 transition-all rounded-lg p-2 overflow-hidden hover:opacity-35  `} ></div>
+          </div>}
+        </div>
+      </div>
+      <div className="w-5/12 h-max flex-col flex  bg-background shadow-lg p-6 rounded-xl">
+        <div className="border-b pb-2 w-full h-max border-muted ">
+          <h1 className="text-4xl">{data?.name} {productSelect?.name}</h1>
+          <div className="flex items-center space-x-2">
+            <h1 className="text-yellow-400 text-xl">{'★'.repeat(5)}</h1>
+            <h1 className="text-muted-foreground text-sm">5 avaliações</h1>
+          </div>
+        </div>
+        <div className="">
+          {data?.selectedVariants ? data.selectedVariants.map(v => {
+            return <div key={v.name} className="mt-4">
+              <h1 className="font-bold">{v.name}:</h1>
+              <div className="flex mt-2 space-x-2">
+                {v.values.map((va, i) => {
+                  return <button key={i} onClick={() => { handleSelectAttribute(v.name, va) }} className={`  rounded-lg px-3 py-2 hover:cursor-pointer ${selectedVariant?.find(p => {
+                    return p.name === v.name && p.value === va
+                  }) ? 'bg-orange-500' : selectedVariant?.some(
+                    (selAttr) => selAttr.value === va && selAttr.name === v.name
+                  )
+                    ? 'active'
+                    : ' bg-muted'
+                    }`}>
+                    <h1 className="text-sm font-bold">{va}</h1>
+                  </button>
+                })}
+              </div>
+            </div>
+          }) : null}
+        </div>
+        <div className="mt-6">
+          <h1 className="text-muted-foreground line-through">R${Number(data?.price).toFixed(2)}</h1>
+          <h1 className="text-3xl text-primary font-bold">R${Number(data?.pricePromo).toFixed(2)}</h1>
+          <h1 className="text-muted-foreground ">3x de 22.50 sem juros</h1>
+          <h1 className="text-primary">5% de desconto no pix</h1>
+        </div>
+        <div className="w-full space-x-2 flex mt-4">
+          <div className="flex border p-1 md:p-3 w-max rounded-lg space-x-1">
+            <div onClick={() => {
+              setQtd(prev => {
+                if (prev === 1 || prev < 2) return prev
+                return prev - 1
+              })
+            }} className=" dark:hover:bg-opacity-65 flex text-lg hover:cursor-pointer font-bold justify-center items-center p-1 rounded-full w-6 h-6">
+              -
+            </div>
+            <div className="  flex justify-center text-sm items-center p-1 rounded-full w-6 h-6">
+              {qtd}
+            </div>
+            <div onClick={() => {
+              setQtd(prev => {
+                return prev + 1
+              })
+            }} className=" dark:hover:bg-opacity-65 flex text-lg hover:cursor-pointer  justify-center items-center p-1 rounded-full w-6 h-6">
+              +
+            </div>
+          </div>
+          <button className="bg-primary p-3 w-full rounded-lg">Comprar</button>
+        </div>
 
-    <div className="px-6">
+      </div>
+    </div>
+  </div>
+
+
+
+
+  { /* <div className="flex bg-zinc-50 flex-col mt-4">
+
+    <div className="px-6 flex">
       
       <div className=" w-full flex mt-3">
         {data?.image ? <CarouselProd images={data?.image} /> : <div className="w-full">
@@ -179,6 +266,6 @@ export default function PageProd({ params }: { params: { id: string } }) {
       </button>
       <HeartIcon className="w-8 h-8" />
     </div>
-  </div>
-
+  </div> */
+  }
 }

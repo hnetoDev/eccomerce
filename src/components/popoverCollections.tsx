@@ -41,7 +41,7 @@ export function HoverCard({ collection }: { collection: string[] }) {
             ref={refs.setFloating}
             style={floatingStyles}
             {...getFloatingProps()}
-            className="bg-background mr-3  w-1/3 z-30  p-4 rounded-3xl shadow-lg"
+            className="bg-background mr-3 w-1/3 z-50 mt-2  p-4 rounded-3xl shadow-lg"
           >
             {collection.map((c, i) => {
               return <div key={c} className='flex group hover:bg-primary/10 rounded-3xl cursor-pointer  justify-between w-full p-3'>

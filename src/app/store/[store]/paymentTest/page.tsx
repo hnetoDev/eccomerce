@@ -46,9 +46,6 @@ export default function PaymentPage() {
   const [loadindEmail, setLoadindEmail] = useState<boolean>(false)
   const [qrCode, setQrCode] = useState<string | undefined>(undefined)
   const [password, setPassword] = useState<string>("")
-
-
-  
   const handlePayment = async () => {
     let resultPayment = null;
     let method: string = '';

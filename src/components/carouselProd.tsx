@@ -24,43 +24,42 @@ export default function CarouselProd({ images }: { images: string[] | undefined 
 
   // Função para navegar para um slide específico ao clicar no dot
   const scrollTo = useCallback(
-    (index:number) => emblaApi && emblaApi.scrollTo(index),
+    (index: number) => emblaApi && emblaApi.scrollTo(index),
     [emblaApi]
   );
 
-  
+
 
   return (
-    <div className="embla relative ">
-
-      <div className="embla__viewport   rounded-lg " ref={emblaRef}>
-
-        <div className="embla__container ">
-          {images ? images.map((image, index) => (
-            <div key={index} className="embla__slide  rounded-lg ">
-              <div className='rounded-lg'>
-                <Image width={800} height={800} src={image} className='w-full h-96 rounded-lg' alt="Slide 1" />
-              </div>
-            </div>
-          )) : null}
-        </div>
-
-      </div>
-
-      <div className="flex space-x-2 mt-2 overflow-y-hidden hide-scrollbar overflow-x-scroll">
+    <div className='flex space-x-4'>
+      <div className="flex flex-col space-y-4  mt-2">
         {scrollSnaps.map((_, index) => (
           <button
             key={index}
-            className={` w-16 h-16 ${index === selectedIndex ? ' border-white scale-105 opacity-35' : 'border'
+            className={` w-16 h-16 ${index === selectedIndex ? ' border-primary  opacity-35' : 'border'
               }`}
             onClick={() => scrollTo(index)}
           >
-            {images ? images[index] ? <Image width={60} height={60} src={images[index]} className=" rounded-lg w-16 h-16 duration-200" alt="" /> : null : null}
+            {images ? images[index] ? <Image width={1000} height={1000} src={images[index]} className=" border w-16 h-16 duration-200" alt="" /> : null : null}
           </button>
         ))}
       </div>
+      <div className="embla relative">
 
+        <div className="embla__viewport   rounded-lg " ref={emblaRef}>
 
+          <div className="embla__container ">
+            {images ? images.map((image, index) => (
+              <div key={index} className="embla__slide  rounded-lg ">
+                <div className='rounded-lg'>
+                  <Image width={1000} height={1000} src={image} className='w-[36rem] h-[38rem] rounded-lg' alt="Slide 1" />
+                </div>
+              </div>
+            )) : null}
+          </div>
+
+        </div>
+      </div>
     </div>
   );
 }

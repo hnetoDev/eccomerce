@@ -5,6 +5,7 @@ import { Inter, Poppins, Open_Sans} from 'next/font/google';
 import { Metadata } from 'next';
 import QueryProvider from './queryProvider';
 import Provider from './provider';
+import { Analytics } from "@vercel/analytics/react"
 
 const inter = Poppins({ subsets: ["latin"], weight: '500' });
 
@@ -22,7 +23,7 @@ export default async function RootLayout({ children, searchParams }: any) {
 
         
           {children}
-        
+          <Analytics/>
 
       </body>
     </html>
