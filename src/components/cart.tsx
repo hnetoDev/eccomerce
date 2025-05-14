@@ -18,183 +18,85 @@ import { FaRegSadCry } from "react-icons/fa";
 import { IoTrashOutline } from "react-icons/io5";
 import { MdOutlineShoppingBag } from 'react-icons/md';
 import Image from "next/image";
-export default function CartCustom({ addToCart, children, id, name, price, img, qtd }: { id?: string, name?: string, price?: string, img?: string, qtd?: number, children?: React.ReactNode, addToCart: boolean }) {
-  const [data, setData] = useState<{ name: string, img: string, id: string, price: string, qtd: number }[]>();
+import { useCartStore } from "@/lib/cartStore/cardStore";
+export default function CartCustom({ addToCart, children, id, name, price, pricePromo, img, qtd }: { id?: string, name?: string, price?: string, pricePromo?: string, img?: string, qtd?: number, children?: React.ReactNode, addToCart: boolean }) {
+  const [data, setData] = useState<{ name: string, image: string, id: string, price: string, qtd: number }[]>();
   const [empty, setEmpty] = useState<boolean>(true);
-  const [total, setTotal] = useState<number>(0);
   const nav = useRouter()
-  const handleClick = () => {
-    const dataCart = localStorage.getItem('cartItem');
-    if (dataCart) {
-      const dataT: { name: string, img: string, id: string, price: string, qtd: number }[] = JSON.parse(dataCart);
-      const repetido = [...dataT].filter(d => d.id === id);
-      const res = [...dataT].filter(d => d.id !== id);
-      if (repetido.length > 0) {
-        repetido[0].qtd++;
-        setData(res ? [...repetido, ...res] : [...repetido])
-        console.log(data);
-        setEmpty(false)
-        localStorage.setItem('cartItem', res ? JSON.stringify([...repetido, ...res]) : JSON.stringify([...repetido]))
-        attState()
-        return calcTotal()
-      }
 
-    }
+  const cart = useCartStore((state) => state.cart)
+  const addToCarts = useCartStore((state) => state.addToCart)
+  const incrementItem = useCartStore((state) => state.incrementItem)
+  const decrementItem = useCartStore((state) => state.decrementItem)
+  const removeFromCart = useCartStore((state) => state.removeFromCart)
+  const clearCart = useCartStore((state) => state.clearCart)
 
-    setEmpty(false)
-    setData(dataCart ? [...JSON.parse(dataCart), { id, name, price, img, qtd: 1 }] : [{ id, name, price, img, qtd: 1 }])
-    localStorage.setItem('cartItem', dataCart ? JSON.stringify([...JSON.parse(dataCart), { id, name, price, img, qtd: 1 }]) : JSON.stringify([{ id, name, price, img, qtd: 1 }]))
-    attState()
-    return calcTotal()
-  }
+
   useEffect(() => {
-    const data = localStorage.getItem('cartItem')
-    if (data) {
-      const dataT = JSON.parse(data)
-      setData(dataT)
-      calcTotal();
+    if (cart.length > 0) {
       setEmpty(false)
-      return
+    } else {
+      setEmpty(true)
     }
-  }, [total, empty])
+  }, [cart])
+  const total = cart.reduce(
+    (sum, item) => sum + (item.price) * item.quantidade,
+    0
+  )
 
 
-  function calcTotal() {
-    const dataCart = localStorage.getItem('cartItem')
-    if (dataCart) {
-      const dataT: { name: string, img: string, id: string, price: string, qtd: number }[] = JSON.parse(dataCart);
-      let total: number = 0;
-      dataT.map(d => {
-        total += d.qtd * Number(d.price);
-        return
-      })
-      return setTotal(total);
-    }
-    return setTotal(0)
-  }
-
-  const handleDown = (id: string) => {
-    const dataCart = localStorage.getItem('cartItem');
-    if (dataCart) {
-      const dataT: { name: string, img: string, id: string, price: string, qtd: number }[] = JSON.parse(dataCart);
-
-      const findId = dataT.find(d => d.id === id)
-      if (findId!.qtd < 2) {
-        const rest = [...dataT].filter(d => d.id !== id);
-        if (rest.length > 0) {
-          setData(rest);
-          localStorage.setItem('cartItem', JSON.stringify([...rest]))
-          return calcTotal()
-        }
-        setData([]);
-        setEmpty(true);
-        localStorage.removeItem('cartItem');
-        calcTotal()
-        return
-
-      }
-      const newCart = dataT.map(d => {
-        if (d.id === id) {
-          d.qtd--;
-        }
-        return d;
-      })
-
-      setData(newCart);
-      localStorage.setItem('cartItem', JSON.stringify([...newCart]))
-      return calcTotal()
-    }
-
-  }
-  const handleUp = (id: string) => {
-    const dataCart = localStorage.getItem('cartItem');
-    if (dataCart) {
-      const dataT: { name: string, img: string, id: string, price: string, qtd: number }[] = JSON.parse(dataCart);
-
-      const newCart = dataT.map(d => {
-        if (d.id === id) {
-          d.qtd++
-        }
-        return d;
-      })
-
-      setData(newCart);
-      localStorage.setItem('cartItem', JSON.stringify([...newCart]))
-      return calcTotal()
-
-    }
-  }
-  const attState = () => {
-    const dataCart = localStorage.getItem('cartItem');
-    if (dataCart) {
-      const dataT: { name: string, img: string, id: string, price: string, qtd: number }[] = JSON.parse(dataCart)
-      setData(dataT);
-      calcTotal();
-      setEmpty(false)
-      return
-    }
-    setEmpty(true);
-    return
-  }
-
-  const handleDelete = (id: string) => {
-    const dataCart = localStorage.getItem('cartItem');
-    if (dataCart) {
-      const dataT: { name: string, img: string, id: string, price: string, qtd: number }[] = JSON.parse(dataCart);
-      const rest = dataT.filter(d => d.id !== id)
-      if (rest.length > 0) {
-        setData(rest);
-        localStorage.setItem('cartItem', JSON.stringify([...rest]));
-        return calcTotal()
-      }
-      setData([]);
-      setEmpty(true);
-      localStorage.removeItem('cartItem')
-      return calcTotal()
-
-    }
-  }
 
 
   return <Sheet>
-    <SheetTrigger className={`${addToCart ? 'w-full' : null}`}>{addToCart ? <div className="w-full" onClick={handleClick}>{children}</div> : <div className="relative">
+    <SheetTrigger className={`${addToCart ? 'w-full' : null}`}>{addToCart ? <div className="w-full" onClick={() => {
+      addToCarts({
+        id: id!,
+        name: name!,
+        price: Number(price!),
+        pricePromo: pricePromo ? Number(pricePromo) : undefined,
+        image: img,
+        quantidade: qtd ?? 1
+      })
+    }}>{children}</div> : <div className="relative">
       <div className="bg-primary w-6 h-6 flex items-center justify-center absolute rounded-full p-2 -right-2 -bottom-2">
-        <p className="text-sm text-white font-bold">{data ? `${data.length}` : '0'}</p>
+        <p className="text-sm text-white font-bold">{cart ? `${cart.length}` : '0'}</p>
       </div>
-      <MdOutlineShoppingBag onClick={attState} className="md:w-8 md:h-8 w-6 h-6 text-muted-foreground" />
+      <MdOutlineShoppingBag className="md:w-8 md:h-8 w-6 h-6 text-muted-foreground" />
     </div>}</SheetTrigger>
-    <SheetContent side={'right'} className="w-[90vw] md:w-[2000px]" >
+    <SheetContent side={'right'} className="w-full md:max-w-[35vw]" >
       <SheetHeader>
         <SheetTitle><div className="flex items-center justify-center space-x-4"> <MdOutlineShoppingBag className="w-7 h-7" /><h1>Seu carrinho</h1></div></SheetTitle>
 
       </SheetHeader>
-      <div className="flex flex-col h-full justify-between py-4">
+      <div className="flex flex-col h-full  justify-between py-4">
         {empty ? <div className="flex flex-col  m-auto space-y-8 justify-center items-center">
           <FaRegSadCry className="w-16 h-16" />
           <div className="flex flex-col justify-center">
             <h1 className="text-zinc-400 text-wrap text-center">Carrinho Vazio</h1>
             <h1 className="text-zinc-400 text-wrap text-center">Adicione itens para aproveitar nossas promoções</h1>
           </div>
-        </div> : <ScrollArea className="   h-[75vh]  ">{data?.map(d => <div key={d.id} className="p-3 hover:bg-zinc-100 dark:hover:bg-zinc-900 hover:rounded-lg bg-opacity-65  w-full justify-between flex">
+        </div> : <ScrollArea className="   h-[75vh]  ">{cart?.map(d => <div key={d.id} className="p-3 hover:bg-zinc-100 dark:hover:bg-zinc-900 items-start hover:rounded-lg bg-opacity-65  w-full justify-between flex">
           <div className="flex space-x-2">
-            <Image alt="" width={100} height={100} src={d.img} className="w-20 h-24  rounded-lg" />
-            <div className="flex flex-col justify-around">
-              <h1 className="text-md">{d.name}</h1>
-              <div className="flex border w-max rounded-xl space-x-1">
-                <div onClick={() => { handleDown(d.id) }} className="  dark:hover:bg-zinc-900 dark:hover:bg-opacity-65 flex text-lg hover:bg-zinc-200 hover:cursor-pointer font-bold justify-center items-center p-1 rounded-l-full w-6 h-6">
-                  -
+            {d.image ? <Image alt="" width={100} height={100} src={d.image} className="w-20 h-24  rounded-lg" /> : null}
+            
+              <div className="flex flex-col justify-between">
+                <h1 className="text-md font-bold">{d.name}</h1>
+                <div className="flex border w-max rounded-xl space-x-1">
+                  <div onClick={() => { decrementItem(d.id) }} className="  dark:hover:bg-zinc-900 dark:hover:bg-opacity-65 flex text-lg hover:bg-zinc-200 hover:cursor-pointer font-bold justify-center items-center p-1 rounded-l-full w-6 h-6">
+                    -
+                  </div>
+                  <div className="    flex justify-center text-sm items-center p-1 rounded-full w-6 h-6">
+                    {d.quantidade}
+                  </div>
+                  <div onClick={() => { incrementItem(d.id) }} className="  dark:hover:bg-zinc-900 dark:hover:bg-opacity-65 flex text-lg hover:bg-zinc-200 hover:cursor-pointer  justify-center items-center p-1 rounded-r-full w-6 h-6">
+                    +
+                  </div>
                 </div>
-                <div className="    flex justify-center text-sm items-center p-1 rounded-full w-6 h-6">
-                  {d.qtd}
-                </div>
-                <div onClick={() => { handleUp(d.id) }} className="  dark:hover:bg-zinc-900 dark:hover:bg-opacity-65 flex text-lg hover:bg-zinc-200 hover:cursor-pointer  justify-center items-center p-1 rounded-r-full w-6 h-6">
-                  +
-                </div>
+                <div className="flex items-center"><h1 className="font-extrabold text-primary text-sm">R$ {d.price}</h1><p className="text-sm text-zinc-500">/cada</p></div>
               </div>
-              <div className="flex items-center"><h1 className="font-extrabold text-primary text-sm">R$ {d.price}</h1><p className="text-sm text-zinc-500">/cada</p></div>
-            </div>
+            
           </div>
-          <IoTrashOutline onClick={() => { handleDelete(d.id) }} className="text-end hover:cursor-pointer  " />
+          <IoTrashOutline onClick={() => { removeFromCart(d.id) }} className="text-end hover:cursor-pointer  " />
         </div>)}</ScrollArea>}
         <div className="w-full
         ">
@@ -207,12 +109,12 @@ export default function CartCustom({ addToCart, children, id, name, price, img, 
               <p className="text-end  text-sm text-green-500">10% de desconto no PIX</p>
               <div className="w-full flex justify-between">
                 <h1 className="font-extrabold">Total</h1>
-                <h1 className="space-x-4 "><span className="text-muted-foreground text-sm line-through">R$ {total.toFixed(2)}</span><span className="font-bold">R$ {(total - (total * 10/100)).toFixed(2)}</span></h1>
+                <h1 className="space-x-4 "><span className="text-muted-foreground text-sm line-through">R$ {total?.toFixed(2)}</span><span className="font-bold">R$ {(total - (total * 10 / 100)).toFixed(2)}</span></h1>
               </div>
             </div>
           </div>
           <SheetClose onClick={() => {
-            nav.push('/app/paymentTest')
+            nav.push('/app/carrinho')
           }} className="bg-primary text-white font-extrabold flex justify-center items-center  w-full rounded-lg p-3">Finalizar compra</SheetClose>
         </div>
       </div>

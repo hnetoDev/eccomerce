@@ -183,9 +183,11 @@ export default function CartCheckout({ metodoRecebimento, total, setTotal, cep, 
       </div>
     </div>}
 
-    <div className="mt-16">
+    <div className="w-full pb-4">
       <LeveTambem />
     </div>
+
+    
 
   </div>
 

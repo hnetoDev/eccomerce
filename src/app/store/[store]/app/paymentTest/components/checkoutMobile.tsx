@@ -15,7 +15,7 @@ import { FaBars, FaWhatsapp } from "react-icons/fa"
 import Image from "next/image"
 import { CiLocationOn } from "react-icons/ci"
 import CartCheckout from "./cartCheckout"
-import AccordionCupom from "./accordionCupom"
+import AccordionCupom from "./accordionCep"
 
 
 export default function CheckoutMobile({setFinaly,setAllReadyUser,setLoadingEmail,allReadyUser,userLoged,loadingEmail, data, name, cpf, phone, email, cep, total, setEmail, setCPF, setMetodoRecebimento, setCep, setName, setPhone, setTotal, metodoPayment, setMetodoPayment, metodoRecebimento, currentStep, setCurrentStep }: {

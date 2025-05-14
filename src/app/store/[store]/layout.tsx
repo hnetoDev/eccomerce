@@ -41,7 +41,7 @@ export default async function StoreLayout({
 
   return (
     <html className="h-screen overflow-x-hidden  w-screen" lang="pt-BR">
-      <body className={`h-screen overflow-x-hidden n w-screen`}>
+      <body className={`h-screen ${inter.className} overflow-x-hidden n w-screen`}>
         <ThemeProvider theme={store.theme}>
           <Head>
             <link rel="preload" as="image" href={store.theme.logoUrl} />

@@ -19,16 +19,22 @@ import AccordionCupom from "./accordionCupom"
 import { getSubdomain } from "@/lib/getSubdomain"
 import { Loader } from "@/components/loader"
 import SignInCredentials from "@/lib/signInCredentials"
+import { HiOutlineShoppingCart } from "react-icons/hi";
+import { getInfoCEP } from "@/lib/cep/getCep"
 
 
-export default function CheckoutDesktop({ setEPassword, ePassword, password, setPassword, handlePayment, setFinaly, setLoadingEmail, setAllReadyUser, allReadyUser, loadingEmail, userLoged, data, name, cpf, phone, email, cep, total, setEmail, setCPF, setMetodoRecebimento, setCep, setName, setPhone, setTotal, metodoPayment, setMetodoPayment, metodoRecebimento, currentStep, setCurrentStep }: {
-  data?: {
+export default function CheckoutDesktop({ estado, cidade, numero, endereco, eName, eEmail, eCPF, ePhone, setEstado, setECPF, setEEmail, setEPhone, setEName, setCidade, setNumero, setEndereco, setCepFinded, cepFinded, setEPassword, ePassword, password, setPassword, handlePayment, setFinaly, setLoadingEmail, setAllReadyUser, allReadyUser, loadingEmail, userLoged, cart, name, cpf, phone, email, cep, total, setEmail, setCPF, setMetodoRecebimento, setCep, setName, setPhone, setTotal, metodoPayment, setMetodoPayment, metodoRecebimento, currentStep, setCurrentStep }: {
+  cart?: {
     name: string;
-    img: string;
+    image?: string;
     id: string;
     price: string;
-    qtd: number;
-  }[], setEmail: React.Dispatch<React.SetStateAction<string>>, setCep: React.Dispatch<React.SetStateAction<string>>, setPhone: React.Dispatch<React.SetStateAction<string>>, name: string, cpf: string, phone: string, email: string, cep: string, total: number, setName: React.Dispatch<React.SetStateAction<string>>, setCPF: React.Dispatch<React.SetStateAction<string>>, setTotal: React.Dispatch<React.SetStateAction<number>>, metodoPayment: string, setMetodoPayment: React.Dispatch<React.SetStateAction<string>>, metodoRecebimento: string, setMetodoRecebimento: React.Dispatch<React.SetStateAction<string>>, setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number,
+    pricePromo?: string;
+    quantidade: number;
+  }[],
+  estado: string, setEstado: React.Dispatch<React.SetStateAction<string>>, cidade: string, setCidade: React.Dispatch<React.SetStateAction<string>>, numero: string, setNumero: React.Dispatch<React.SetStateAction<string>>, endereco: string, setEndereco: React.Dispatch<React.SetStateAction<string>>,
+  cepFinded: boolean, setCepFinded: React.Dispatch<React.SetStateAction<boolean>>, setEName: React.Dispatch<React.SetStateAction<boolean>>, eName: boolean, setEEmail: React.Dispatch<React.SetStateAction<boolean>>, eEmail: boolean, setECPF: React.Dispatch<React.SetStateAction<boolean>>, eCPF: boolean, setEPhone: React.Dispatch<React.SetStateAction<boolean>>, ePhone: boolean,
+  setEmail: React.Dispatch<React.SetStateAction<string>>, setCep: React.Dispatch<React.SetStateAction<string>>, setPhone: React.Dispatch<React.SetStateAction<string>>, name: string, cpf: string, phone: string, email: string, cep: string, total: number, setName: React.Dispatch<React.SetStateAction<string>>, setCPF: React.Dispatch<React.SetStateAction<string>>, setTotal: React.Dispatch<React.SetStateAction<number>>, metodoPayment: string, setMetodoPayment: React.Dispatch<React.SetStateAction<string>>, metodoRecebimento: string, setMetodoRecebimento: React.Dispatch<React.SetStateAction<string>>, setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number,
   setLoadingEmail: React.Dispatch<React.SetStateAction<boolean>>, loadingEmail: boolean, setAllReadyUser: React.Dispatch<React.SetStateAction<string>>, allReadyUser: string, userLoged: boolean,
   setFinaly: React.Dispatch<React.SetStateAction<boolean>>,
   setPassword: React.Dispatch<React.SetStateAction<string>>,
@@ -38,11 +44,6 @@ export default function CheckoutDesktop({ setEPassword, ePassword, password, set
   handlePayment: () => Promise<void>
 }) {
 
-
-  const [eName, setEName] = useState<boolean>(false)
-  const [eEmail, setEEmail] = useState<boolean>(false)
-  const [eCPF, setECPF] = useState<boolean>(false)
-  const [ePhone, setEPhone] = useState<boolean>(false)
   const session = useSession()
 
 
@@ -83,9 +84,8 @@ export default function CheckoutDesktop({ setEPassword, ePassword, password, set
 
 
   return <div className="w-full  flex justify-between space-x-8 pb-20 px-12 ">
-    <div className="w-[62%] rounded-xl z-20">
-      {currentStep === 0 ? <CartCheckout total={total} setTotal={setTotal} cep={cep} setCep={setCep} setMetodoRecebimento={setMetodoRecebimento} metodoRecebimento={metodoRecebimento} /> : null}
-      {currentStep === 1 ? <div className="visibleee rounded-xl">
+    <div className="w-[55%] rounded-xl z-20">
+      {currentStep === 0 ? <div className="visibleee rounded-xl">
         {session.data?.user ? <>
           <div className="border flex rounded-lg p-3">
             <div className="flex items-center space-x-2">
@@ -104,17 +104,33 @@ export default function CheckoutDesktop({ setEPassword, ePassword, password, set
               {userLoged ? null : <div className="bg-background p-6 rounded-2xl">
                 <div className="">
                   <h1 className="font-bold">Dados pessoais</h1>
-                  <div className="flex w-full space-x-3  justify-center items-center mt-5">
-                    <CircleUser className="w-12 h-12  text-muted-foreground" />
-                    <div className="space-y-3">
-                      <div className="h-1 w-20  rounded-md bg-muted-foreground"></div>
-                      <div className="h-1 w-24  rounded-md bg-muted-foreground"></div>
+                  <p className="text-sm text-muted-foreground mt-2">Entre com</p>
+                  <div className="flex space-x-2 mt-2 items-center justify-center">
+                    <div onClick={() => {
+                      signIn('google', {
+                        redirect: false
+                      })
+                    }} className="rounded-xl  hover:bg-primary/5 hover:border-primary duration-300  cursor-pointer transition-all space-x-2 border p-3 justify-center items-center flex">
+                      <Image alt="" width={50} height={50} src="/images/google.png" className="w-7 h-7" />
+                      <h1 className="text-sm">Google</h1>
+                    </div>
+                    <div className="rounded-xl  hover:bg-primary/5 hover:border-primary duration-300  cursor-pointer transition-all  space-x-2 border p-3 justify-center items-center flex">
+                      <UserCircle className="w-7 h-7" />
+                      <h1 className="text-sm">Email/senha</h1>
+                    </div>
+                    <div className="rounded-xl  hover:bg-primary/5 hover:border-primary duration-300  cursor-pointer transition-all space-x-2 border p-3 justify-center items-center flex">
+                      <HiOutlineShoppingCart className="w-7 h-7" />
+                      <h1 className="text-sm">Venda Rápida</h1>
                     </div>
                   </div>
-                  <div className="mt-8">
-                    <h1 className="">{allReadyUser === 'WAITING' ? 'Digite seu email para continuar' : allReadyUser === "FIND" ? 'Digite sua senha para fazer login em sua conta' : allReadyUser === "NOTFIND" ? 'Preencha os dados para continuar' : null}</h1>
+                  <div className="flex w-full mt-4 justify-center items-center">
+                    <div className="w-1/3 h-0.5 border-b border-muted"></div>
+                    <div className="text-muted-foreground text-center w-1/5">ou</div>
+                    <div className="w-1/3 h-0.5 border-b border-muted"></div>
+                  </div>
+                  <div className="mt-4">
+                    <h1 className="text-sm text-muted-foreground">{allReadyUser === 'WAITING' ? 'Digite seu email para continuar' : allReadyUser === "FIND" ? 'Digite sua senha para fazer login em sua conta' : allReadyUser === "NOTFIND" ? 'Preencha os dados para continuar' : null}</h1>
                     <div className="space-y-2 mt-4">
-                      <h1 className=" text-sm text-muted-foreground">Email<span className="text-red-500">*</span></h1>
                       <div className={` ${eEmail ? 'bg-red-50' : ''} duration-200 flex border border-muted rounded-xl  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
                         <MdOutlineEmail size={20} className="text-muted-foreground" />
                         <input type="text" disabled={allReadyUser === 'FIND' ? true : false} onChange={(v) => {
@@ -143,19 +159,40 @@ export default function CheckoutDesktop({ setEPassword, ePassword, password, set
                         {ePassword ? <p className='text-sm text-red-500'><span className=''>X A senha tem no minimo 6 caracteres</span></p> : null}
                         <p className="text-sm text-muted-foreground underline">Esqueci minha senha</p>
 
-                      </div> : allReadyUser === 'NOTFIND' ? <div className="flex space-y-4">
-                        <div className="space-y-2 mt-4">
-                          <h1 className=" text-sm text-muted-foreground">Senha<span className="text-red-500">*</span></h1>
-                          <div className={`  duration-200 flex border border-muted rounded-xl  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
-                            <MdPassword size={20} className="text-muted-foreground" />
-                            <input type="password" onChange={(v) => {
-                              setEPassword(false)
-                              setPassword(v.target.value)
-                            }} placeholder="*******" className=" bg-transparent p-0 w-full border-0 outline-0" />
+                      </div> : allReadyUser === 'NOTFIND' ? <div className=" gap-4 grid  mt-5">
+                        <div className="space-y-1">
+                          <h1 className="text-muted-foreground text-sm">Nome <span className="text-red-500">*</span></h1>
+                          <div className={`  duration-200 flex border rounded-xl border-muted  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
+                            <MdPersonOutline size={20} className="text-muted-foreground" />
+                            <input type="text" onChange={() => {
+                              setEName(false)
+                            }} placeholder="Jorge Ribeiro" className=" bg-transparent p-0 w-full border-0 outline-0" />
                           </div>
-                          {ePassword ? <p className='text-sm text-red-500'><span className=''>X A senha tem no minimo 6 caracteres</span></p> : null}
+                          {eName ? <p className='text-sm text-red-500'><span className=''>X </span> Campo obrigatório</p> : null}
                         </div>
 
+                        <div className="space-y-1">
+                          <h1 className="text-muted-foreground text-sm">Telefone</h1>
+                          <div className={`  duration-200 flex border rounded-xl border-muted  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
+                            <MdOutlinePhone size={20} className="text-muted-foreground" />
+                            <InputMask mask={"(99) 99999-9999"} value={phone} placeholder="(__) _____-____" type="text" onChange={(v) => {
+                              setEName(false)
+
+                            }} className=" bg-transparent p-0 w-full border-0 outline-0" />
+                          </div>
+
+                        </div>
+                        <div className="space-y-1">
+                          <h1 className="text-muted-foreground text-sm">CPF</h1>
+                          <div className={`  duration-200 flex border rounded-xl border-muted  focus-within:border-primary  p-3 items-center space-x-2 w-full`}>
+                            <LockIcon size={20} className="text-muted-foreground" />
+                            <InputMask mask={"999.999.999-99"} type="text" value={cpf} onChange={(v) => {
+                              setECPF(false)
+                              setCPF(v.target.value)
+                            }} placeholder="___.___.___-__" className=" bg-transparent w-full border-0 outline-0" />
+                          </div>
+                          {eCPF ? <p className='text-sm text-red-500'><span className=''>X </span>CPF inválido</p> : null}
+                        </div>
                       </div> : null
                     }
                     {allReadyUser === 'FIND' ? <div className="w-full flex justify-end mt-4">
@@ -231,7 +268,7 @@ export default function CheckoutDesktop({ setEPassword, ePassword, password, set
                   <h1 className="text-sm text-primary text-center">Você deve buscar seu pedido na loja, na opção RETIRADA!</h1>
                 </div>
               </div> : metodoRecebimento === 'ENTREGA' ? <div className="mt-4">
-                {!userLoged ? <div>
+                {userLoged ? <div>
                   <div className="border-2 rounded-xl w-full border-primary border-dashed bg-primary/5 p-3 items-center flex justify-between">
                     <div className="flex items-center w-1/2 justify-center space-x-2">
                       <CiLocationOn className="text-primary border-primary w-8 h-8" />
@@ -241,54 +278,59 @@ export default function CheckoutDesktop({ setEPassword, ePassword, password, set
                   </div>
                   <h1></h1>
                 </div> : <div className="grid grid-cols-3 gap-4">
-                  <div className="space-y-1 ">
-                    <h1 className="text-muted-foreground text-sm">Cep<span className="text-red-500">*</span></h1>
-                    <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
-                      <CiLocationOn className="text-muted-foreground w-5 h-5" />
-                      <InputMask mask={"99999-999"} value={cep} placeholder="_____-___" type="text" onChange={(v) => {
-                        setCep(v.target.value)
-                      }} className=" bg-transparent p-0 w-full border-0 outline-0" />
+                  <div className="space-y-2 col-span-3">
+                    <h1 className="text-muted-foreground text-sm">Digite o CEP<span className="text-red-500">*</span></h1>
+                    <div className="flex items-center space-x-8">
+                      <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
+                        <CiLocationOn className="text-muted-foreground w-5 h-5" />
+                        <InputMask mask={"99999-999"} value={cep} placeholder="_____-___" type="text" onChange={async (v) => {
+                          if (v.target.value.length === 9 && !v.target.value.includes('_')) {
+                            const cepString = v.target.value.replace(/\D/g, '')
+                            const dataCEP = await getInfoCEP(v.target.value)
+                            if (dataCEP) {
+                              setEndereco(dataCEP.logradouro)
+                              setEstado(dataCEP.uf)
+                              setCidade(dataCEP.cidade)
+                              setCepFinded(true)
+                            }
+                          }
+                          setCep(v.target.value)
+                        }} className=" bg-transparent p-0 w-full border-0 outline-0" />
+                      </div>
+                      {cepFinded ?
+                      <h1 className="text-muted-foreground text-sm">{cidade}/{estado}</h1>
+                      : null}
+
                     </div>
                   </div>
-                  <div className="space-y-1 ">
-                    <h1 className="text-muted-foreground text-sm">Estado<span className="text-red-500"> *</span></h1>
-                    <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
-                      <input type="text" onChange={(v) => {
-                        setCep(v.target.value)
-                      }} className=" bg-transparent p-0 w-full border-0 outline-0" />
-                    </div>
-                  </div>
-                  <div className="space-y-1 ">
-                    <h1 className="text-muted-foreground text-sm">Cidade<span className="text-red-500"> *</span></h1>
-                    <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
-                      <input type="text" onChange={(v) => {
-                        setCep(v.target.value)
-                      }} className=" bg-transparent p-0 w-full border-0 outline-0" />
-                    </div>
-                  </div>
-                  <div className="space-y-1 col-span-2 ">
-                    <h1 className="text-muted-foreground text-sm">Endereço<span className="text-red-500"> *</span></h1>
-                    <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
-                      <input type="text" onChange={(v) => {
-                        setCep(v.target.value)
-                      }} className=" bg-transparent p-0 w-full border-0 outline-0" />
-                    </div>
-                  </div>
-                  <div className="space-y-1 ">
-                    <h1 className="text-muted-foreground text-sm">Número<span className="text-red-500"> *</span></h1>
-                    <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
-                      <input type="text" onChange={(v) => {
-                        setCep(v.target.value)
-                      }} className=" bg-transparent p-0 w-full border-0 outline-0" />
-                    </div>
-                  </div>
+                  {
+                    cepFinded ? <div className="flex w-full">
+                      <div className="space-y-1 w-full ">
+                        <h1 className="text-muted-foreground text-sm">Endereço<span className="text-red-500"> *</span></h1>
+                        <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
+                          <input type="text" onChange={(v) => {
+                            setCep(v.target.value)
+                          }} className=" bg-transparent p-0 w-full border-0 outline-0" />
+                        </div>
+                      </div>
+                      <div className="space-y-1 ">
+                        <h1 className="text-muted-foreground text-sm">Número<span className="text-red-500"> *</span></h1>
+                        <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
+                          <input type="text" onChange={(v) => {
+                            setCep(v.target.value)
+                          }} className=" bg-transparent p-0 w-full border-0 outline-0" />
+                        </div>
+                      </div>
+                    </div> : null
+                  }
+
                 </div>}
               </div> : null}
             </div>
           </div>
         </>}
       </div> : null}
-      {currentStep === 2 ? <div className="flex bg-background visibleee flex-col p-6 rounded-xl ">
+      {currentStep === 1 ? <div className="flex bg-background visibleee flex-col p-6 rounded-xl ">
         <h1 className="font-bold">Escolha o método de pagamento:</h1>
         <div className="grid mt-5  grid-cols-2 gap-4">
           <div onClick={() => {
@@ -421,7 +463,7 @@ export default function CheckoutDesktop({ setEPassword, ePassword, password, set
         </div> : null}
 
       </div> : null}
-      {currentStep === 3 ? <div className="flex bg-background p-6 rounded-xl flex-col visibleee space-y-4">
+      {currentStep === 2 ? <div className="flex bg-background p-6 rounded-xl flex-col visibleee space-y-4">
         <div>
           <h1 className="font-bold">Resumo do pedido</h1>
           <div className="space-y-4 mt-5 rounded-xl ">
@@ -534,11 +576,31 @@ export default function CheckoutDesktop({ setEPassword, ePassword, password, set
 
       </div> : null}
     </div>
-    {currentStep < 4 ? <div className="w-[38%] bg-background  shadow-lg p-3 h-max  rounded-xl">
+    {currentStep < 4 ? <div className="w-[45%] bg-background  shadow-lg p-3 h-max  rounded-xl">
 
 
-      <div className=" rounded-xl dark:bg-zinc-900 bg-zinc-50 p-6 space-y-2">
-        <div className="flex px-3 justify-between">
+      <div className=" rounded-xl dark:bg-zinc-900 bg-zinc-50 p-6">
+        {cart?.map(d => <div key={d.id} className="p-3 border-b   dark:hover:bg-zinc-900  w-full justify-between flex">
+          <div className="flex space-x-2 w-full">
+            {d.image ? <Image alt="" width={200} height={200} src={d.image} className="md:w-24 md:h-24 w-24 h-24  rounded-lg" /> : null}
+            <div className="flex flex-col w-full justify-between">
+              <div>
+                <h1 className="text-md font-bold">{d.name}</h1>
+                <div className="flex items-center"><h1 className="font-extrabold text-primary text-sm">R$ {Number(d.price).toFixed(2)}</h1><p className="text-sm text-zinc-500">/cada</p></div>
+              </div>
+              <div className="w-full flex  items-center space-x-4">
+                <h1 className="text-sm text-muted-foreground">Total:</h1>
+                <div className="w-full h-0.5 bg-muted"></div>
+                <h1 className="font-bold">R${Number(Number(d.price) * d.quantidade).toFixed(2)}</h1>
+              </div>
+
+
+            </div>
+          </div>
+
+        </div>)}
+
+        <div className="flex px-3 mt-4 justify-between">
           <h1 className="">subTotal:</h1>
           <h1 className="">R$ {total.toFixed(2)}</h1>
         </div>
@@ -566,11 +628,12 @@ export default function CheckoutDesktop({ setEPassword, ePassword, password, set
           handlePayment()
           setFinaly(true)
         }
-      }} className="w-full p-5 bg-primary rounded-xl mt-2 flex items-center justify-center">
+      }} className="w-full p-5 bg-primary rounded-xl mt-2 flex items-center justify-center hover:bg-primary/90">
         <h1 className="text-white font-bold">{currentStep === 0 ? 'Finalizar compra' : currentStep === 3 ? 'Pagar agora' : 'Próximo'}</h1>
       </button>
-    </div> : null}
-  </div>
+    </div> : null
+    }
+  </div >
 
 
 }

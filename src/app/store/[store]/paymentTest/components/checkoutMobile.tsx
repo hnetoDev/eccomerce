@@ -18,13 +18,14 @@ import CartCheckout from "./cartCheckout"
 import AccordionCupom from "./accordionCupom"
 
 
-export default function CheckoutMobile({setFinaly,setAllReadyUser,setLoadingEmail,allReadyUser,userLoged,loadingEmail, data, name, cpf, phone, email, cep, total, setEmail, setCPF, setMetodoRecebimento, setCep, setName, setPhone, setTotal, metodoPayment, setMetodoPayment, metodoRecebimento, currentStep, setCurrentStep }: {
-  data?: {
+export default function CheckoutMobile({setFinaly,setAllReadyUser,setLoadingEmail,allReadyUser,userLoged,loadingEmail, cart, name, cpf, phone, email, cep, total, setEmail, setCPF, setMetodoRecebimento, setCep, setName, setPhone, setTotal, metodoPayment, setMetodoPayment, metodoRecebimento, currentStep, setCurrentStep }: {
+  cart?: {
     name: string;
-    img: string;
+    image?: string;
     id: string;
     price: string;
-    qtd: number;
+    pricePromo?:string;
+    quantidade: number;
   }[],
   setEmail: React.Dispatch<React.SetStateAction<string>>, setCep: React.Dispatch<React.SetStateAction<string>>, setPhone: React.Dispatch<React.SetStateAction<string>>,
   name: string, cpf: string, phone: string, email: string, cep: string, total: number,

@@ -21,7 +21,7 @@ import InputMask from "react-input-mask"
 import Link from "next/link";
 import { CiLocationOn } from "react-icons/ci";
 import Image from "next/image";
-import LeveTambem from "./leveTambem";
+
 export default function CartCheckout({ metodoRecebimento, total, setTotal, cep, setCep, setMetodoRecebimento }: { total: number, setTotal: Dispatch<SetStateAction<number>>, cep: string, setCep: Dispatch<SetStateAction<string>>, metodoRecebimento: string, setMetodoRecebimento: Dispatch<SetStateAction<string>> }) {
   const [data, setData] = useState<{ name: string, img: string, id: string, price: string, qtd: number }[]>();
   const [empty, setEmpty] = useState<boolean>(true);
@@ -157,7 +157,7 @@ export default function CartCheckout({ metodoRecebimento, total, setTotal, cep, 
             <div className="flex items-center"><h1 className="font-extrabold text-primary text-sm">R$ {Number(d.price).toFixed(2)}</h1><p className="text-sm text-zinc-500">/cada</p></div>
           </div>
           <div className="w-full flex  items-center space-x-4">
-            <h1 className="text-sm text-muted-foreground">Total:</h1>
+            <h1 className="text-sm text-muted-foreground">Total45:</h1>
             <div className="w-full h-0.5 bg-muted"></div>
             <h1 className="font-bold">R${Number(Number(d.price) * d.qtd).toFixed(2)}</h1>
           </div>
@@ -183,9 +183,6 @@ export default function CartCheckout({ metodoRecebimento, total, setTotal, cep, 
       </div>
     </div>}
 
-    <div className="mt-16">
-      <LeveTambem />
-    </div>
 
   </div>
 

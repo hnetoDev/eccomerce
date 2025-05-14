@@ -7,7 +7,7 @@ import QueryProvider from './queryProvider';
 import Provider from './provider';
 import { Analytics } from "@vercel/analytics/react"
 
-const inter = Poppins({ subsets: ["latin"], weight: '500' });
+const inter = Poppins({ subsets: ["latin"], weight: "600"});
 
 export const metadata: Metadata = {
   title: "Create Next App",

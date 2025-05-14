@@ -18,6 +18,7 @@ import CheckoutMobile from "./components/checkoutMobile"
 import CheckoutDesktop from "./components/chekoutDesktop"
 import { useTheme } from "@/app/context"
 import QRCode from "react-qr-code"
+import LeveTambem from "./components/leveTambem"
 
 
 export default function PaymentPage() {

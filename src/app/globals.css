@@ -392,3 +392,63 @@
     width: 100%; /* 1 item per slide on mobile portrait */
   }
 }
+
+.category-card {
+  @apply relative overflow-hidden transition-all duration-300;
+}
+
+.category-card:hover img {
+  @apply scale-125;
+}
+
+.category-card img {
+  @apply transition-transform duration-500;
+}
+
+.category-overlay {
+  @apply absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6;
+}
+
+.banner-slide {
+  @apply relative aspect-[2.4/1] overflow-hidden;
+}
+
+.banner-content {
+  @apply absolute inset-0 flex flex-col justify-center items-center text-white text-center z-10;
+}
+
+.banner-overlay {
+  @apply absolute inset-0 bg-black/40;
+}
+
+.product-card {
+  @apply relative overflow-hidden rounded-xl bg-white shadow-sm transition-all duration-300;
+}
+
+.product-card:hover {
+  @apply shadow-lg -translate-y-1;
+}
+
+.product-image {
+  @apply aspect-[3/4] overflow-hidden;
+}
+
+.product-image img {
+  @apply w-full h-full object-cover transition-transform duration-500;
+}
+
+.product-card:hover .product-image img {
+  @apply scale-110;
+}
+
+.collection-section {
+  @apply relative overflow-hidden;
+}
+
+.collection-content {
+  @apply relative z-10 text-center py-24 px-4;
+}
+
+.collection-bg {
+  @apply absolute inset-0 bg-gradient-to-r from-amber-500/10 to-amber-700/10;
+}

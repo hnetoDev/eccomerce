@@ -14,7 +14,7 @@ import { MdEmail, MdOutlineEmail } from "react-icons/md";
 import { PiDotsThreeCircle, PiXLogo } from "react-icons/pi";
 import Footer from "./footer";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { DataInit } from "@/types";
 import { HoverCard } from "@/components/popoverCollections";
@@ -45,6 +45,8 @@ export default function LayoutApp({ children }: { children: React.ReactNode }) {
     staleTime: 1000 * 60 * 20,
   })
 
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
+
 
 
 
@@ -57,10 +59,47 @@ export default function LayoutApp({ children }: { children: React.ReactNode }) {
       setCollections(dataT)
     }
   }, [data])
+  const [scrollY, setScrollY] = useState(0); // Estado para scrollY
+  const [scrollPassed50, setScrollPassed50] = useState(false); // Verifica se passou de 50px
+  const scrollContainerRef = useRef<HTMLDivElement>(null); // Ref para a div que queremos escutar
 
-  return <div className="flex flex-col ">
+  // Função para verificar o scroll
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      const currentScrollY = scrollContainerRef.current.scrollTop; // Pega a posição do scroll da div
+      setScrollY(currentScrollY); // Atualiza o estado do scrollY
+      if (currentScrollY > 50) {
+        if (!scrollPassed50) {
+          setScrollPassed50(true); // Atualiza o estado
+        }
+      } else {
+        if (scrollPassed50) {
+          setScrollPassed50(false); // Atualiza o estado
+        }
+      }
+    }
+  };
+
+  // Adiciona o evento de scroll quando o componente é montado
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener('scroll', handleScroll); // Escuta o evento de scroll na div específica
+    }
+
+    // Limpeza do evento quando o componente for desmontado
+    return () => {
+      if (container) {
+        container.removeEventListener('scroll', handleScroll); // Remove o ouvinte de evento ao desmontar
+      }
+    };
+  }, [scrollPassed50]);
+
+  // lembrar de verificar se o scroll é maior que 50 e se isso causa problema de desempenho
+
+  return <div ref={scrollContainerRef} className="flex h-screen w-screen overflow-x-hidden overflow-y-auto flex-col ">
     <CarouselDemo />
-    <div className="w-full md:w-0 md:fixed md:invisible visible shadow-lg z-50 bg-background px-8 py-3 sticky top-0 flex justify-between items-center">
+    <div className={`w-full md:w-0 md:fixed md:invisible visible ${scrollPassed50 ? 'shadow-lg' : ''}  z-50 bg-background px-8 py-3 sticky top-0 flex justify-between items-center`}>
       <div className="w-2/4 flex space-x-2">
         <SheetCustom />
       </div>
@@ -74,7 +113,7 @@ export default function LayoutApp({ children }: { children: React.ReactNode }) {
         <CartCustom addToCart={false} />
       </div>
     </div>
-    <div className="w-0 md:w-full md:sticky md:visible invisible shadow-xl fixed xl:px-16 2xl:px-40   z-50 bg-background px-8 py-3 top-0 flex flex-col justify-between items-center">
+    <div className={`w-0 md:w-full md:sticky md:visible invisible ${scrollPassed50 ? 'shadow-lg' : ''} fixed xl:px-16 2xl:px-40   z-50 bg-background px-8 py-3 top-0 flex flex-col justify-between items-center`}>
       <div className="w-full flex justify-between items-center">
 
         <div className="w-2/4 items-center flex space-x-8">
@@ -123,4 +162,8 @@ export default function LayoutApp({ children }: { children: React.ReactNode }) {
 
     <Footer />
   </div>
+}
+
+function useDebounce(arg0: () => void, arg1: number) {
+  throw new Error("Function not implemented.");
 }
