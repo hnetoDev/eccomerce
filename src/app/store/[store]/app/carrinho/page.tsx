@@ -75,17 +75,17 @@ export default function CartCheckout() {
       <h1 className="font-bold text-xl">Meu carrinho</h1>
 
     </div>
-    <div className="w-full  mt-2 flex justify-between space-x-8 ">
+    {empty ? <div className="flex flex-col  m-auto space-y-8 justify-center items-center">
+      <FaRegSadCry className="w-16 h-16" />
+      <div className="flex flex-col justify-center">
+        <h1 className="text-zinc-400 text-wrap text-center">Carrinho Vazio</h1>
+        <h1 className="text-zinc-400 text-wrap text-center"><span className="text-primary"><Link href={'/'}>Adicionar itens</Link></span> para aproveitar nossas promoções</h1>
+      </div>
+    </div> : <div className="w-full  mt-2 flex justify-between space-x-8 ">
       <div className="w-[60%] h-max rounded-xl z-20">
         <div className="flex flex-col h-full justify-between md:py-0 py-4">
 
-          {empty ? <div className="flex flex-col  m-auto space-y-8 justify-center items-center">
-            <FaRegSadCry className="w-16 h-16" />
-            <div className="flex flex-col justify-center">
-              <h1 className="text-zinc-400 text-wrap text-center">Carrinho Vazio</h1>
-              <h1 className="text-zinc-400 text-wrap text-center"><span className="text-primary"><Link href={'/'}>Adicionar itens</Link></span> para aproveitar nossas promoções</h1>
-            </div>
-          </div> : <div className=" pb-4 w-full md:space-y-4">{cart?.map(d => <div key={d.id} className="p-3 md:p-6 md:bg-background shadow-md rounded-xl  dark:hover:bg-zinc-900  w-full justify-between flex">
+          <div className=" pb-4 w-full md:space-y-4">{cart?.map(d => <div key={d.id} className="p-3 md:p-6 md:bg-background shadow-md rounded-xl  dark:hover:bg-zinc-900  w-full justify-between flex">
             <div className="flex space-x-2 w-full">
               {d.image ? <Image alt="" width={200} height={200} src={d.image} className="md:w-32 md:h-32 w-24 h-24  rounded-lg" /> : null}
               <div className="flex flex-col w-full justify-between">
@@ -115,13 +115,13 @@ export default function CartCheckout() {
 
               </div>
             </div>
-           
+
           </div>)}
             <div className="w-full flex flex-col justify-start items-start">
               <h1 className="text-muted-foreground text-sm">Total de itens: {cart?.length}</h1>
               <Link className="text-center text-primary font-bold" href={{ pathname: '/' }}> &lt; Continuar comprando</Link>
             </div>
-          </div>}
+          </div>
 
 
 
@@ -224,8 +224,8 @@ export default function CartCheckout() {
           <div className="flex  flex-col border-t p-3 rounded-b-xl mt-2 justify-between">
             <p className="text-end  text-sm text-green-500">10% de desconto no PIX</p>
             <div className="w-full flex justify-between">
-              <h1 className="font-extrabold">Total</h1>
-              <h1 className="space-x-4 "><span className="text-muted-foreground text-sm line-through">R$ {total.toFixed(2)}</span><span className="font-bold">R$ {(total - (total * 10 / 100)).toFixed(2)}</span></h1>
+              <h1 className="font-extrabold text-xl">Total</h1>
+              <h1 className="space-x-4 text-xl"><span className="text-muted-foreground text-sm line-through">R$ {total.toFixed(2)}</span><span className="font-bold">R$ {(total - (total * 10 / 100)).toFixed(2)}</span></h1>
             </div>
           </div>
 
@@ -240,6 +240,8 @@ export default function CartCheckout() {
         </button>
       </div>
     </div>
+    }
+
   </div>
 
 }

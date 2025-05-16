@@ -5,7 +5,7 @@ export default async function SignInCredentials({email, password}: {email: strin
   const storeName = getSubdomain()
   const res = await signIn('credentials', {
     redirect: false,
-    storeName,
+    storeName: 'teste',
     email,
     password,
   })

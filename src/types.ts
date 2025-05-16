@@ -32,10 +32,21 @@ export type DataInit = {
 }
 
 export type Theme = {
-  storeId:string
+  id:string
   name:string
-  primaryColor: string
-  backgroundColor: string
+  storeId:string
+  light:{
+    primaryColor: string
+    secondaryColor: string
+    backgroundColor: string
+    foregroundColor: string
+  }
+  dark:{
+    primaryColor: string
+    secondaryColor: string
+    backgroundColor: string
+    foregroundColor: string
+  }
   logoUrl: string
 }
 
@@ -98,4 +109,23 @@ type ProductCart = {
   qtd: number,
   pricePromo?: number,
   variantName?: string,
+}
+
+export type DataUser = {
+  id: string,
+  name: string,
+  email: string,
+  image?: string,
+  cpf?: string,
+  password:string,
+  phone?: string,
+  Endereco?: {
+    cep?: string,
+    complemento?: string,
+    bairro?: string,
+    numero?: string | number,
+    cidade?: string,
+    estado?: string,
+    rua?: string,
+  }
 }

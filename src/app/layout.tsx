@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 import QueryProvider from './queryProvider';
 import Provider from './provider';
 import { Analytics } from "@vercel/analytics/react"
-
+import "@/app/globals.css"
 const inter = Poppins({ subsets: ["latin"], weight: "600"});
 
 export const metadata: Metadata = {

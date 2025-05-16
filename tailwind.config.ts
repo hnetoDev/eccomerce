@@ -24,6 +24,9 @@ const config: Config = {
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
+			boxShadow: {
+				'custom-light': '0 4px 10px var(--tw-shadow-color)',
+			},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -75,6 +78,10 @@ const config: Config = {
   					height: 'var(--radix-accordion-content-height)'
   				}
   			},
+				'pulse-shadow': {
+          '0%, 100%': { boxShadow: '0 0 10px var(--tw-shadow-color)' }, // sombra inicial
+          '50%': { boxShadow: '0 0 20px var(--tw-shadow-color)' },       // sombra maior
+        },
   			'accordion-up': {
   				from: {
   					height: 'var(--radix-accordion-content-height)'
@@ -86,7 +93,8 @@ const config: Config = {
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-shadow': 'pulse-shadow 2s ease-in-out infinite',
   		}
   	}
   },

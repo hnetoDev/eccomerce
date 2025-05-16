@@ -1,7 +1,7 @@
 import { getStoreData } from "@/lib/getStore"
 import { ThemeProvider } from '@/app/context'
-import '../../globals.css'
 import Head from "next/head"
+import '@/app/globals.css'
 import Image from "next/image"
 import CartCustom from "@/components/cart"
 import { UserCircle } from "lucide-react"
@@ -29,31 +29,66 @@ export default async function StoreLayout({
   params: { store: string }
 }) {
   const store = await getStoreData('teste')
-  if (store === null) {
-    return (
-      <html lang="pt-BR">
-        <body>
-          <div>Loja não encontrada</div>
-        </body>
-      </html>
-    )
+  if(!store) {
+    return <div className="w-screen h-screen flex justify-center items-center">
+      <h1 className="text-2xl font-bold">Loja não encontrada</h1>
+    </div>
   }
+  console.log('store', store)
+
+  const cssVariables = `
+    :root {
+      --primary: ${store?.theme.light.primaryColor};
+      --secondary: ${store?.theme.light.secondaryColor};
+    }
+    .dark {
+      --primary: ${store?.theme.dark.primaryColor};
+      --secondary: ${store?.theme.dark.secondaryColor};
+    }
+  `;
+  const globalStyles = `
+    <style id="dynamic-theme">${cssVariables}</style>
+  `
+  console.log(cssVariables)
 
   return (
-    <html className="h-screen overflow-x-hidden  w-screen" lang="pt-BR">
-      <body className={`h-screen ${inter.className} overflow-x-hidden n w-screen`}>
-        <ThemeProvider theme={store.theme}>
-          <Head>
-            <link rel="preload" as="image" href={store.theme.logoUrl} />
-          </Head>
-
-          <Provider>
-            <QueryProvider>
-              {children}
-            </QueryProvider>
-          </Provider>
+    <div className="h-screen overflow-x-hidden  w-screen" lang="pt-BR">
+      <style id="dynamic-theme">{cssVariables}</style>
+      <Head>
+        <link rel="preload" as="image" href={store.theme.logoUrl} />
+      </Head>
+      <div className={`h-screen ${inter.className} overflow-x-hidden n w-screen`}>
+        <ThemeProvider theme={store!.theme}>
+          <AppThemeProvider>
+            <Provider>
+              <QueryProvider>
+                {children}
+              </QueryProvider>
+            </Provider>
+          </AppThemeProvider>
         </ThemeProvider>
-      </body>
-    </html>
+      </div>
+    </div>
   )
 }
+
+/*return (
+  <html className="h-screen overflow-x-hidden  w-screen" lang="pt-BR">
+    <head>
+      <link rel="preload" as="image" href={store.theme.logoUrl} />
+      <style color={store.theme.light.primaryColor}></style>
+    </head>
+    <body className={`h-screen ${inter.className} overflow-x-hidden n w-screen`}>
+      <ThemeProvider theme={store.theme}>
+        
+
+        <Provider>
+          <QueryProvider>
+            {children}
+          </QueryProvider>
+        </Provider>
+      </ThemeProvider>
+    </body>
+  </html>
+)*/
+

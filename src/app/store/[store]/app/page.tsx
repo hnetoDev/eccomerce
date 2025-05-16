@@ -36,11 +36,13 @@ const fetchStoreData = async (name: string): Promise<DataInit> => {
 }
 
 export default function StoreHome() {
+
+
   const theme = useTheme()
   const [categoria, setCategoria] = useState<string>('')
 
 
-
+  
 
 
 

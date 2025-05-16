@@ -1,12 +1,12 @@
 
 
 'use client'
-import { signIn, useSession } from "next-auth/react"
+import { signIn, signOut, useSession } from "next-auth/react"
 import { redirect } from "next/navigation"
 import { useEffect, useState } from "react"
-import { IoBackspace, IoTrashOutline } from "react-icons/io5"
-import { BarcodeIcon, CheckCircle2, CheckCircle2Icon, CheckCircleIcon, CircleUser, CreditCard, HelpCircle, LockIcon, Pencil, ShoppingCartIcon, TicketPercentIcon, UserCircle, UserX } from "lucide-react"
-import { PersonIcon } from "@radix-ui/react-icons"
+import { IoBackspace, IoExit, IoTrashOutline } from "react-icons/io5"
+import { BarcodeIcon, CheckCircle2, CheckCircle2Icon, CheckCircleIcon, CircleUser, CreditCard, HelpCircle, LockIcon, Pencil, ShoppingCartIcon, TicketPercentIcon, UserCircle, UserX, XCircle } from "lucide-react"
+import { ExitIcon, PersonIcon } from "@radix-ui/react-icons"
 import { MdOutlineEmail, MdOutlinePhone, MdOutlinePix, MdPassword, MdPayment, MdPersonOutline, MdPix } from "react-icons/md"
 import Stepper from "./stepper2"
 import { FaCircleCheck } from "react-icons/fa6";
@@ -21,9 +21,10 @@ import { Loader } from "@/components/loader"
 import SignInCredentials from "@/lib/signInCredentials"
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { getInfoCEP } from "@/lib/cep/getCep"
+import { DataUser } from "@/types"
 
 
-export default function CheckoutDesktop({ estado, cidade, numero, endereco, eName, eEmail, eCPF, ePhone, setEstado, setECPF, setEEmail, setEPhone, setEName, setCidade, setNumero, setEndereco, setCepFinded, cepFinded, setEPassword, ePassword, password, setPassword, handlePayment, setFinaly, setLoadingEmail, setAllReadyUser, allReadyUser, loadingEmail, userLoged, cart, name, cpf, phone, email, cep, total, setEmail, setCPF, setMetodoRecebimento, setCep, setName, setPhone, setTotal, metodoPayment, setMetodoPayment, metodoRecebimento, currentStep, setCurrentStep }: {
+export default function CheckoutDesktop({ total, dataUser, estado, cidade, numero, endereco, eName, eEmail, eCPF, ePhone, setEstado, setECPF, setEEmail, setEPhone, setEName, setCidade, setNumero, setEndereco, setCepFinded, cepFinded, setEPassword, ePassword, password, setPassword, handlePayment, setFinaly, setLoadingEmail, setAllReadyUser, allReadyUser, loadingEmail, userLoged, cart, name, cpf, phone, email, cep, setEmail, setCPF, setMetodoRecebimento, setCep, setName, setPhone, setTotal, metodoPayment, setMetodoPayment, metodoRecebimento, currentStep, setCurrentStep }: {
   cart?: {
     name: string;
     image?: string;
@@ -32,9 +33,11 @@ export default function CheckoutDesktop({ estado, cidade, numero, endereco, eNam
     pricePromo?: string;
     quantidade: number;
   }[],
+  total?: number,
+  dataUser?: DataUser
   estado: string, setEstado: React.Dispatch<React.SetStateAction<string>>, cidade: string, setCidade: React.Dispatch<React.SetStateAction<string>>, numero: string, setNumero: React.Dispatch<React.SetStateAction<string>>, endereco: string, setEndereco: React.Dispatch<React.SetStateAction<string>>,
   cepFinded: boolean, setCepFinded: React.Dispatch<React.SetStateAction<boolean>>, setEName: React.Dispatch<React.SetStateAction<boolean>>, eName: boolean, setEEmail: React.Dispatch<React.SetStateAction<boolean>>, eEmail: boolean, setECPF: React.Dispatch<React.SetStateAction<boolean>>, eCPF: boolean, setEPhone: React.Dispatch<React.SetStateAction<boolean>>, ePhone: boolean,
-  setEmail: React.Dispatch<React.SetStateAction<string>>, setCep: React.Dispatch<React.SetStateAction<string>>, setPhone: React.Dispatch<React.SetStateAction<string>>, name: string, cpf: string, phone: string, email: string, cep: string, total: number, setName: React.Dispatch<React.SetStateAction<string>>, setCPF: React.Dispatch<React.SetStateAction<string>>, setTotal: React.Dispatch<React.SetStateAction<number>>, metodoPayment: string, setMetodoPayment: React.Dispatch<React.SetStateAction<string>>, metodoRecebimento: string, setMetodoRecebimento: React.Dispatch<React.SetStateAction<string>>, setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number,
+  setEmail: React.Dispatch<React.SetStateAction<string>>, setCep: React.Dispatch<React.SetStateAction<string>>, setPhone: React.Dispatch<React.SetStateAction<string>>, name: string, cpf: string, phone: string, email: string, cep: string, setName: React.Dispatch<React.SetStateAction<string>>, setCPF: React.Dispatch<React.SetStateAction<string>>, setTotal: React.Dispatch<React.SetStateAction<number>>, metodoPayment: string, setMetodoPayment: React.Dispatch<React.SetStateAction<string>>, metodoRecebimento: string, setMetodoRecebimento: React.Dispatch<React.SetStateAction<string>>, setCurrentStep: React.Dispatch<React.SetStateAction<number>>, currentStep: number,
   setLoadingEmail: React.Dispatch<React.SetStateAction<boolean>>, loadingEmail: boolean, setAllReadyUser: React.Dispatch<React.SetStateAction<string>>, allReadyUser: string, userLoged: boolean,
   setFinaly: React.Dispatch<React.SetStateAction<boolean>>,
   setPassword: React.Dispatch<React.SetStateAction<string>>,
@@ -79,31 +82,45 @@ export default function CheckoutDesktop({ estado, cidade, numero, endereco, eNam
 
   }
 
+  console.log(session.data?.user)
 
 
 
 
-  return <div className="w-full  flex justify-between space-x-8 pb-20 px-12 ">
-    <div className="w-[55%] rounded-xl z-20">
+
+  return <div className="w-full  flex justify-between space-x-8 pb-20 ">
+    <div className="w-[65%] rounded-xl z-20">
       {currentStep === 0 ? <div className="visibleee rounded-xl">
-        {session.data?.user ? <>
-          <div className="border flex rounded-lg p-3">
-            <div className="flex items-center space-x-2">
-              {session.data?.user.image ? <Image width={20} height={20} alt="Foto perfil" src={session.data?.user.image} className="w-10 rounded-full" /> : <UserCircle className="w-10 h-10" />}
-
-              <div className="flex flex-col">
-                <h1 className="font-bold">{session.data?.user.name}</h1>
-                <p className="text-sm text-zinc-500">{session.data?.user.email}</p>
-              </div>
+        {session.data?.user ? <div className=" p-6 rounded-2xl">
+          <h1 className="font-bold">1- Dados pessoais</h1>
+          <p className="text-sm text-muted-foreground mt-2">Entrou com</p>
+          <div className=" space-x-4 mt-4 p-3 bg-primary/5 border border-primary rounded-xl flex justify-between items-center ">
+            <div className="flex items-center space-x-4">
+              {dataUser ? <>
+                {session.data?.user.image ? <Image width={20} height={20} alt="Foto perfil" src={session.data?.user.image} className="w-10 h-10 border border-primary rounded-full" /> : <UserCircle className="w-10 h-10" />}
+                <div className="flex flex-col">
+                  <h1 className="text-sm flex space-x-2">Nome: <span></span><span> {dataUser?.name} </span></h1>
+                  <h1 className="text-sm flex space-x-2">Email: <span className=""></span> <span className="text-muted-foreground"> {dataUser?.email}</span>  </h1>
+                  <h1 className="text-sm flex space-x-2">Cpf: <span></span> <span className="text-muted-foreground"> {dataUser?.cpf}</span> </h1>
+                  <h1 className="text-sm flex space-x-2">Celular: <span></span> <span className="text-muted-foreground"> {dataUser?.phone}</span> </h1>
+                </div>
+              </> : <div className="p-6 w-full flex justify-center items-center"> <Loader /> </div>}
             </div>
+            <XCircle onClick={() => {
+              signOut()
+            }} className="text-primary cursor-pointer" />
           </div>
-        </> : <>
+          <div>
+
+          </div>
+
+        </div> : <>
           <div className="w-full flex flex-col">
 
             <div className="">
-              {userLoged ? null : <div className="bg-background p-6 rounded-2xl">
+              {userLoged ? null : <div className=" p-6 rounded-2xl">
                 <div className="">
-                  <h1 className="font-bold">Dados pessoais</h1>
+                  <h1 className="font-bold">1- Dados pessoais</h1>
                   <p className="text-sm text-muted-foreground mt-2">Entre com</p>
                   <div className="flex space-x-2 mt-2 items-center justify-center">
                     <div onClick={() => {
@@ -203,6 +220,7 @@ export default function CheckoutDesktop({ estado, cidade, numero, endereco, eNam
                         if (password.length < 6) {
                           return setEPassword(true)
                         }
+
                         SignInCredentials({ email, password })
                       }} className="bg-primary text-white rounded-lg p-3">Continuar</button>
                     </div> : null}
@@ -213,196 +231,264 @@ export default function CheckoutDesktop({ estado, cidade, numero, endereco, eNam
                 </div>
               </div>}
             </div>
-            <div className="mt-4 p-6 bg-background rounded-2xl">
-              <div className="flex justify-between items-center w-full">
-                <h1 className="font-bold">Dados de entrega</h1>
-                <CiDeliveryTruck className="w-6 h-6" />
+
+          </div>
+        </>}
+        <div className="mt-8 p-6 rounded-2xl">
+          <div className="flex justify-between items-center w-full">
+            <h1 className="font-bold">2- Dados de entrega</h1>
+            <CiDeliveryTruck className="w-6 h-6" />
+          </div>
+          <div className="flex mt-4 space-x-4">
+            <div onClick={() => {
+              setMetodoRecebimento('ENTREGA')
+            }} className={`${metodoRecebimento === "ENTREGA" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
+              <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoRecebimento === 'ENTREGA' ? " border-primary " : "bg-background border-gray-300"
+                }`}>
+                <div
+                  className={`w-4 h-4 duration-300 transition-all  rounded-full  ${metodoRecebimento === 'ENTREGA'
+                    ? "bg-primary "
+
+                    : "bg-background "
+                    }`}
+                ></div>
               </div>
-              <div className="flex mt-4 space-x-4">
+              <div className="flex justify-center items-center space-x-2">
+                <CiDeliveryTruck className="w-6 h-6 text-muted-foreground" />
+                <h1 className='text-sm'>Entrega</h1>
+              </div>
+            </div>
+
+            <div onClick={() => {
+              setMetodoRecebimento('RETIRADA')
+            }} className={`${metodoRecebimento === "RETIRADA" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
+              <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoRecebimento === 'RETIRADA' ? " border-primary " : "bg-background border-gray-300"
+                }`}>
+                <div
+                  className={`w-4 h-4 duration-300 transition-all  rounded-full  ${metodoRecebimento === 'RETIRADA'
+                    ? "bg-primary "
+
+                    : "bg-background "
+                    }`}
+                ></div>
+              </div>
+              <div className="flex justify-center items-center space-x-2">
+                <CiLocationOn className="w-6 h-6 text-muted-foreground" />
+                <h1 className='text-sm'>Retirada</h1>
+              </div>
+            </div>
+          </div>
+          {metodoRecebimento === "RETIRADA" ? <div className="mt-4">
+            <div className="flex w-full mt-5 justify-between items-center" >
+              <div className="flex space-x-3 items-center">
+                <CiLocationOn className="text-primary border-primary w-8 h-8" />
+                <h1 className="text-sm text-muted-foreground">Rua dasvxcv 45, Piritiba ba, proximo a adada ada</h1>
+              </div>
+            </div>
+            <div className="bg-primary/5 mt-2 border rounded-sm mt p-2 w-full border-dashed">
+              <h1 className="text-sm text-primary text-center">Você deve buscar seu pedido na loja, na opção RETIRADA!</h1>
+            </div>
+          </div> : metodoRecebimento === 'ENTREGA' ? <div className="mt-4">
+            {session.data?.user ? <div>
+
+              <h1 className="text-sm mt-4 text-muted-foreground">Seu endereço</h1>
+              <div className=" w-full  p-3 items-center flex justify-between">
+                <div className="flex items-center  justify-center space-x-2">
+                  <CiLocationOn className="text-primary border-primary w-8 h-8" />
+                  <h1 className="text-sm ">Rua dasvxcv 45, Piritiba ba, proximo a adada ada</h1>
+                </div>
+                <div className="flex space-x-2">
+                  <p className="text-sm text-muted-foreground">mudar</p>
+                  <Pencil className="text-primary border-primary w-5 h-5" />
+                </div>
+              </div>
+              <div className="mt-4">
+                <h1 className="font-bold">Método de envio</h1>
                 <div onClick={() => {
                   setMetodoRecebimento('ENTREGA')
-                }} className={`${metodoRecebimento === "ENTREGA" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
-                  <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoRecebimento === 'ENTREGA' ? " border-primary " : "bg-background border-gray-300"
-                    }`}>
-                    <div
-                      className={`w-4 h-4 duration-300 transition-all  rounded-full  ${metodoRecebimento === 'ENTREGA'
-                        ? "bg-primary "
+                }} className={`${metodoRecebimento === "ENTREGA" ? 'border-primary bg-primary/5' : ''}  mt-4 flex space-x-2 border p-3  rounded-xl justify-between cursor-pointer items-center`}>
+                  <div className="flex space-x-2">
+                    <div className={` p-1 duration-300 transition-all bg-background rounded-full border-2 ${metodoRecebimento === 'ENTREGA' ? " border-primary " : "bg-background border-gray-300"
+                      }`}>
+                      <div
+                        className={`w-2 h-2 duration-300 transition-all  rounded-full  ${metodoRecebimento === 'ENTREGA'
+                          ? "bg-primary "
 
-                        : "bg-background "
-                        }`}
-                    ></div>
+                          : "bg-background "
+                          }`}
+                      ></div>
+                    </div>
+                    <div className="flex justify-center items-center space-x-2">
+
+                      <h1 className='text-sm'>Frete PAC <span className="text-muted-foreground"> - Prazo 10 a 20 dias úteis</span></h1>
+                    </div>
                   </div>
-                  <div className="flex justify-center items-center space-x-2">
-                    <CiDeliveryTruck className="w-6 h-6 text-muted-foreground" />
-                    <h1 className='text-sm'>Entrega</h1>
-                  </div>
+                  <h1>R$ 15,50</h1>
                 </div>
-
                 <div onClick={() => {
                   setMetodoRecebimento('RETIRADA')
-                }} className={`${metodoRecebimento === "RETIRADA" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
-                  <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoRecebimento === 'RETIRADA' ? " border-primary " : "bg-background border-gray-300"
-                    }`}>
-                    <div
-                      className={`w-4 h-4 duration-300 transition-all  rounded-full  ${metodoRecebimento === 'RETIRADA'
-                        ? "bg-primary "
+                }} className={`${metodoRecebimento === "RETIRADA" ? 'border-primary bg-primary/5' : ''}  mt-4 flex space-x-2 border p-3  rounded-xl justify-between cursor-pointer items-center`}>
+                  <div className="flex space-x-2">
+                    <div className={` p-1 duration-300 transition-all bg-background rounded-full border-2 ${metodoRecebimento === 'ENTREGA' ? " border-primary " : "bg-background border-gray-300"
+                      }`}>
+                      <div
+                        className={`w-2 h-2 duration-300 transition-all  rounded-full  ${metodoRecebimento === 'ENTREGA'
+                          ? "bg-primary "
 
-                        : "bg-background "
-                        }`}
-                    ></div>
+                          : "bg-background "
+                          }`}
+                      ></div>
+                    </div>
+                    <div className="flex justify-center items-center space-x-2">
+
+                      <h1 className='text-sm'>Frete Expresso <span className="text-muted-foreground"> - Prazo 7 a 12 dias úteis</span></h1>
+                    </div>
                   </div>
-                  <div className="flex justify-center items-center space-x-2">
-                    <CiLocationOn className="w-6 h-6 text-muted-foreground" />
-                    <h1 className='text-sm'>Retirada</h1>
-                  </div>
+                  <h1>R$ 32,10</h1>
                 </div>
               </div>
-              {metodoRecebimento === "RETIRADA" ? <div className="mt-4">
-                <div className="flex w-full mt-5 justify-between items-center" >
-                  <div className="flex space-x-3 items-center">
-                    <CiLocationOn className="text-primary border-primary w-8 h-8" />
-                    <h1 className="text-sm text-muted-foreground">Rua dasvxcv 45, Piritiba ba, proximo a adada ada</h1>
+            </div> : <div className="flex flex-col">
+              <div className="space-y-2 col-span-3">
+                <h1 className="text-muted-foreground text-sm">Digite o CEP<span className="text-red-500">*</span></h1>
+                <div className="flex items-center space-x-8">
+                  <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
+                    <CiLocationOn className="text-muted-foreground w-5 h-5" />
+                    <InputMask mask={"99999-999"} value={cep} placeholder="_____-___" type="text" onChange={async (v) => {
+                      setCep(v.target.value)
+                      if (v.target.value.length === 9 && !v.target.value.includes('_')) {
+                        const cepString = v.target.value;
+
+                        const dataCEP = await getInfoCEP(cepString.replace(/\D/g, ''))
+                        if (dataCEP) {
+                          setEndereco(dataCEP.logradouro)
+                          setEstado(dataCEP.uf)
+                          setCidade(dataCEP.cidade)
+                          setCepFinded(true)
+                        }
+                      }
+
+                    }} className=" bg-transparent p-0 w-full border-0 outline-0" />
                   </div>
+                  {cepFinded ?
+                    <h1 className="text-muted-foreground text-sm">{cidade}/{estado}</h1>
+                    : null}
+
                 </div>
-                <div className="bg-primary/5 mt-2 border rounded-sm mt p-2 w-full border-dashed">
-                  <h1 className="text-sm text-primary text-center">Você deve buscar seu pedido na loja, na opção RETIRADA!</h1>
-                </div>
-              </div> : metodoRecebimento === 'ENTREGA' ? <div className="mt-4">
-                {userLoged ? <div>
-                  <div className="border-2 rounded-xl w-full border-primary border-dashed bg-primary/5 p-3 items-center flex justify-between">
-                    <div className="flex items-center w-1/2 justify-center space-x-2">
-                      <CiLocationOn className="text-primary border-primary w-8 h-8" />
-                      <h1 className="text-sm text-muted-foreground">Rua dasvxcv 45, Piritiba ba, proximo a adada ada</h1>
-                    </div>
-                    <FaCircleCheck className="text-primary border-primary w-5 h-5" />
-                  </div>
-                  <h1></h1>
-                </div> : <div className="grid grid-cols-3 gap-4">
-                  <div className="space-y-2 col-span-3">
-                    <h1 className="text-muted-foreground text-sm">Digite o CEP<span className="text-red-500">*</span></h1>
-                    <div className="flex items-center space-x-8">
+              </div>
+              {
+                cepFinded ? <div className="flex flex-col w-full">
+
+                  <div className="w-full flex">
+                    <div className="space-y-1 w-full ">
+                      <h1 className="text-muted-foreground text-sm">Endereço<span className="text-red-500"> *</span></h1>
                       <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
-                        <CiLocationOn className="text-muted-foreground w-5 h-5" />
-                        <InputMask mask={"99999-999"} value={cep} placeholder="_____-___" type="text" onChange={async (v) => {
-                          if (v.target.value.length === 9 && !v.target.value.includes('_')) {
-                            const cepString = v.target.value.replace(/\D/g, '')
-                            const dataCEP = await getInfoCEP(v.target.value)
-                            if (dataCEP) {
-                              setEndereco(dataCEP.logradouro)
-                              setEstado(dataCEP.uf)
-                              setCidade(dataCEP.cidade)
-                              setCepFinded(true)
-                            }
-                          }
+                        <input type="text" onChange={(v) => {
                           setCep(v.target.value)
                         }} className=" bg-transparent p-0 w-full border-0 outline-0" />
                       </div>
-                      {cepFinded ?
-                      <h1 className="text-muted-foreground text-sm">{cidade}/{estado}</h1>
-                      : null}
-
+                    </div>
+                    <div className="space-y-1 ">
+                      <h1 className="text-muted-foreground text-sm">Número<span className="text-red-500"> *</span></h1>
+                      <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
+                        <input type="text" onChange={(v) => {
+                          setCep(v.target.value)
+                        }} className=" bg-transparent p-0 w-full border-0 outline-0" />
+                      </div>
                     </div>
                   </div>
-                  {
-                    cepFinded ? <div className="flex w-full">
-                      <div className="space-y-1 w-full ">
-                        <h1 className="text-muted-foreground text-sm">Endereço<span className="text-red-500"> *</span></h1>
-                        <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
-                          <input type="text" onChange={(v) => {
-                            setCep(v.target.value)
-                          }} className=" bg-transparent p-0 w-full border-0 outline-0" />
-                        </div>
-                      </div>
-                      <div className="space-y-1 ">
-                        <h1 className="text-muted-foreground text-sm">Número<span className="text-red-500"> *</span></h1>
-                        <div className={`  duration-200 flex border rounded-2xl border-muted  focus-within:border-primary p-3 items-center space-x-2 w-full`}>
-                          <input type="text" onChange={(v) => {
-                            setCep(v.target.value)
-                          }} className=" bg-transparent p-0 w-full border-0 outline-0" />
-                        </div>
-                      </div>
-                    </div> : null
-                  }
+                </div> : null
+              }
 
-                </div>}
-              </div> : null}
-            </div>
-          </div>
-        </>}
+            </div>}
+          </div> : null}
+        </div>
       </div> : null}
       {currentStep === 1 ? <div className="flex bg-background visibleee flex-col p-6 rounded-xl ">
         <h1 className="font-bold">Escolha o método de pagamento:</h1>
-        <div className="grid mt-5  grid-cols-2 gap-4">
+        <div className="grid mt-5   gap-4">
           <div onClick={() => {
             setMetodoPayment('PIX')
-          }} className={`${metodoPayment === "PIX" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
-            <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoPayment === 'PIX' ? " border-primary " : "bg-background border-gray-300"
+          }} className={`${metodoPayment === "PIX" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer  items-center`}>
+            <div className={` p-1 duration-300 transition-all bg-background rounded-full border-2 ${metodoPayment === 'PIX' ? " border-primary " : "bg-background border-gray-300"
               }`}>
               <div
-                className={`w-4 h-4 duration-300 transition-all  rounded-full  ${metodoPayment === 'PIX'
+                className={`w-2 h-2 duration-300 transition-all  rounded-full  ${metodoPayment === 'PIX'
                   ? "bg-primary "
 
                   : "bg-background "
                   }`}
               ></div>
             </div>
-            <div className="flex justify-center items-center space-x-2">
+            <div className="flex  items-center space-x-2">
               <MdPix className="w-6 h-6 text-muted-foreground" />
               <h1 className='text-sm'>Pix</h1>
+            </div>
+            <div className="w-full flex justify-end">
+              <Image src={'/images/pix.svg'} alt="Logo da loja" width={40} height={40} className="rounded-lg w-16 h-8 " />
             </div>
           </div>
           <div onClick={() => {
             setMetodoPayment('CREDITO')
-          }} className={`${metodoPayment === "CREDITO" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
-            <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoPayment === 'CREDITO' ? " border-primary " : "bg-background border-gray-300"
+          }} className={`${metodoPayment === "CREDITO" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border  p-4 rounded-xl cursor-pointer justify-between items-center`}>
+            <div className={` p-1 duration-300 transition-all bg-background rounded-full border-2 ${metodoPayment === 'CREDITO' ? " border-primary " : "bg-background border-gray-300"
               }`}>
               <div
-                className={`w-4 h-4 duration-300 transition-all  rounded-full  ${metodoPayment === 'CREDITO'
+                className={`w-2 h-2 duration-300 transition-all  rounded-full  ${metodoPayment === 'CREDITO'
                   ? "bg-primary "
 
                   : "bg-background "
                   }`}
               ></div>
             </div>
-            <div className="flex justify-center items-center space-x-2">
+            <div className="flex items-center space-x-2">
               <CreditCard className="w-6 h-6 text-muted-foreground" />
               <h1 className='text-sm'>Cartão</h1>
+            </div>
+            <div className="flex w-full justify-end space-x-1">
+              <Image src={'/images/masterCard.svg'} alt="Logo da loja" width={40} height={40} className="rounded-lg w-8 h-8 " />
+              <Image src={'/images/visa.svg'} alt="Logo da loja" width={40} height={40} className="rounded-lg w-8 h-8 " />
+              <Image src={'/images/hipercard.png'} alt="Logo da loja" width={40} height={40} className="rounded-lg w-8 h-8 " />
+              <Image src={'/images/elo.png'} alt="Logo da loja" width={40} height={40} className="rounded-lg w-8 h-8 " />
             </div>
           </div>
           <div onClick={() => {
             setMetodoPayment('BOLETO')
-          }} className={`${metodoPayment === "BOLETO" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
-            <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoPayment === "BOLETO" ? " border-primary " : "bg-background border-gray-300"
+          }} className={`${metodoPayment === "BOLETO" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border  p-4 rounded-xl cursor-pointer justify-between items-center`}>
+            <div className={` p-1 duration-300 transition-all bg-background rounded-full border-2 ${metodoPayment === "BOLETO" ? " border-primary " : "bg-background border-gray-300"
               }`}>
               <div
-                className={`w-4 h-4 duration-300 transition-all  rounded-full  ${metodoPayment === "BOLETO"
+                className={`w-2 h-2 duration-300 transition-all  rounded-full  ${metodoPayment === "BOLETO"
                   ? "bg-primary "
 
                   : "bg-background "
                   }`}
               ></div>
             </div>
-            <div className="flex justify-center items-center space-x-2">
+            <div className="flex  items-center space-x-2">
               <BarcodeIcon className="w-6 h-6 text-muted-foreground" />
               <h1 className='text-sm'>Boleto</h1>
             </div>
+            <div className="w-full"></div>
           </div>
           <div onClick={() => {
             setMetodoPayment('WPP')
-          }} className={`${metodoPayment === "WPP" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
-            <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoPayment === 'WPP' ? " border-primary " : "bg-background border-gray-300"
+          }} className={`${metodoPayment === "WPP" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border  p-4 rounded-xl cursor-pointer justify-between items-center`}>
+            <div className={` p-1 duration-300 transition-all bg-background rounded-full border-2 ${metodoPayment === 'WPP' ? " border-primary " : "bg-background border-gray-300"
               }`}>
               <div
-                className={`w-4 h-4 duration-300 transition-all  rounded-full  ${metodoPayment === 'WPP'
+                className={`w-2 h-2 duration-300 transition-all  rounded-full  ${metodoPayment === 'WPP'
                   ? "bg-primary "
 
                   : "bg-background "
                   }`}
               ></div>
             </div>
-            <div className="flex justify-center items-center space-x-2">
+            <div className="flex items-center space-x-2">
               <FaWhatsapp className="w-6 h-6 text-muted-foreground" />
               <h1 className='text-sm'>Whatsapp</h1>
+            </div>
+            <div className="w-full">
+
             </div>
           </div>
 
@@ -467,13 +553,13 @@ export default function CheckoutDesktop({ estado, cidade, numero, endereco, eNam
         <div>
           <h1 className="font-bold">Resumo do pedido</h1>
           <div className="space-y-4 mt-5 rounded-xl ">
-            {data?.map(d => <div key={d.id} className=" hover:bg-zinc-100 rounded-lg dark:hover:bg-zinc-900 hover:rounded-lg bg-opacity-65  w-full justify-between flex">
+            {cart?.map(d => <div key={d.id} className=" hover:bg-zinc-100 rounded-lg dark:hover:bg-zinc-900 hover:rounded-lg bg-opacity-65  w-full justify-between flex">
               <div className="flex  items-center space-x-2">
-                <Image width={100} height={100} alt="Produto" src={d.img} className="w-28 h-28  rounded-lg" />
+                <Image width={100} height={100} alt="Produto" src={d.image} className="w-28 h-28  rounded-lg" />
                 <div className="flex flex-col justify-between">
                   <h1 className="">{d.name}</h1>
                   <div>
-                    <h1 className="text-muted-foreground">Quantidade: {d.qtd}</h1>
+                    <h1 className="text-muted-foreground">Quantidade: {d.quantidade}</h1>
                     <div className="flex items-center"><h1 className="font-extrabold text-primary border-primary">R$ {d.price}</h1><p className="text-sm text-zinc-500">/cada</p></div>
                   </div>
                 </div>
@@ -576,10 +662,10 @@ export default function CheckoutDesktop({ estado, cidade, numero, endereco, eNam
 
       </div> : null}
     </div>
-    {currentStep < 4 ? <div className="w-[45%] bg-background  shadow-lg p-3 h-max  rounded-xl">
+    {currentStep < 4 ? <div className="w-[35%] bg-background shadow-custom-light shadow-primary/30 duration-200 transition-all  p-3 h-max  rounded-xl">
 
 
-      <div className=" rounded-xl dark:bg-zinc-900 bg-zinc-50 p-6">
+      <div className=" rounded-xl dark:bg-zinc-900 bg-zinc-100 p-6">
         {cart?.map(d => <div key={d.id} className="p-3 border-b   dark:hover:bg-zinc-900  w-full justify-between flex">
           <div className="flex space-x-2 w-full">
             {d.image ? <Image alt="" width={200} height={200} src={d.image} className="md:w-24 md:h-24 w-24 h-24  rounded-lg" /> : null}
@@ -587,6 +673,9 @@ export default function CheckoutDesktop({ estado, cidade, numero, endereco, eNam
               <div>
                 <h1 className="text-md font-bold">{d.name}</h1>
                 <div className="flex items-center"><h1 className="font-extrabold text-primary text-sm">R$ {Number(d.price).toFixed(2)}</h1><p className="text-sm text-zinc-500">/cada</p></div>
+              </div>
+              <div>
+                <h1 className="text-sm ">Quantidade: {d.quantidade}</h1>
               </div>
               <div className="w-full flex  items-center space-x-4">
                 <h1 className="text-sm text-muted-foreground">Total:</h1>
@@ -602,17 +691,17 @@ export default function CheckoutDesktop({ estado, cidade, numero, endereco, eNam
 
         <div className="flex px-3 mt-4 justify-between">
           <h1 className="">subTotal:</h1>
-          <h1 className="">R$ {total.toFixed(2)}</h1>
+          <h1 className="">R$ {total?.toFixed(2)}</h1>
         </div>
         <div className="flex px-3  py-1 justify-between">
           <h1 className="">frete:</h1>
-          <h1 className="">R$ {total.toFixed(2)}</h1>
+          <h1 className="">R$ 15,50</h1>
         </div>
-        <div className="flex  flex-col border-t p-3 rounded-b-xl mt-2 justify-between">
+        <div className="flex  flex-col p-3 rounded-b-xl mt-2 justify-between">
           <p className="text-end  text-sm text-green-500">10% de desconto no PIX</p>
           <div className="w-full flex justify-between">
-            <h1 className="font-extrabold">Total</h1>
-            <h1 className="space-x-4 "><span className="text-muted-foreground text-sm line-through">R$ {total.toFixed(2)}</span><span className="font-bold">R$ {(total - (total * 10 / 100)).toFixed(2)}</span></h1>
+            <h1 className="font-extrabold text-xl">Total</h1>
+            <h1 className="space-x-4 text-xl "><span className="text-muted-foreground text-sm line-through">R$ {total?.toFixed(2)}</span><span className="font-bold">R$ {total ? (total - (total * 10 / 100)).toFixed(2) : 0}</span></h1>
           </div>
         </div>
 
