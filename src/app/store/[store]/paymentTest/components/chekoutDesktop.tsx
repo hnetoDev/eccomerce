@@ -24,7 +24,7 @@ import { getInfoCEP } from "@/lib/cep/getCep"
 import { DataUser } from "@/types"
 
 
-export default function CheckoutDesktop({ total, dataUser, estado, cidade, numero, endereco, eName, eEmail, eCPF, ePhone, setEstado, setECPF, setEEmail, setEPhone, setEName, setCidade, setNumero, setEndereco, setCepFinded, cepFinded, setEPassword, ePassword, password, setPassword, handlePayment, setFinaly, setLoadingEmail, setAllReadyUser, allReadyUser, loadingEmail, userLoged, cart, name, cpf, phone, email, cep, setEmail, setCPF, setMetodoRecebimento, setCep, setName, setPhone, setTotal, metodoPayment, setMetodoPayment, metodoRecebimento, currentStep, setCurrentStep }: {
+export default function CheckoutDesktop({ freteSelected, setFreteSelected, total, dataUser, estado, cidade, numero, endereco, eName, eEmail, eCPF, ePhone, setEstado, setECPF, setEEmail, setEPhone, setEName, setCidade, setNumero, setEndereco, setCepFinded, cepFinded, setEPassword, ePassword, password, setPassword, handlePayment, setFinaly, setLoadingEmail, setAllReadyUser, allReadyUser, loadingEmail, userLoged, cart, name, cpf, phone, email, cep, setEmail, setCPF, setMetodoRecebimento, setCep, setName, setPhone, setTotal, metodoPayment, setMetodoPayment, metodoRecebimento, currentStep, setCurrentStep }: {
   cart?: {
     name: string;
     image?: string;
@@ -33,6 +33,14 @@ export default function CheckoutDesktop({ total, dataUser, estado, cidade, numer
     pricePromo?: string;
     quantidade: number;
   }[],
+  freteSelected?: {
+    name: string;
+    price: number;
+  },
+  setFreteSelected: React.Dispatch<React.SetStateAction<{
+    name: string;
+    price: number
+  }>>,
   total?: number,
   dataUser?: DataUser
   estado: string, setEstado: React.Dispatch<React.SetStateAction<string>>, cidade: string, setCidade: React.Dispatch<React.SetStateAction<string>>, numero: string, setNumero: React.Dispatch<React.SetStateAction<string>>, endereco: string, setEndereco: React.Dispatch<React.SetStateAction<string>>,
@@ -303,15 +311,18 @@ export default function CheckoutDesktop({ total, dataUser, estado, cidade, numer
                 </div>
               </div>
               <div className="mt-4">
-                <h1 className="font-bold">Método de envio</h1>
+                <h1 className="text-sm text-muted-foreground">Método de envio</h1>
                 <div onClick={() => {
-                  setMetodoRecebimento('ENTREGA')
-                }} className={`${metodoRecebimento === "ENTREGA" ? 'border-primary bg-primary/5' : ''}  mt-4 flex space-x-2 border p-3  rounded-xl justify-between cursor-pointer items-center`}>
+                  setFreteSelected({
+                    name: 'PAC',
+                    price: 15.50
+                  })
+                }} className={`${freteSelected?.name === 'PAC' ? 'border-primary bg-primary/5' : ''}  mt-4 flex space-x-2 border p-3  rounded-xl justify-between cursor-pointer items-center`}>
                   <div className="flex space-x-2">
-                    <div className={` p-1 duration-300 transition-all bg-background rounded-full border-2 ${metodoRecebimento === 'ENTREGA' ? " border-primary " : "bg-background border-gray-300"
+                    <div className={` p-1 duration-300 transition-all bg-background rounded-full border-2 ${freteSelected?.name === 'PAC' ? " border-primary " : "bg-background border-gray-300"
                       }`}>
                       <div
-                        className={`w-2 h-2 duration-300 transition-all  rounded-full  ${metodoRecebimento === 'ENTREGA'
+                        className={`w-2 h-2 duration-300 transition-all  rounded-full  ${freteSelected?.name === 'PAC'
                           ? "bg-primary "
 
                           : "bg-background "
@@ -326,13 +337,16 @@ export default function CheckoutDesktop({ total, dataUser, estado, cidade, numer
                   <h1>R$ 15,50</h1>
                 </div>
                 <div onClick={() => {
-                  setMetodoRecebimento('RETIRADA')
-                }} className={`${metodoRecebimento === "RETIRADA" ? 'border-primary bg-primary/5' : ''}  mt-4 flex space-x-2 border p-3  rounded-xl justify-between cursor-pointer items-center`}>
+                  setFreteSelected({
+                    name: 'EXPRESSO',
+                    price: 32.10
+                  })
+                }} className={`${freteSelected?.name === "EXPRESSO" ? 'border-primary bg-primary/5' : ''}  mt-4 flex space-x-2 border p-3  rounded-xl justify-between cursor-pointer items-center`}>
                   <div className="flex space-x-2">
-                    <div className={` p-1 duration-300 transition-all bg-background rounded-full border-2 ${metodoRecebimento === 'ENTREGA' ? " border-primary " : "bg-background border-gray-300"
+                    <div className={` p-1 duration-300 transition-all bg-background rounded-full border-2 ${freteSelected?.name === "EXPRESSO" ? " border-primary " : "bg-background border-gray-300"
                       }`}>
                       <div
-                        className={`w-2 h-2 duration-300 transition-all  rounded-full  ${metodoRecebimento === 'ENTREGA'
+                        className={`w-2 h-2 duration-300 transition-all  rounded-full  ${freteSelected?.name === "EXPRESSO"
                           ? "bg-primary "
 
                           : "bg-background "
@@ -555,7 +569,7 @@ export default function CheckoutDesktop({ total, dataUser, estado, cidade, numer
           <div className="space-y-4 mt-5 rounded-xl ">
             {cart?.map(d => <div key={d.id} className=" hover:bg-zinc-100 rounded-lg dark:hover:bg-zinc-900 hover:rounded-lg bg-opacity-65  w-full justify-between flex">
               <div className="flex  items-center space-x-2">
-                <Image width={100} height={100} alt="Produto" src={d.image} className="w-28 h-28  rounded-lg" />
+                {d.image ? <Image width={100} height={100} alt="Produto" src={d.image} className="w-28 h-28  rounded-lg" /> : null}
                 <div className="flex flex-col justify-between">
                   <h1 className="">{d.name}</h1>
                   <div>
@@ -668,14 +682,16 @@ export default function CheckoutDesktop({ total, dataUser, estado, cidade, numer
       <div className=" rounded-xl dark:bg-zinc-900 bg-zinc-100 p-6">
         {cart?.map(d => <div key={d.id} className="p-3 border-b   dark:hover:bg-zinc-900  w-full justify-between flex">
           <div className="flex space-x-2 w-full">
-            {d.image ? <Image alt="" width={200} height={200} src={d.image} className="md:w-24 md:h-24 w-24 h-24  rounded-lg" /> : null}
+            {d.image ? <Image alt="" width={200} height={200} src={d.image} className="md:w-20 md:h-20 w-20 h-20  rounded-lg" /> : null}
             <div className="flex flex-col w-full justify-between">
-              <div>
-                <h1 className="text-md font-bold">{d.name}</h1>
-                <div className="flex items-center"><h1 className="font-extrabold text-primary text-sm">R$ {Number(d.price).toFixed(2)}</h1><p className="text-sm text-zinc-500">/cada</p></div>
-              </div>
-              <div>
-                <h1 className="text-sm ">Quantidade: {d.quantidade}</h1>
+              <div className="w-full flex justify-between items-center">
+                <div>
+                  <h1 className=" ">{d.name}</h1>
+                  <div className="flex items-center"><h1 className=" text-primary text-sm">R$ {Number(d.price).toFixed(2)}</h1></div>
+                </div>
+                <div>
+                  <h1>x {d.quantidade}</h1>
+                </div>
               </div>
               <div className="w-full flex  items-center space-x-4">
                 <h1 className="text-sm text-muted-foreground">Total:</h1>
@@ -695,7 +711,7 @@ export default function CheckoutDesktop({ total, dataUser, estado, cidade, numer
         </div>
         <div className="flex px-3  py-1 justify-between">
           <h1 className="">frete:</h1>
-          <h1 className="">R$ 15,50</h1>
+          <h1 className="">R$ {freteSelected ? freteSelected.price.toFixed(2) : 0}</h1>
         </div>
         <div className="flex  flex-col p-3 rounded-b-xl mt-2 justify-between">
           <p className="text-end  text-sm text-green-500">10% de desconto no PIX</p>
@@ -712,13 +728,13 @@ export default function CheckoutDesktop({ total, dataUser, estado, cidade, numer
         <AccordionCupom />
       </div>
       <button onClick={() => {
-        setCurrentStep(prev => prev + 1)
-        if (currentStep === 3) {
+        if (currentStep === 1) {
           handlePayment()
-          setFinaly(true)
+          return
         }
+        setCurrentStep(prev => prev + 1)
       }} className="w-full p-5 bg-primary rounded-xl mt-2 flex items-center justify-center hover:bg-primary/90">
-        <h1 className="text-white font-bold">{currentStep === 0 ? 'Finalizar compra' : currentStep === 3 ? 'Pagar agora' : 'Próximo'}</h1>
+        <h1 className="text-white font-bold">{currentStep === 0 ? "Próximo" : 'Pagar agora'}</h1>
       </button>
     </div> : null
     }

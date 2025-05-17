@@ -27,6 +27,9 @@ const config: Config = {
 			boxShadow: {
 				'custom-light': '0 4px 10px var(--tw-shadow-color)',
 			},
+			transitionDuration:{
+				"custom": '2000ms',
+			},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -79,8 +82,8 @@ const config: Config = {
   				}
   			},
 				'pulse-shadow': {
-          '0%, 100%': { boxShadow: '0 0 10px var(--tw-shadow-color)' }, // sombra inicial
-          '50%': { boxShadow: '0 0 20px var(--tw-shadow-color)' },       // sombra maior
+          '0%, 100%': { boxShadow: '0 0 0 0px hsl(var(--primary) / 0.3)' },
+          '50%': { boxShadow: '0 0 0 8px hsl(var(--primary) / 0)' },
         },
   			'accordion-up': {
   				from: {
@@ -94,7 +97,7 @@ const config: Config = {
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out',
-				'pulse-shadow': 'pulse-shadow 2s ease-in-out infinite',
+				'pulse-shadow': 'pulse-shadow 4s ease-in-out infinite',
   		}
   	}
   },

@@ -1,6 +1,6 @@
 'use client'
 import { useSession } from "next-auth/react"
-import { redirect } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { IoBackspace, IoTrashOutline } from "react-icons/io5"
 import StepperCustom from "./components/stepper"
@@ -62,8 +62,8 @@ export default function PaymentPage() {
   const [total, setTotal] = useState<number>(0)
   const [metodoPayment, setMetodoPayment] = useState<string>("CREDITO")
   const [metodoRecebimento, setMetodoRecebimento] = useState<string>("ENTREGA")
-  const steps = ["Dados", "Pagamento", "Resumo"];
-  const [finaly, setFinaly] = useState<boolean>(false)
+  const [freteSelected, setFreteSelected] = useState<{name:string,price:number}>()
+  const steps = ["Dados", "Pagamento"];
   const theme = useTheme()
   const [allReadyUser, setAllReadyUser] = useState<string>('WAITING')
   const [loadindEmail, setLoadindEmail] = useState<boolean>(false)
@@ -72,8 +72,7 @@ export default function PaymentPage() {
   const [cepFinded, setCepFinded] = useState<boolean>(false)
   const [dadosFaltando, setDadosFaltando] = useState<string[]>([])
 
-
-
+  const router = useRouter()
 
 
   const handlePayment = async () => {
@@ -87,9 +86,9 @@ export default function PaymentPage() {
       },
       body: JSON.stringify({
         "order": {
-          products: '',
+          products: cart,
           userId: "cad0b9d2-2279-470e-84fc-61be87cd3f52",
-          total: 38,
+          total: total,
           method: method,
           entrega: false
         },
@@ -103,7 +102,7 @@ export default function PaymentPage() {
     })
     if (res.ok) {
       resultPayment = await res.json()
-      setQrCode(resultPayment.point_of_interaction.transaction_data.qr_code)
+      router.push(`/paymentTest/${resultPayment.id}`)
     }
   }
 
@@ -117,10 +116,11 @@ export default function PaymentPage() {
         cart.reduce(
           (sum, item) => sum + (item.price) * item.quantidade,
           0
-        )
+        ) + (freteSelected?.price ? freteSelected.price : 0)
       )
+      console.log(total)
     }
-  },[cart])
+  },[cart,total,freteSelected])
 
   const {data: dataUser} = useQuery({
     queryKey: ['userData',session.data?.user?.email],
@@ -164,63 +164,20 @@ export default function PaymentPage() {
 
 
   return <div className="w-full dark:bg-black/60  flex flex-col pb-5 lg:px-12 md:px-16 2xl:px-28 justify-between pt-6 ">
-    {finaly ? <div className="flex  justify-center space-x-4  w-full">
-      <div className="bg-background p-6 rounded-xl space-y-4">
-        <div className="bg-black rounded-xl w-80 h-80">
-          {qrCode ? <QRCode
-            size={256}
-            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-            value={qrCode}
-            viewBox={`0 0 256 256`}
-          /> : null}
-        </div>
-        <button className="bg-primary w-full space-x-3 text-white p-3 rounded-xl flex justify-center items-center"><CopyIcon /><h1>Copiar copia e cola</h1></button>
-      </div>
-      <div className="w-full flex flex-col space-y-4">
-        <div className="bg-background p-6 space-x-4 rounded-xl h-max flex flex-col  justify-center items-center">
-          <div className="flex space-x-4 items-center justify-center">
-            <img src="/images/pix.svg" className="w-40" />
-            <p className="text-muted-foreground text-sm">Escaneie o QRcode ou copie a chave pix, e faça o pagamento com o banco de sua prefência</p>
-          </div>
-          <div className="flex w-full justify-center mt-6 items-center">
-            <h1 className="text-muted-foreground text-sm">pague <span className="text-primary font-bold text-3xl">R$ {total?.toFixed(2)}</span> </h1>
-          </div>
-        </div>
-        <div className="bg-background p-6 rounded-xl space-y-4">
-          <div className="flex space-x-4 items-center justify-center">
-            <Image src={'/images/logoMenthosBlack.png'} alt="Logo da loja" width={130} height={30} className="rounded-lg dark:w-0 w-32 dark:fixed dark:invisible  overflow-y-visible " />
-            <Image src={'/images/logoMenthos.png'} alt="Logo da loja" width={130} height={30} className="rounded-lg w-0 fixed invisible dark:w-32 dark:relative dark:visible  overflow-y-visible " />
-            <div className="">
-              <h1 className="text-muted-foreground text-sm text-center">Ao finalizar o pagamento, clique no botão para verificar se seu pagamento foi aprovado!</h1>
-            </div>
-          </div>
-        </div>
-        <button className="p-3 rounded-xl space-x-4 bg-primary flex justify-center items-center">
-          <h1 className="text-white">Verificar pagamento</h1>
-          <FaCircleDollarToSlot className="text-white" />
-        </button>
-      </div>
-
-    </div> : <div className="space-y-4 mt-6">
+    <div className="space-y-4 ">
       <div>
-        <h1 className="text-center font-bold">Pagina de pagamentos</h1>
-        <div className="px-4 w-full mt-2   flex justify-center items-center">
+        <div className="px-4 w-1/4 mt-2   flex justify-start items-center">
           <Stepper setCurrentStep={setCurrentStep} steps={steps} currentStep={currentStep} />
         </div>
       </div>
       <div className="md:w-full md:visible md:relative w-0 invisible fixed">
-        {cart ? <CheckoutDesktop dataUser={dataUser} total={total} setCidade={setCidade} setEndereco={setEndereco} setEstado={setEstado} setNumero={setNumero} endereco={endereco} numero={numero} estado={estado} cidade={cidade} setECPF={setECPF} setEEmail={setEEmail} setEPhone={setEPhone} setEName={setEName}  cepFinded={cepFinded} setCepFinded={setCepFinded} setEPassword={setEPassword} cart={cart} ePassword={ePassword} password={password} setPassword={setPassword} handlePayment={handlePayment} setFinaly={setFinaly} allReadyUser={allReadyUser} setAllReadyUser={setAllReadyUser} userLoged={userLoged} loadingEmail={loadindEmail} setLoadingEmail={setLoadindEmail} metodoPayment={metodoPayment} metodoRecebimento={metodoRecebimento} setPhone={setPhone} cpf={cpf} cep={cep}  phone={phone} email={email} setCurrentStep={setCurrentStep} currentStep={currentStep} name={name} setCPF={setCPF} setCep={setCep} setEmail={setEmail} setMetodoPayment={setMetodoPayment} setMetodoRecebimento={setMetodoRecebimento} setName={setName} setTotal={setTotal} /> : null}
+        {cart ? <CheckoutDesktop freteSelected={freteSelected} setFreteSelected={setFreteSelected} dataUser={dataUser} total={total} setCidade={setCidade} setEndereco={setEndereco} setEstado={setEstado} setNumero={setNumero} endereco={endereco} numero={numero} estado={estado} cidade={cidade} setECPF={setECPF} setEEmail={setEEmail} setEPhone={setEPhone} setEName={setEName}  cepFinded={cepFinded} setCepFinded={setCepFinded} setEPassword={setEPassword} cart={cart} ePassword={ePassword} password={password} setPassword={setPassword} handlePayment={handlePayment} allReadyUser={allReadyUser} setAllReadyUser={setAllReadyUser} userLoged={userLoged} loadingEmail={loadindEmail} setLoadingEmail={setLoadindEmail} metodoPayment={metodoPayment} metodoRecebimento={metodoRecebimento} setPhone={setPhone} cpf={cpf} cep={cep}  phone={phone} email={email} setCurrentStep={setCurrentStep} currentStep={currentStep} name={name} setCPF={setCPF} setCep={setCep} setEmail={setEmail} setMetodoPayment={setMetodoPayment} setMetodoRecebimento={setMetodoRecebimento} setName={setName} setTotal={setTotal} /> : null}
       </div>
       <div className="w-full visible relative md:w-0 md:invisible md:fixed">
-        <CheckoutMobile setFinaly={setFinaly} allReadyUser={allReadyUser} setAllReadyUser={setAllReadyUser} userLoged={userLoged} loadingEmail={loadindEmail} setLoadingEmail={setLoadindEmail} metodoPayment={metodoPayment} metodoRecebimento={metodoRecebimento} setPhone={setPhone} cpf={cpf} cep={cep} total={total} phone={phone} email={email} setCurrentStep={setCurrentStep} currentStep={currentStep} name={name} setCPF={setCPF} setCep={setCep} setEmail={setEmail} setMetodoPayment={setMetodoPayment} setMetodoRecebimento={setMetodoRecebimento} setName={setName} setTotal={setTotal} />
+         {/*<CheckoutMobile setFinaly={setFinaly} allReadyUser={allReadyUser} setAllReadyUser={setAllReadyUser} userLoged={userLoged} loadingEmail={loadindEmail} setLoadingEmail={setLoadindEmail} metodoPayment={metodoPayment} metodoRecebimento={metodoRecebimento} setPhone={setPhone} cpf={cpf} cep={cep} total={total} phone={phone} email={email} setCurrentStep={setCurrentStep} currentStep={currentStep} name={name} setCPF={setCPF} setCep={setCep} setEmail={setEmail} setMetodoPayment={setMetodoPayment} setMetodoRecebimento={setMetodoRecebimento} setName={setName} setTotal={setTotal} />*/}
       </div>
 
-    </div>}
-
-
-
-
-
+    </div>
   </div>
 }
 
