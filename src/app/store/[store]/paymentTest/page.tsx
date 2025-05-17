@@ -21,6 +21,9 @@ import QRCode from "react-qr-code"
 import { useCartStore } from "@/lib/cartStore/cardStore"
 import { useQuery } from "@tanstack/react-query"
 import { DataUser } from "@/types"
+import { toastSuccess } from "@/components/toast-toastify"
+import { toast } from "react-toastify"
+import { toastError } from "@/components/toast"
 
 
 const fetchUserData = async (storeId:string,email?: string) :Promise<DataUser> => {
@@ -176,6 +179,9 @@ export default function PaymentPage() {
       <div className="w-full visible relative md:w-0 md:invisible md:fixed">
          {/*<CheckoutMobile setFinaly={setFinaly} allReadyUser={allReadyUser} setAllReadyUser={setAllReadyUser} userLoged={userLoged} loadingEmail={loadindEmail} setLoadingEmail={setLoadindEmail} metodoPayment={metodoPayment} metodoRecebimento={metodoRecebimento} setPhone={setPhone} cpf={cpf} cep={cep} total={total} phone={phone} email={email} setCurrentStep={setCurrentStep} currentStep={currentStep} name={name} setCPF={setCPF} setCep={setCep} setEmail={setEmail} setMetodoPayment={setMetodoPayment} setMetodoRecebimento={setMetodoRecebimento} setName={setName} setTotal={setTotal} />*/}
       </div>
+      <button onClick={() => toastError('Error')}>
+        Sucesso
+      </button>
 
     </div>
   </div>

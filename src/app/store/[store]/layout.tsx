@@ -59,13 +59,11 @@ export default async function StoreLayout({
       </Head>
       <div className={`h-screen ${inter.className} overflow-x-hidden n w-screen`}>
         <ThemeProvider theme={store!.theme}>
-          <AppThemeProvider>
             <Provider>
               <QueryProvider>
                 {children}
               </QueryProvider>
             </Provider>
-          </AppThemeProvider>
         </ThemeProvider>
       </div>
     </div>

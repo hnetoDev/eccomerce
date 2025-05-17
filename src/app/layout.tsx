@@ -1,13 +1,20 @@
 // app/layout.tsx
 import { getStoreData } from '@/lib/getStore'
 import { ThemeProvider } from './context'
-import { Inter, Poppins, Open_Sans} from 'next/font/google';
+import { Inter, Poppins, Open_Sans } from 'next/font/google';
 import { Metadata } from 'next';
 import QueryProvider from './queryProvider';
 import Provider from './provider';
 import { Analytics } from "@vercel/analytics/react"
 import "@/app/globals.css"
-const inter = Poppins({ subsets: ["latin"], weight: "600"});
+import { ToastProvider } from '@/components/toast-provider-hot';
+import { ToastProviderToastify } from '@/components/toast-provider-toastify';
+
+
+
+
+
+const inter = Poppins({ subsets: ["latin"], weight: "600" });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,9 +28,13 @@ export default async function RootLayout({ children, searchParams }: any) {
     <html className=' h-screen overflow-x-hidden  w-screen' lang="pt-BR">
       <body className={`${inter.className} h-screen overflow-x-hidden  w-screen `}>
 
-        
+
+
+        <ToastProvider>
           {children}
-          <Analytics/>
+        </ToastProvider>
+
+        <Analytics />
 
       </body>
     </html>

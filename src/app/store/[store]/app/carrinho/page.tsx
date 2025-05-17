@@ -81,13 +81,15 @@ export default function CartCheckout() {
         <h1 className="text-zinc-400 text-wrap text-center">Carrinho Vazio</h1>
         <h1 className="text-zinc-400 text-wrap text-center"><span className="text-primary"><Link href={'/'}>Adicionar itens</Link></span> para aproveitar nossas promoções</h1>
       </div>
-    </div> : <div className="w-full  mt-2 flex justify-between space-x-8 ">
+    </div> : <div className="w-full  mt-4 flex justify-between space-x-12 ">
       <div className="w-[60%] h-max rounded-xl z-20">
         <div className="flex flex-col h-full justify-between md:py-0 py-4">
 
-          <div className=" pb-4 w-full md:space-y-4">{cart?.map(d => <div key={d.id} className="p-3 md:p-6 md:bg-background shadow-md rounded-xl  dark:hover:bg-zinc-900  w-full justify-between flex">
+          <div className=" pb-4 w-full md:space-y-8">{cart?.map(d => <div key={d.id} className=" rounded-xl  dark:hover:bg-zinc-900  w-full justify-between flex">
             <div className="flex space-x-2 w-full">
-              {d.image ? <Image alt="" width={200} height={200} src={d.image} className="md:w-32 md:h-32 w-24 h-24  rounded-lg" /> : null}
+              <div className="w-32">
+                {d.image ? <Image alt="" width={200} height={200} src={d.image} className="md:w-32 md:h-32 w-24 h-24  rounded-lg" /> : null}
+              </div>
               <div className="flex flex-col w-full justify-between">
                 <div>
                   <h1 className="text-md font-bold">{d.name}</h1>
@@ -99,7 +101,7 @@ export default function CartCheckout() {
                   <h1 className="font-bold">R${Number(Number(d.price) * d.quantidade).toFixed(2)}</h1>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <div className="flex border p-1 md:p-3 w-max rounded-lg space-x-1">
+                  <div className="flex border p-1 w-max rounded-lg space-x-1">
                     <div onClick={() => { decrementItem(d.id) }} className=" duration-200 transition-all hover:text-primary dark:hover:bg-opacity-65 flex text-lg hover:cursor-pointer font-bold justify-center items-center p-1 rounded-full w-6 h-6">
                       -
                     </div>
@@ -110,7 +112,7 @@ export default function CartCheckout() {
                       +
                     </div>
                   </div>
-                  <Trash onClick={() => { removeFromCart(d.id) }} className="text-end w-6 h-6 text-muted-foreground hover:cursor-pointer  " />
+                  <IoTrashOutline onClick={() => { removeFromCart(d.id) }} className="text-end w-6 h-6 text-muted-foreground hover:cursor-pointer  " />
                 </div>
 
               </div>

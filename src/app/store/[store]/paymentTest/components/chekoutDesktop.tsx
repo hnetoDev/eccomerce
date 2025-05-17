@@ -1,5 +1,3 @@
-
-
 'use client'
 import { signIn, signOut, useSession } from "next-auth/react"
 import { redirect } from "next/navigation"
@@ -22,6 +20,8 @@ import SignInCredentials from "@/lib/signInCredentials"
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { getInfoCEP } from "@/lib/cep/getCep"
 import { DataUser } from "@/types"
+import { toast, useToast } from "@/hooks/use-toast"
+import { toastError, toastLoading, toastSuccess } from "@/components/toast"
 
 
 export default function CheckoutDesktop({ freteSelected, setFreteSelected, total, dataUser, estado, cidade, numero, endereco, eName, eEmail, eCPF, ePhone, setEstado, setECPF, setEEmail, setEPhone, setEName, setCidade, setNumero, setEndereco, setCepFinded, cepFinded, setEPassword, ePassword, password, setPassword, handlePayment, setFinaly, setLoadingEmail, setAllReadyUser, allReadyUser, loadingEmail, userLoged, cart, name, cpf, phone, email, cep, setEmail, setCPF, setMetodoRecebimento, setCep, setName, setPhone, setTotal, metodoPayment, setMetodoPayment, metodoRecebimento, currentStep, setCurrentStep }: {
@@ -91,7 +91,18 @@ export default function CheckoutDesktop({ freteSelected, setFreteSelected, total
   }
 
   console.log(session.data?.user)
+  const {toast} = useToast()
 
+  const handleProx = ()=>{
+    if(currentStep === 0){
+      if(metodoRecebimento === 'ENTREGA'){
+        if(!cepFinded){
+          return toastError('Preencha o CEP para continuar')
+        }
+      }
+    }
+    setCurrentStep(currentStep + 1)
+  }
 
 
 
@@ -728,11 +739,8 @@ export default function CheckoutDesktop({ freteSelected, setFreteSelected, total
         <AccordionCupom />
       </div>
       <button onClick={() => {
-        if (currentStep === 1) {
-          handlePayment()
-          return
-        }
-        setCurrentStep(prev => prev + 1)
+        
+        handleProx()
       }} className="w-full p-5 bg-primary rounded-xl mt-2 flex items-center justify-center hover:bg-primary/90">
         <h1 className="text-white font-bold">{currentStep === 0 ? "Próximo" : 'Pagar agora'}</h1>
       </button>

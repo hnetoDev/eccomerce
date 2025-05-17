@@ -452,3 +452,17 @@
 .collection-bg {
   @apply absolute inset-0 bg-gradient-to-r from-amber-500/10 to-amber-700/10;
 }
+
+
+react-hot-toast-container {
+  width: 100vw !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+react-hot-toast {
+  width: 100vw !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
