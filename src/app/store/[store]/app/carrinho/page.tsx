@@ -22,7 +22,7 @@ import Link from "next/link";
 import { CiDeliveryTruck, CiLocationOn } from "react-icons/ci";
 import Image from "next/image";
 import LeveTambem from "../paymentTest/components/leveTambem";
-import AccordionCupom from "../../paymentTest/components/accordionCupom";
+import AccordionCupom from "../../checkout/components/accordionCupom";
 import AccordionCep from "../paymentTest/components/accordionCep";
 import '@/app/globals.css'
 import { useCartStore } from "@/lib/cartStore/cardStore";

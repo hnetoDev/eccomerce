@@ -19,6 +19,8 @@ import { IoTrashOutline } from "react-icons/io5";
 import { MdOutlineShoppingBag } from 'react-icons/md';
 import Image from "next/image";
 import { useCartStore } from "@/lib/cartStore/cardStore";
+import { HiOutlineShoppingBag } from "react-icons/hi";
+import { TbShoppingBag } from "react-icons/tb";
 export default function CartCustom({ addToCart, children, id, name, price, pricePromo, img, qtd }: { id?: string, name?: string, price?: string, pricePromo?: string, img?: string, qtd?: number, children?: React.ReactNode, addToCart: boolean }) {
   const [data, setData] = useState<{ name: string, image: string, id: string, price: string, qtd: number }[]>();
   const [empty, setEmpty] = useState<boolean>(true);
@@ -61,11 +63,11 @@ export default function CartCustom({ addToCart, children, id, name, price, price
       <div className="bg-primary w-6 h-6 flex items-center justify-center absolute rounded-full p-2 -right-2 -bottom-2">
         <p className="text-sm text-white font-bold">{cart ? `${cart.length}` : '0'}</p>
       </div>
-      <MdOutlineShoppingBag className="md:w-8 md:h-8 w-6 h-6 text-muted-foreground" />
+      <TbShoppingBag className="md:w-8 md:h-8 w-6 h-6 text-muted-foreground" />
     </div>}</SheetTrigger>
     <SheetContent side={'right'} className="w-full md:max-w-[35vw]" >
       <SheetHeader>
-        <SheetTitle><div className="flex items-center justify-center space-x-4"> <MdOutlineShoppingBag className="w-7 h-7" /><h1>Seu carrinho</h1></div></SheetTitle>
+        <SheetTitle><div className="flex items-center justify-center space-x-4"> <TbShoppingBag className="w-7 h-7" /><h1>Seu carrinho</h1></div></SheetTitle>
 
       </SheetHeader>
       <div className="flex flex-col h-full  justify-between py-4">

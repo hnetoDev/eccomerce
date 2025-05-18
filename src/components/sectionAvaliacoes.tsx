@@ -1,69 +1,116 @@
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
+'use client'
 
-export default function SectionAvaliacoes() {
-  const items = [
-    <div key={2} className="bg-primary/5 rounded-2xl flex flex-col justify-center items-center max-w-3xl mx-auto p-6 relative">
-      <div className="text-yellow-400 text-2xl mb-4">
-        {'★'.repeat(5)}
-      </div>
-      <p className="text-muted-foreground  italic text-base">
-        <span className="text-2xl text-primary mr-2">“</span>
-        Sou cliente há anos, desde o início, para ser sincera, e a qualidade de cada peça é inegável. O requinte e o bom gosto também são marca registrada! Agora, no site, eu me sinto ainda mais segura, posso comprar de olhos fechados, sempre, porque sei que estou cercada pelo que há de melhor!
-        <span className="text-2xl text-primary ml-2">”</span>
-      </p>
-      <p className="mt-4 font-semibold ">Eliete Vanucchi</p>
-    </div>,
-    <div key={2} className="bg-primary/5 rounded-2xl flex flex-col justify-center items-center max-w-3xl mx-auto p-6 relative">
-      <div className="text-yellow-400 text-2xl mb-4">
-        {'★'.repeat(5)}
-      </div>
-      <p className="text-muted-foreground  italic text-base">
-        <span className="text-2xl text-primary mr-2">“</span>
-        Sou cliente há anos, desde o início, para ser sincera, e a qualidade de cada peça é inegável. O requinte e o bom gosto também são marca registrada! Agora, no site, eu me sinto ainda mais segura, posso comprar de olhos fechados, sempre, porque sei que estou cercada pelo que há de melhor!
-        <span className="text-2xl text-primary ml-2">”</span>
-      </p>
-      <p className="mt-4 font-semibold ">Eliete Vanucchi</p>
-    </div>,
-    <div key={2} className="bg-primary/5 rounded-2xl flex flex-col justify-center items-center max-w-3xl mx-auto p-6 relative">
-      <div className="text-yellow-400 text-2xl mb-4">
-        {'★'.repeat(5)}
-      </div>
-      <p className="text-muted-foreground  italic text-base">
-        <span className="text-2xl text-primary mr-2">“</span>
-        Sou cliente há anos, desde o início, para ser sincera, e a qualidade de cada peça é inegável. O requinte e o bom gosto também são marca registrada! Agora, no site, eu me sinto ainda mais segura, posso comprar de olhos fechados, sempre, porque sei que estou cercada pelo que há de melhor!
-        <span className="text-2xl text-primary ml-2">”</span>
-      </p>
-      <p className="mt-4 font-semibold ">Eliete Vanucchi</p>
-    </div>,
+import React, { useEffect, useState, useCallback } from 'react'
+import useEmblaCarousel from 'embla-carousel-react'
+import Autoplay from 'embla-carousel-autoplay'
+import CardProd from './cardProd'
+import CardProdLanding from './cardProdLading'
+
+interface avaliacaoProps {
+  name: string
+  desc: string
+  nota: number
+}
+
+const SectionAvaliacoes = () => {
+  const [slidesToScroll, setSlidesToScroll] = useState(1)
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([])
+
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: true,
+      align: "start",
+      containScroll: 'trimSnaps',
+      slidesToScroll,
+    },
+  )
+
+  const updateSlidesToScroll = useCallback(() => {
+    const width = window.innerWidth
+    if (width >= 1024) setSlidesToScroll(4)
+    else if (width >= 768) setSlidesToScroll(2)
+    else setSlidesToScroll(1)
+  }, [])
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return
+    setSelectedIndex(emblaApi.selectedScrollSnap())
+  }, [emblaApi])
+
+  useEffect(() => {
+    updateSlidesToScroll()
+    window.addEventListener('resize', updateSlidesToScroll)
+    return () => window.removeEventListener('resize', updateSlidesToScroll)
+  }, [updateSlidesToScroll])
+
+  useEffect(() => {
+    if (!emblaApi) return
+    emblaApi.reInit({ slidesToScroll })
+    setScrollSnaps(emblaApi.scrollSnapList())
+    onSelect()
+    emblaApi.on('select', onSelect)
+    emblaApi.on('reInit', onSelect)
+  }, [emblaApi, slidesToScroll, onSelect])
+
+  const avaliacoes: avaliacaoProps[] = [
+    {
+      name: 'Elizangela Lopes',
+      desc: 'Ótimo produto, chegou rápido e bem embalado. Recomendo!',
+      nota: 5,
+    }
   ]
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
-      <Carousel
-        opts={{ align: "start", }}
-        className="w-full"
+    <div className="py-10 relative w-full">
+      <h2 className="text-2xl font-semibold text-center mb-6">Mais Vendidos</h2>
+
+      {/* Prev Button */}
+      <button
+        onClick={() => emblaApi?.scrollPrev()}
+        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-primary text-white w-8 h-8 flex justify-center items-center rounded-full"
       >
-        <CarouselContent className="-ml-2">
-          {items.map((item, index) => (
-            <CarouselItem
-              key={index}
-              className=" pl-2"
+        ‹
+      </button>
+
+      {/* Carousel */}
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex">
+          {avaliacoes.map((p) => (
+            <div
+              key={p.name}
+              className="flex-[0_0_50%] sm:flex-[0_0_50%] md:flex-[0_0_50%] lg:flex-[0_0_25%] px-2"
             >
-              <div className="">
-                {item}
+              <div className='bg-muted p-3'>
+                
               </div>
-            </CarouselItem>
+             
+            </div>
           ))}
-        </CarouselContent>
-        <CarouselPrevious className="font-bold" />
-        <CarouselNext className="font-bold" />
-      </Carousel>
+        </div>
+      </div>
+
+      {/* Next Button */}
+      <button
+        onClick={() => emblaApi?.scrollNext()}
+        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-primary text-white w-8 h-8 flex justify-center items-center rounded-full"
+      >
+        ›
+      </button>
+
+      {/* Dots */}
+      <div className="flex justify-center mt-6 gap-2">
+        {scrollSnaps.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => emblaApi?.scrollTo(index)}
+            className={`w-3 h-3 rounded-full duration-200 transition-all ${index === selectedIndex ? 'bg-primary w-6' : 'bg-gray-400'
+              }`}
+          />
+        ))}
+      </div>
     </div>
   )
 }
+
+export default SectionAvaliacoes;

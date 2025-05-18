@@ -23,11 +23,12 @@ import { useQuery } from "@tanstack/react-query"
 import { DataUser } from "@/types"
 import { toast } from "react-toastify"
 import { toastError, toastSuccess } from "@/components/toast"
+import SignUpCredentials from "@/lib/signUpCredentials"
 
 
-const fetchUserData = async (storeId:string,email?: string) :Promise<DataUser> => {
+const fetchUserData = async (storeId: string, email?: string): Promise<DataUser> => {
   if (!email) throw new Error('Erro ao buscar dados')
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/findOneSecure`,{
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/findOneSecure`, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json'
@@ -44,38 +45,78 @@ const fetchUserData = async (storeId:string,email?: string) :Promise<DataUser> =
 export default function PaymentPage() {
 
   const [currentStep, setCurrentStep] = useState(0);
+  const session = useSession()
+  const [userLoged, setUserLoged] = useState<boolean>(false)
+
+  // erros
   const [eName, setEName] = useState<boolean>(false)
   const [eEmail, setEEmail] = useState<boolean>(false)
   const [eCPF, setECPF] = useState<boolean>(false)
   const [ePhone, setEPhone] = useState<boolean>(false)
-  const [ePassword,setEPassword] = useState<boolean>(false)
-  const session = useSession()
-  const [userLoged, setUserLoged] = useState<boolean>(false)
+  const [ePassword, setEPassword] = useState<boolean>(false)
+
+
+
+  // dados
   const [cpf, setCPF] = useState<string>("")
   const [phone, setPhone] = useState<string>("")
   const [name, setName] = useState<string>("")
   const [email, setEmail] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
+  const [dataUser, setDataUser] = useState<DataUser | undefined>()
+  // dados de endereço
   const [cep, setCep] = useState<string>("")
   const [estado, setEstado] = useState<string>("")
   const [cidade, setCidade] = useState<string>("")
   const [bairro, setBairro] = useState<string>("")
   const [numero, setNumero] = useState<string>("")
   const [endereco, setEndereco] = useState<string>("")
-  const [total, setTotal] = useState<number>(0)
+
+  // controle de dados
   const [metodoPayment, setMetodoPayment] = useState<string>("CREDITO")
   const [metodoRecebimento, setMetodoRecebimento] = useState<string>("ENTREGA")
-  const [freteSelected, setFreteSelected] = useState<{name:string,price:number}>()
-  const steps = ["Dados", "Pagamento"];
-  const theme = useTheme()
-  const [allReadyUser, setAllReadyUser] = useState<string>('WAITING')
-  const [loadindEmail, setLoadindEmail] = useState<boolean>(false)
-  const [qrCode, setQrCode] = useState<string | undefined>(undefined)
-  const [password, setPassword] = useState<string>("")
+  const [freteSelected, setFreteSelected] = useState<{ name: string, price: number }>()
   const [cepFinded, setCepFinded] = useState<boolean>(false)
   const [dadosFaltando, setDadosFaltando] = useState<string[]>([])
   const [changeEndereco, setChangeEndereco] = useState<boolean>(false)
+  const [total, setTotal] = useState<number>(0)
+  const [allReadyUser, setAllReadyUser] = useState<string>('WAITING')
+  const [loadindEmail, setLoadindEmail] = useState<boolean>(false)
+
+
+  const steps = ["Dados", "Pagamento", "Confirmação"];
+  const theme = useTheme()
+
+  const [qrCode, setQrCode] = useState<string | undefined>(undefined)
+
   const router = useRouter()
 
+  const { data } = useQuery({
+    queryKey: ['userData', session.data?.user?.email],
+    enabled: !!session?.data?.user?.email,
+    queryFn: () => fetchUserData(theme.id, session?.data?.user?.email),
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    refetchInterval: false,
+    refetchOnMount: false,
+    staleTime: 1000 * 60 * 20,
+  })
+
+  useEffect(() => {
+    if (data) {
+      setDataUser(data)
+    }
+  }, [data])
+
+
+
+  const handleCredentials = async () => {
+    if (!name || !email || !phone || !cpf) {
+      toastError('Preencha todos os campos obrigatórios')
+      return
+    }
+    SignUpCredentials({ storeName: theme.name, name, cpf, email, phone, password })
+  }
 
   const handlePayment = async () => {
     let resultPayment = null;
@@ -109,11 +150,11 @@ export default function PaymentPage() {
   }
 
 
-  
+
   const cart = useCartStore((state) => state.cart)
-  
-  useEffect(()=>{
-    if(cart && cart.length > 0){
+
+  useEffect(() => {
+    if (cart && cart.length > 0) {
       setTotal(
         cart.reduce(
           (sum, item) => sum + (item.price) * item.quantidade,
@@ -122,62 +163,53 @@ export default function PaymentPage() {
       )
       console.log(total)
     }
-  },[cart,total,freteSelected])
-
-  const {data: dataUser} = useQuery({
-    queryKey: ['userData',session.data?.user?.email],
-    enabled: !!session?.data?.user?.email,
-    queryFn: () => fetchUserData(theme.id,session?.data?.user?.email),
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-    refetchInterval: false,
-    refetchOnMount: false,
-    staleTime: 1000 * 60 * 20,
-  })
+  }, [cart, total, freteSelected])
 
 
-  useEffect(()=>{
-    if(dataUser){
+
+
+  useEffect(() => {
+    if (dataUser) {
       console.log(dataUser)
       setName(dataUser.name)
       setEmail(dataUser.email)
 
-      if(!dataUser.phone){
-        setDadosFaltando(prev => [...prev,'phone'])
+      if (!dataUser.phone) {
+        setDadosFaltando(prev => [...prev, 'phone'])
       }
-      if(!dataUser.cpf){
-        setDadosFaltando(prev => [...prev,'cpf'])
+      if (!dataUser.cpf) {
+        setDadosFaltando(prev => [...prev, 'cpf'])
       }
-      if(!dataUser.password){
-        setDadosFaltando(prev => [...prev,'password'])
+      if (!dataUser.password) {
+        setDadosFaltando(prev => [...prev, 'password'])
       }
 
       setPhone(dataUser.phone ?? '')
       setCPF(dataUser.cpf ?? '')
-      setEndereco(dataUser.Endereco?.rua ?? '')
-      setBairro(dataUser.Endereco?.bairro ?? '')
-      setCidade(dataUser.Endereco?.cidade ?? '')
-      setEstado(dataUser.Endereco?.estado ?? '')
-      setNumero(dataUser.Endereco?.numero ? `${dataUser.Endereco.numero}` : '' )
-      setCep(dataUser.Endereco?.cep ?? '')
+      if (dataUser.Endereco) {
+        setEndereco(dataUser.Endereco?.rua ?? '')
+        setBairro(dataUser.Endereco?.bairro ?? '')
+        setCidade(dataUser.Endereco?.cidade ?? '')
+        setEstado(dataUser.Endereco?.estado ?? '')
+        setNumero(dataUser.Endereco?.numero ? `${dataUser.Endereco.numero}` : '')
+        setCep(dataUser.Endereco?.cep ?? '')
+      }
     }
-  },[dataUser])
-
-
+  }, [dataUser])
 
 
   return <div className="w-full dark:bg-black/60  flex flex-col pb-5 lg:px-12 md:px-16 2xl:px-28 justify-between pt-6 ">
     <div className="space-y-4 ">
       <div>
-        <div className="px-4 w-1/4 mt-2   flex justify-start items-center">
+        <div className="px-4 w-1/3 mt-2   flex justify-start items-center">
           <Stepper setCurrentStep={setCurrentStep} steps={steps} currentStep={currentStep} />
         </div>
       </div>
       <div className="md:w-full md:visible md:relative w-0 invisible fixed">
-        {cart ? <CheckoutDesktop freteSelected={freteSelected} changeEndereco={changeEndereco} setChangeEndereco={setChangeEndereco} setFreteSelected={setFreteSelected} dataUser={dataUser} total={total} setCidade={setCidade} setEndereco={setEndereco} setEstado={setEstado} setNumero={setNumero} endereco={endereco} numero={numero} estado={estado} cidade={cidade} setECPF={setECPF} setEEmail={setEEmail} setEPhone={setEPhone} setEName={setEName}  cepFinded={cepFinded} setCepFinded={setCepFinded} setEPassword={setEPassword} cart={cart} ePassword={ePassword} password={password} setPassword={setPassword} handlePayment={handlePayment} allReadyUser={allReadyUser} setAllReadyUser={setAllReadyUser} userLoged={userLoged} loadingEmail={loadindEmail} setLoadingEmail={setLoadindEmail} metodoPayment={metodoPayment} metodoRecebimento={metodoRecebimento} setPhone={setPhone} cpf={cpf} cep={cep}  phone={phone} email={email} setCurrentStep={setCurrentStep} currentStep={currentStep} name={name} setCPF={setCPF} setCep={setCep} setEmail={setEmail} setMetodoPayment={setMetodoPayment} setMetodoRecebimento={setMetodoRecebimento} setName={setName} setTotal={setTotal} /> : null}
+        {cart ? <CheckoutDesktop setDataUser={setDataUser} handleCredentials={handleCredentials} freteSelected={freteSelected} changeEndereco={changeEndereco} setChangeEndereco={setChangeEndereco} setFreteSelected={setFreteSelected} dataUser={dataUser} total={total} setCidade={setCidade} setEndereco={setEndereco} setEstado={setEstado} setNumero={setNumero} endereco={endereco} numero={numero} estado={estado} cidade={cidade} setECPF={setECPF} setEEmail={setEEmail} setEPhone={setEPhone} setEName={setEName} cepFinded={cepFinded} setCepFinded={setCepFinded} setEPassword={setEPassword} cart={cart} ePassword={ePassword} password={password} setPassword={setPassword} handlePayment={handlePayment} allReadyUser={allReadyUser} setAllReadyUser={setAllReadyUser} userLoged={userLoged} loadingEmail={loadindEmail} setLoadingEmail={setLoadindEmail} metodoPayment={metodoPayment} metodoRecebimento={metodoRecebimento} setPhone={setPhone} cpf={cpf} cep={cep} phone={phone} email={email} setCurrentStep={setCurrentStep} currentStep={currentStep} name={name} setCPF={setCPF} setCep={setCep} setEmail={setEmail} setMetodoPayment={setMetodoPayment} setMetodoRecebimento={setMetodoRecebimento} setName={setName} setTotal={setTotal} /> : null}
       </div>
       <div className="w-full visible relative md:w-0 md:invisible md:fixed">
-         {/*<CheckoutMobile setFinaly={setFinaly} allReadyUser={allReadyUser} setAllReadyUser={setAllReadyUser} userLoged={userLoged} loadingEmail={loadindEmail} setLoadingEmail={setLoadindEmail} metodoPayment={metodoPayment} metodoRecebimento={metodoRecebimento} setPhone={setPhone} cpf={cpf} cep={cep} total={total} phone={phone} email={email} setCurrentStep={setCurrentStep} currentStep={currentStep} name={name} setCPF={setCPF} setCep={setCep} setEmail={setEmail} setMetodoPayment={setMetodoPayment} setMetodoRecebimento={setMetodoRecebimento} setName={setName} setTotal={setTotal} />*/}
+        {/*<CheckoutMobile setFinaly={setFinaly} allReadyUser={allReadyUser} setAllReadyUser={setAllReadyUser} userLoged={userLoged} loadingEmail={loadindEmail} setLoadingEmail={setLoadindEmail} metodoPayment={metodoPayment} metodoRecebimento={metodoRecebimento} setPhone={setPhone} cpf={cpf} cep={cep} total={total} phone={phone} email={email} setCurrentStep={setCurrentStep} currentStep={currentStep} name={name} setCPF={setCPF} setCep={setCep} setEmail={setEmail} setMetodoPayment={setMetodoPayment} setMetodoRecebimento={setMetodoRecebimento} setName={setName} setTotal={setTotal} />*/}
       </div>
       <button onClick={() => toastSuccess('Login realizado com sucesso')}>
         Sucesso

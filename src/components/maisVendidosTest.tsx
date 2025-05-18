@@ -5,6 +5,7 @@ import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
 import CardProd from './cardProd'
 import CardProdLanding from './cardProdLading'
+import Link from 'next/link'
 
 interface Product {
   id: string
@@ -67,12 +68,15 @@ const ProductCarouselTeste: React.FC<ProductCarouselProps> = ({ collection }) =>
 
   return (
     <div className="py-10 relative w-full">
-      <h2 className="text-2xl font-semibold text-center mb-6">Mais Vendidos</h2>
+      <div className='w-full  flex justify-between items-center'>
+      <h2 className="text-2xl font-semibold text-center ">Mais Vendidos</h2>
+      <Link href={{pathname:`/`}} className=''>Ver mais &gt;</Link>
+      </div>
 
       {/* Prev Button */}
       <button
         onClick={() => emblaApi?.scrollPrev()}
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-primary text-white w-8 h-8 flex justify-center items-center rounded-full"
+        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-primary text-white w-8 h-8  justify-center items-center rounded-full"
       >
         ‹
       </button>
@@ -83,7 +87,7 @@ const ProductCarouselTeste: React.FC<ProductCarouselProps> = ({ collection }) =>
           {allProducts.map((p) => (
             <div
               key={p.id}
-              className="flex-[0_0_50%] sm:flex-[0_0_50%] md:flex-[0_0_50%] lg:flex-[0_0_25%] px-2"
+              className="flex-[0_0_50%] pb-4 sm:flex-[0_0_50%] md:flex-[0_0_50%] lg:flex-[0_0_25%] px-2"
             >
               <CardProd
                 id={p.id}
