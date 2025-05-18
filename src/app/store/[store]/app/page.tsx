@@ -27,6 +27,7 @@ import MaisVendidos from "@/components/maisVendidosTest"
 import ProductCarouselTest from "@/components/maisVendidosTest"
 import EmblaCarousel from "@/components/carousel-embla"
 import ProductCarouselTeste from "@/components/maisVendidosTest"
+import SectionCategoriesAnimated from "@/components/sectionCategoriesAnimated"
 
 const fetchStoreData = async (name: string): Promise<DataInit> => {
   alert('fetch 2 vez desnecessario')
@@ -77,57 +78,13 @@ export default function StoreHome() {
         }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }} /// Duração da animação
-        className="mt-12 w-full md:px-24 flex-col flex justify-center items-center"
+        className=" w-full flex-col flex justify-center items-center"
       >
-        <h1 className="font-bold text-center text-xl  md:text-4xl">Compre por categoria  💪💙</h1>
-        <div className="mt-8 px-8 overflow-x-auto hide-scrollbar w-full hide-scollbar">
-          <CardSectionCategoria />
+        <div className="px-20 overflow-x-auto hide-scrollbar w-full hide-scollbar">
+          <SectionCategoriesAnimated/>
         </div>
       </motion.div>
 
-
-      <motion.div initial={{
-        opacity: 0, // Começa invisível
-        y: 50,      // Começa abaixo
-      }}
-        whileInView={{
-          opacity: 1, // Quando a div entra na tela, ela se torna visível
-          y: 0,       // A div sobe para a posição original
-        }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }} // Duração da animação
-        className="mt-12 w-full px-8 md:px-16  flex-col flex justify-center items-center">
-        <div className="w-full flex justify-between items-center">
-          <h1 className=" text-2xl text-start  md:text-xl">Os mais vendidos</h1>
-          <Link href={'/'} className="flex space-x-4 items-center  group">
-            <h1 className="group-hover:text-primary">Ver mais</h1>
-          </Link>
-        </div>
-        <div className="mt-2 w-full overflow-x-auto overflow-y-hidden hide-scrollbar flex justify-start items-start">
-          {data?.Collection ? <CardSectionMais collection={data?.Collection} /> : null}
-
-        </div>
-      </motion.div>
-      <div className="mt-12 mb-12 w-full md:px-20 px-8 flex-col flex justify-center items-center">
-        <CardSectionInfo />
-      </div>
-      <div className="mt-12 mb-12 w-full  md:px-20 px-8 flex-col flex justify-center items-center">
-        <section className=" py-4 px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold  mb-4">
-            VEJA O QUE DIZEM NOSSOS CLIENTES
-          </h2>
-          <div className="h-1 w-8 mx-auto bg-gray-300 mb-6"></div>
-        </section>
-        <SectionAvaliacoes />
-      </div>
-
-
-
-
-      <div className="px-20">
-        <ProductCarousel collection={data?.Collection} />
-      </div>
-      
       <div className="md:px-20">
         {data?.Collection ? <ProductCarouselTeste collection={data?.Collection} /> : null}
       </div>

@@ -23,6 +23,11 @@ const categories = [
     name: 'Acessórios',
     description: 'Complementos que fazem a diferença',
     image: '/images/feminina.jpg'
+  },
+  {
+    name: 'Acessórios',
+    description: 'Complementos que fazem a diferença',
+    image: '/images/feminina.jpg'
   }
 ];
 

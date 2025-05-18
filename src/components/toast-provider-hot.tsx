@@ -12,7 +12,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         position="top-center"
         toastOptions={{
           className: "!w-full !rounded-none sm:w-auto sm:rounded-md mx-0 sm:mx-auto",
-          duration: 3000,
+          duration: 2000,
           style: {
             borderRadius: "8px",
             background: "#333",

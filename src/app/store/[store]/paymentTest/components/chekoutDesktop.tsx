@@ -24,7 +24,7 @@ import { toast, useToast } from "@/hooks/use-toast"
 import { toastError, toastLoading, toastSuccess } from "@/components/toast"
 
 
-export default function CheckoutDesktop({ freteSelected, setFreteSelected, total, dataUser, estado, cidade, numero, endereco, eName, eEmail, eCPF, ePhone, setEstado, setECPF, setEEmail, setEPhone, setEName, setCidade, setNumero, setEndereco, setCepFinded, cepFinded, setEPassword, ePassword, password, setPassword, handlePayment, setFinaly, setLoadingEmail, setAllReadyUser, allReadyUser, loadingEmail, userLoged, cart, name, cpf, phone, email, cep, setEmail, setCPF, setMetodoRecebimento, setCep, setName, setPhone, setTotal, metodoPayment, setMetodoPayment, metodoRecebimento, currentStep, setCurrentStep }: {
+export default function CheckoutDesktop({ changeEndereco, setChangeEndereco, freteSelected, setFreteSelected, total, dataUser, estado, cidade, numero, endereco, eName, eEmail, eCPF, ePhone, setEstado, setECPF, setEEmail, setEPhone, setEName, setCidade, setNumero, setEndereco, setCepFinded, cepFinded, setEPassword, ePassword, password, setPassword, handlePayment, setFinaly, setLoadingEmail, setAllReadyUser, allReadyUser, loadingEmail, userLoged, cart, name, cpf, phone, email, cep, setEmail, setCPF, setMetodoRecebimento, setCep, setName, setPhone, setTotal, metodoPayment, setMetodoPayment, metodoRecebimento, currentStep, setCurrentStep }: {
   cart?: {
     name: string;
     image?: string;
@@ -40,7 +40,8 @@ export default function CheckoutDesktop({ freteSelected, setFreteSelected, total
   setFreteSelected: React.Dispatch<React.SetStateAction<{
     name: string;
     price: number
-  }>>,
+  } | undefined>>,
+  changeEndereco: boolean, setChangeEndereco: React.Dispatch<React.SetStateAction<boolean>>,
   total?: number,
   dataUser?: DataUser
   estado: string, setEstado: React.Dispatch<React.SetStateAction<string>>, cidade: string, setCidade: React.Dispatch<React.SetStateAction<string>>, numero: string, setNumero: React.Dispatch<React.SetStateAction<string>>, endereco: string, setEndereco: React.Dispatch<React.SetStateAction<string>>,
@@ -91,15 +92,22 @@ export default function CheckoutDesktop({ freteSelected, setFreteSelected, total
   }
 
   console.log(session.data?.user)
-  const {toast} = useToast()
+  const { toast } = useToast()
 
-  const handleProx = ()=>{
-    if(currentStep === 0){
-      if(metodoRecebimento === 'ENTREGA'){
-        if(!cepFinded){
-          return toastError('Preencha o CEP para continuar')
+  const handleProx = () => {
+    if (currentStep === 0) {
+      if (!dataUser) {
+        return toastError('Preencha os dados pessoais para continuar')
+      }
+      if (metodoRecebimento === 'ENTREGA') {
+        if (!cepFinded) {
+          toastError('Preencha o CEP para continuar')
         }
       }
+
+    }
+    if(currentStep === 1) {
+      return handlePayment()
     }
     setCurrentStep(currentStep + 1)
   }
@@ -107,11 +115,11 @@ export default function CheckoutDesktop({ freteSelected, setFreteSelected, total
 
 
 
-  return <div className="w-full  flex justify-between space-x-8 pb-20 ">
+  return <div className="w-full  flex justify-between space-x-8   pb-20 ">
     <div className="w-[65%] rounded-xl z-20">
-      {currentStep === 0 ? <div className="visibleee rounded-xl">
-        {session.data?.user ? <div className=" p-6 rounded-2xl">
-          <h1 className="font-bold">1- Dados pessoais</h1>
+      {currentStep === 0 ? <div className="visibleee p-6 rounded-xl">
+        {session.data?.user ? <div className=" rounded-2xl">
+          <h1 className="font-bold text-lg">1- Dados pessoais</h1>
           <p className="text-sm text-muted-foreground mt-2">Entrou com</p>
           <div className=" space-x-4 mt-4 p-3 bg-primary/5 border border-primary rounded-xl flex justify-between items-center ">
             <div className="flex items-center space-x-4">
@@ -144,7 +152,7 @@ export default function CheckoutDesktop({ freteSelected, setFreteSelected, total
                   <div className="flex space-x-2 mt-2 items-center justify-center">
                     <div onClick={() => {
                       signIn('google', {
-                        redirect: false
+                        redirect: false,
                       })
                     }} className="rounded-xl  hover:bg-primary/5 hover:border-primary duration-300  cursor-pointer transition-all space-x-2 border p-3 justify-center items-center flex">
                       <Image alt="" width={50} height={50} src="/images/google.png" className="w-7 h-7" />
@@ -253,9 +261,9 @@ export default function CheckoutDesktop({ freteSelected, setFreteSelected, total
 
           </div>
         </>}
-        <div className="mt-8 p-6 rounded-2xl">
+        <div className="mt-16 rounded-2xl">
           <div className="flex justify-between items-center w-full">
-            <h1 className="font-bold">2- Dados de entrega</h1>
+            <h1 className="font-bold text-lg">2- Dados de entrega</h1>
             <CiDeliveryTruck className="w-6 h-6" />
           </div>
           <div className="flex mt-4 space-x-4">
@@ -280,6 +288,7 @@ export default function CheckoutDesktop({ freteSelected, setFreteSelected, total
 
             <div onClick={() => {
               setMetodoRecebimento('RETIRADA')
+              setFreteSelected(undefined)
             }} className={`${metodoRecebimento === "RETIRADA" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border p-4 rounded-xl cursor-pointer justify-center items-center`}>
               <div className={` p-1.5 duration-300 transition-all bg-background rounded-full border-2 ${metodoRecebimento === 'RETIRADA' ? " border-primary " : "bg-background border-gray-300"
                 }`}>
@@ -308,68 +317,74 @@ export default function CheckoutDesktop({ freteSelected, setFreteSelected, total
               <h1 className="text-sm text-primary text-center">Você deve buscar seu pedido na loja, na opção RETIRADA!</h1>
             </div>
           </div> : metodoRecebimento === 'ENTREGA' ? <div className="mt-4">
-            {session.data?.user ? <div>
-
+            {dataUser?.Endereco ? <div>
               <h1 className="text-sm mt-4 text-muted-foreground">Seu endereço</h1>
               <div className=" w-full  p-3 items-center flex justify-between">
                 <div className="flex items-center  justify-center space-x-2">
                   <CiLocationOn className="text-primary border-primary w-8 h-8" />
-                  <h1 className="text-sm ">Rua dasvxcv 45, Piritiba ba, proximo a adada ada</h1>
+                  <div>
+                    <h1 className="text-sm">{dataUser.Endereco.cidade}/{dataUser.Endereco.estado}</h1>
+                    <h1 className="text-sm ">{dataUser.Endereco.rua}, {dataUser.Endereco.bairro},{dataUser.Endereco.numero},{dataUser.Endereco.complemento}</h1>
+                  </div>
                 </div>
-                <div className="flex space-x-2">
-                  <p className="text-sm text-muted-foreground">mudar</p>
+                <button className="flex p-3 border rounded-xl space-x-2">
+                  <p className="text-sm text-muted-foreground">Alterar</p>
                   <Pencil className="text-primary border-primary w-5 h-5" />
-                </div>
+                </button>
               </div>
               <div className="mt-4">
                 <h1 className="text-sm text-muted-foreground">Método de envio</h1>
-                <div onClick={() => {
-                  setFreteSelected({
-                    name: 'PAC',
-                    price: 15.50
-                  })
-                }} className={`${freteSelected?.name === 'PAC' ? 'border-primary bg-primary/5' : ''}  mt-4 flex space-x-2 border p-3  rounded-xl justify-between cursor-pointer items-center`}>
-                  <div className="flex space-x-2">
-                    <div className={` p-1 duration-300 transition-all bg-background rounded-full border-2 ${freteSelected?.name === 'PAC' ? " border-primary " : "bg-background border-gray-300"
-                      }`}>
-                      <div
-                        className={`w-2 h-2 duration-300 transition-all  rounded-full  ${freteSelected?.name === 'PAC'
-                          ? "bg-primary "
+                <div>
+                  <div onClick={() => {
+                    setFreteSelected({
+                      name: 'PAC',
+                      price: 15.50
+                    })
+                  }} className={`${freteSelected?.name === 'PAC' ? 'border-primary bg-primary/5' : ''}  mt-4 flex space-x-2 border p-3  rounded-t-xl justify-between cursor-pointer items-center`}>
+                    <div className="flex space-x-2">
+                      <div className="flex items-center space-x-4">
+                        <div className={` p-1 duration-300 transition-all bg-background h-max rounded-full border-2 ${freteSelected?.name === "PAC" ? " border-primary " : "bg-background border-gray-300"
+                          }`}>
+                          <div
+                            className={`w-2 h-2 duration-300 transition-all  rounded-full  ${freteSelected?.name === "PAC"
+                              ? "bg-primary "
 
-                          : "bg-background "
-                          }`}
-                      ></div>
+                              : "bg-background "
+                              }`}
+                          ></div>
+                        </div>
+                        <div className="flex justify-center flex-col">
+                          <h1 className='text-sm'>Frete PAC <span className="text-muted-foreground"></span></h1>
+                          <p className="text-muted-foreground text-sm">Prazo 7 a 12 dias úteis</p>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex justify-center items-center space-x-2">
-
-                      <h1 className='text-sm'>Frete PAC <span className="text-muted-foreground"> - Prazo 10 a 20 dias úteis</span></h1>
-                    </div>
+                    <h1>R$ 15,50</h1>
                   </div>
-                  <h1>R$ 15,50</h1>
-                </div>
-                <div onClick={() => {
-                  setFreteSelected({
-                    name: 'EXPRESSO',
-                    price: 32.10
-                  })
-                }} className={`${freteSelected?.name === "EXPRESSO" ? 'border-primary bg-primary/5' : ''}  mt-4 flex space-x-2 border p-3  rounded-xl justify-between cursor-pointer items-center`}>
-                  <div className="flex space-x-2">
-                    <div className={` p-1 duration-300 transition-all bg-background rounded-full border-2 ${freteSelected?.name === "EXPRESSO" ? " border-primary " : "bg-background border-gray-300"
-                      }`}>
-                      <div
-                        className={`w-2 h-2 duration-300 transition-all  rounded-full  ${freteSelected?.name === "EXPRESSO"
-                          ? "bg-primary "
+                  <div onClick={() => {
+                    setFreteSelected({
+                      name: 'EXPRESSO',
+                      price: 32.10
+                    })
+                  }} className={`${freteSelected?.name === "EXPRESSO" ? 'border-primary bg-primary/5' : ''} flex space-x-2 border p-3  rounded-b-xl justify-between cursor-pointer items-center`}>
+                    <div className="flex items-center space-x-4">
+                      <div className={` p-1 duration-300 transition-all bg-background h-max rounded-full border-2 ${freteSelected?.name === "EXPRESSO" ? " border-primary " : "bg-background border-gray-300"
+                        }`}>
+                        <div
+                          className={`w-2 h-2 duration-300 transition-all  rounded-full  ${freteSelected?.name === "EXPRESSO"
+                            ? "bg-primary "
 
-                          : "bg-background "
-                          }`}
-                      ></div>
+                            : "bg-background "
+                            }`}
+                        ></div>
+                      </div>
+                      <div className="flex justify-center flex-col">
+                        <h1 className='text-sm'>Frete Expresso <span className="text-muted-foreground"></span></h1>
+                        <p className="text-muted-foreground text-sm">Prazo 7 a 12 dias úteis</p>
+                      </div>
                     </div>
-                    <div className="flex justify-center items-center space-x-2">
-
-                      <h1 className='text-sm'>Frete Expresso <span className="text-muted-foreground"> - Prazo 7 a 12 dias úteis</span></h1>
-                    </div>
+                    <h1>R$ 32,10</h1>
                   </div>
-                  <h1>R$ 32,10</h1>
                 </div>
               </div>
             </div> : <div className="flex flex-col">
@@ -687,13 +702,13 @@ export default function CheckoutDesktop({ freteSelected, setFreteSelected, total
 
       </div> : null}
     </div>
-    {currentStep < 4 ? <div className="w-[35%] bg-background shadow-custom-light shadow-primary/30 duration-200 transition-all  p-3 h-max  rounded-xl">
-
-
-      <div className=" rounded-xl dark:bg-zinc-900 bg-zinc-100 p-6">
-        {cart?.map(d => <div key={d.id} className="p-3 border-b   dark:hover:bg-zinc-900  w-full justify-between flex">
+    {currentStep < 4 ? <div className="w-[35%] bg-background shadow-custom-light shadow-primary/30 duration-200 transition-all p-3 h-max  rounded-xl">
+      <div className="flex  pb-2 flex-col">
+        {cart?.map((d, i) => <div key={d.id} className={`  p-3 hover:bg-primary/5 rounded-xl  w-full justify-between flex`}>
           <div className="flex space-x-2 w-full">
-            {d.image ? <Image alt="" width={200} height={200} src={d.image} className="md:w-20 md:h-20 w-20 h-20  rounded-lg" /> : null}
+            <div className="w-24">
+              {d.image ? <Image alt="" width={200} height={200} src={d.image} className="md:w-20 md:h-20 w-20 h-20  rounded-lg" /> : null}
+            </div>
             <div className="flex flex-col w-full justify-between">
               <div className="w-full flex justify-between items-center">
                 <div>
@@ -701,7 +716,7 @@ export default function CheckoutDesktop({ freteSelected, setFreteSelected, total
                   <div className="flex items-center"><h1 className=" text-primary text-sm">R$ {Number(d.price).toFixed(2)}</h1></div>
                 </div>
                 <div>
-                  <h1>x {d.quantidade}</h1>
+                  <h1 className="text-muted-foreground text-sm">x {d.quantidade}</h1>
                 </div>
               </div>
               <div className="w-full flex  items-center space-x-4">
@@ -716,30 +731,30 @@ export default function CheckoutDesktop({ freteSelected, setFreteSelected, total
 
         </div>)}
 
+
+      </div>
+      <div className="bg-muted rounded-xl p-3">
         <div className="flex px-3 mt-4 justify-between">
-          <h1 className="">subTotal:</h1>
-          <h1 className="">R$ {total?.toFixed(2)}</h1>
+          <h1 className="text-sm text-muted-foreground">subTotal:</h1>
+          <h1 className="text-sm">R$ {total?.toFixed(2)}</h1>
         </div>
-        <div className="flex px-3  py-1 justify-between">
-          <h1 className="">frete:</h1>
-          <h1 className="">R$ {freteSelected ? freteSelected.price.toFixed(2) : 0}</h1>
+        <div className="flex px-3   py-1 justify-between">
+          <h1 className="text-sm text-muted-foreground">frete:</h1>
+          <h1 className="text-sm">R$ {freteSelected ? freteSelected.price.toFixed(2) : 0}</h1>
         </div>
-        <div className="flex  flex-col p-3 rounded-b-xl mt-2 justify-between">
+        <div className="flex border-t flex-col p-3 rounded-b-xl  justify-between">
           <p className="text-end  text-sm text-green-500">10% de desconto no PIX</p>
           <div className="w-full flex justify-between">
             <h1 className="font-extrabold text-xl">Total</h1>
             <h1 className="space-x-4 text-xl "><span className="text-muted-foreground text-sm line-through">R$ {total?.toFixed(2)}</span><span className="font-bold">R$ {total ? (total - (total * 10 / 100)).toFixed(2) : 0}</span></h1>
           </div>
         </div>
-
-
-
       </div>
       <div className="px-3">
         <AccordionCupom />
       </div>
       <button onClick={() => {
-        
+
         handleProx()
       }} className="w-full p-5 bg-primary rounded-xl mt-2 flex items-center justify-center hover:bg-primary/90">
         <h1 className="text-white font-bold">{currentStep === 0 ? "Próximo" : 'Pagar agora'}</h1>

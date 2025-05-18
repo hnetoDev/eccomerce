@@ -104,8 +104,8 @@ export default function LayoutApp({ children }: { children: React.ReactNode }) {
         <SheetCustom />
       </div>
       <Link href={{ pathname: '/' }}>
-        <Image src={theme.logoUrl} alt="Logo da loja" width={130} height={30} className="rounded-lg dark:w-0 w-32 dark:fixed dark:invisible  overflow-y-visible " />
-        <Image src={theme.logoUrl} alt="Logo da loja" width={130} height={30} className="rounded-lg w-0 fixed invisible dark:w-32 dark:relative dark:visible  overflow-y-visible " />
+        <Image src={theme.logoUrlLight} alt="Logo da loja" width={130} height={30} className="rounded-lg dark:w-0 w-32 dark:fixed dark:invisible  overflow-y-visible " />
+        <Image src={theme.logoUrlLight} alt="Logo da loja" width={130} height={30} className="rounded-lg w-0 fixed invisible dark:w-32 dark:relative dark:visible  overflow-y-visible " />
       </Link>
       <div className="flex justify-end w-2/4 space-x-4 items-center">
         <SearchDrawer />
@@ -118,8 +118,8 @@ export default function LayoutApp({ children }: { children: React.ReactNode }) {
 
         <div className="w-2/4 items-center flex space-x-8">
           <Link href={{ pathname: '/' }}>
-            <Image src={'/images/logoMenthosBlack.png'} alt="Logo da loja" width={130} height={30} className="rounded-lg dark:w-0 w-28 dark:fixed dark:invisible  overflow-y-visible " />
-            <Image src={'/images/logoMenthos.png'} alt="Logo da loja" width={130} height={30} className="rounded-lg w-0 fixed invisible dark:w-28 dark:relative dark:visible  overflow-y-visible " />
+            <Image src={theme.logoUrlLight} alt="Logo da loja" width={130} height={30} className="rounded-lg dark:w-0 w-28 h-20 dark:fixed dark:invisible  overflow-y-visible " />
+            <Image src={theme.logoUrlLight} alt="Logo da loja" width={130} height={30} className="rounded-lg w-0 fixed invisible dark:w-28 h-20 dark:relative dark:visible  overflow-y-visible " />
           </Link>
           <div className="h-max w-max">
             <ThemeTabs />

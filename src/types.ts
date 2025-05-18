@@ -35,6 +35,8 @@ export type Theme = {
   id:string
   name:string
   storeId:string
+  logoUrlDark: string
+  logoUrlLight: string
   light:{
     primaryColor: string
     secondaryColor: string
@@ -47,7 +49,6 @@ export type Theme = {
     backgroundColor: string
     foregroundColor: string
   }
-  logoUrl: string
 }
 
 

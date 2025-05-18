@@ -46,16 +46,12 @@ export default async function StoreLayout({
       --secondary: ${store?.theme.dark.secondaryColor};
     }
   `;
-  const globalStyles = `
-    <style id="dynamic-theme">${cssVariables}</style>
-  `
-  console.log(cssVariables)
 
   return (
     <div className="h-screen overflow-x-hidden  w-screen" lang="pt-BR">
       <style id="dynamic-theme">{cssVariables}</style>
       <Head>
-        <link rel="preload" as="image" href={store.theme.logoUrl} />
+        <link rel="preload" as="image" href={store.theme.logoUrlLight} />
       </Head>
       <div className={`h-screen ${inter.className} overflow-x-hidden n w-screen`}>
         <ThemeProvider theme={store!.theme}>

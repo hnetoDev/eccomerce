@@ -39,8 +39,8 @@ export default function CardProd({ id, name, price, pricePromo, img }: { id: str
     </div>
     <div>
       <div className="flex items-center mt-2">
-        <h1 className="text-primary text-xl font-bold">R${pricePromo ?? price}</h1>
-        {pricePromo ? <h1 className="text-muted-foreground text-sm line-through ml-2">R${price}</h1> : null}
+        <h1 className="text-primary text-xl font-bold">R${pricePromo ? Number(pricePromo).toFixed(2) : Number(price).toFixed(2)}</h1>
+        {pricePromo ? <h1 className="text-muted-foreground text-sm line-through ml-2">R${Number(price).toFixed(2)}</h1> : null}
       </div>
       <p className="text-sm text-muted-foreground">3x de R$33,00 s/ juros</p>
     </div>

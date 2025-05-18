@@ -21,9 +21,8 @@ import QRCode from "react-qr-code"
 import { useCartStore } from "@/lib/cartStore/cardStore"
 import { useQuery } from "@tanstack/react-query"
 import { DataUser } from "@/types"
-import { toastSuccess } from "@/components/toast-toastify"
 import { toast } from "react-toastify"
-import { toastError } from "@/components/toast"
+import { toastError, toastSuccess } from "@/components/toast"
 
 
 const fetchUserData = async (storeId:string,email?: string) :Promise<DataUser> => {
@@ -74,7 +73,7 @@ export default function PaymentPage() {
   const [password, setPassword] = useState<string>("")
   const [cepFinded, setCepFinded] = useState<boolean>(false)
   const [dadosFaltando, setDadosFaltando] = useState<string[]>([])
-
+  const [changeEndereco, setChangeEndereco] = useState<boolean>(false)
   const router = useRouter()
 
 
@@ -166,6 +165,7 @@ export default function PaymentPage() {
 
 
 
+
   return <div className="w-full dark:bg-black/60  flex flex-col pb-5 lg:px-12 md:px-16 2xl:px-28 justify-between pt-6 ">
     <div className="space-y-4 ">
       <div>
@@ -174,12 +174,12 @@ export default function PaymentPage() {
         </div>
       </div>
       <div className="md:w-full md:visible md:relative w-0 invisible fixed">
-        {cart ? <CheckoutDesktop freteSelected={freteSelected} setFreteSelected={setFreteSelected} dataUser={dataUser} total={total} setCidade={setCidade} setEndereco={setEndereco} setEstado={setEstado} setNumero={setNumero} endereco={endereco} numero={numero} estado={estado} cidade={cidade} setECPF={setECPF} setEEmail={setEEmail} setEPhone={setEPhone} setEName={setEName}  cepFinded={cepFinded} setCepFinded={setCepFinded} setEPassword={setEPassword} cart={cart} ePassword={ePassword} password={password} setPassword={setPassword} handlePayment={handlePayment} allReadyUser={allReadyUser} setAllReadyUser={setAllReadyUser} userLoged={userLoged} loadingEmail={loadindEmail} setLoadingEmail={setLoadindEmail} metodoPayment={metodoPayment} metodoRecebimento={metodoRecebimento} setPhone={setPhone} cpf={cpf} cep={cep}  phone={phone} email={email} setCurrentStep={setCurrentStep} currentStep={currentStep} name={name} setCPF={setCPF} setCep={setCep} setEmail={setEmail} setMetodoPayment={setMetodoPayment} setMetodoRecebimento={setMetodoRecebimento} setName={setName} setTotal={setTotal} /> : null}
+        {cart ? <CheckoutDesktop freteSelected={freteSelected} changeEndereco={changeEndereco} setChangeEndereco={setChangeEndereco} setFreteSelected={setFreteSelected} dataUser={dataUser} total={total} setCidade={setCidade} setEndereco={setEndereco} setEstado={setEstado} setNumero={setNumero} endereco={endereco} numero={numero} estado={estado} cidade={cidade} setECPF={setECPF} setEEmail={setEEmail} setEPhone={setEPhone} setEName={setEName}  cepFinded={cepFinded} setCepFinded={setCepFinded} setEPassword={setEPassword} cart={cart} ePassword={ePassword} password={password} setPassword={setPassword} handlePayment={handlePayment} allReadyUser={allReadyUser} setAllReadyUser={setAllReadyUser} userLoged={userLoged} loadingEmail={loadindEmail} setLoadingEmail={setLoadindEmail} metodoPayment={metodoPayment} metodoRecebimento={metodoRecebimento} setPhone={setPhone} cpf={cpf} cep={cep}  phone={phone} email={email} setCurrentStep={setCurrentStep} currentStep={currentStep} name={name} setCPF={setCPF} setCep={setCep} setEmail={setEmail} setMetodoPayment={setMetodoPayment} setMetodoRecebimento={setMetodoRecebimento} setName={setName} setTotal={setTotal} /> : null}
       </div>
       <div className="w-full visible relative md:w-0 md:invisible md:fixed">
          {/*<CheckoutMobile setFinaly={setFinaly} allReadyUser={allReadyUser} setAllReadyUser={setAllReadyUser} userLoged={userLoged} loadingEmail={loadindEmail} setLoadingEmail={setLoadindEmail} metodoPayment={metodoPayment} metodoRecebimento={metodoRecebimento} setPhone={setPhone} cpf={cpf} cep={cep} total={total} phone={phone} email={email} setCurrentStep={setCurrentStep} currentStep={currentStep} name={name} setCPF={setCPF} setCep={setCep} setEmail={setEmail} setMetodoPayment={setMetodoPayment} setMetodoRecebimento={setMetodoRecebimento} setName={setName} setTotal={setTotal} />*/}
       </div>
-      <button onClick={() => toastError('Error')}>
+      <button onClick={() => toastSuccess('Login realizado com sucesso')}>
         Sucesso
       </button>
 
