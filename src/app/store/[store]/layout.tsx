@@ -34,7 +34,7 @@ export default async function StoreLayout({
       <h1 className="text-2xl font-bold">Loja não encontrada</h1>
     </div>
   }
-  console.log('store', store)
+
 
   const cssVariables = `
     :root {

@@ -30,7 +30,6 @@ import ProductCarouselTeste from "@/components/maisVendidosTest"
 import SectionCategoriesAnimated from "@/components/sectionCategoriesAnimated"
 
 const fetchStoreData = async (name: string): Promise<DataInit> => {
-  alert('fetch 2 vez desnecessario')
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/store/${name}`)
   if (!res.ok) throw new Error('Erro ao buscar dados')
   return res.json()

@@ -13,8 +13,8 @@ export default function Stepper({currentStep,setCurrentStep,steps}:{currentStep:
 
         {/* Linha de progresso (azul) */}
         <div
-          className="absolute top-6 left-6 h-0.5 rounded-full duration-300 md:w-[78%]  max-w-[85%] bg-primary z-10 transition-all"
-          style={{ width: `${(currentStep / (steps.length - 1)) * 88}%` }}
+          className="absolute top-6 left-6 h-0.5 rounded-full duration-300 md:max-w-[78%]  max-w-[85%] bg-primary z-10 transition-all"
+          style={{ width: `${(currentStep / (steps.length - 1)) * 81}%` }}
         ></div>
 
         {/* Bolinhas */}

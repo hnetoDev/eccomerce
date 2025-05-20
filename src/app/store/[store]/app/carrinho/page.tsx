@@ -62,7 +62,7 @@ export default function CartCheckout() {
     if (cart.length < 1) {
       return
     }
-    nav.push('../../paymentTest')
+    nav.push('../../checkout')
 
   }
 

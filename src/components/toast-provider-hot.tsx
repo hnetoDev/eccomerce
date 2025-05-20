@@ -11,7 +11,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         containerClassName="!w-screen !left-0 !right-0 !mx-0 px-0"
         position="top-center"
         toastOptions={{
-          className: "!w-full !rounded-none sm:w-auto sm:rounded-md mx-0 sm:mx-auto",
+          className: " bg-green-500 !rounded-none sm:w-auto sm:rounded-md mx-0 sm:mx-auto",
           duration: 2000,
           style: {
             borderRadius: "8px",
@@ -32,7 +32,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             },
           },
           error: {
-            className: 'w-full',
+            className: 'w-screen',
             style: {
               background: "#ef4444",
               color: "#fff",

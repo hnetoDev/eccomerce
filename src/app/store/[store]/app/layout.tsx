@@ -24,7 +24,6 @@ import ThemeTabs from "@/components/tabTheme";
 import InputSearch from "@/components/inputSearch";
 
 const fetchStoreData = async (name: string): Promise<DataInit> => {
-  alert('fetch1vez')
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/store/${name}`)
   if (!res.ok) throw new Error('Erro ao buscar dados')
   return res.json()
@@ -33,7 +32,7 @@ const fetchStoreData = async (name: string): Promise<DataInit> => {
 export default function LayoutApp({ children }: { children: React.ReactNode }) {
 
   const theme = useTheme()
-  const session = useSession()
+
 
   const { data } = useQuery({
     queryKey: ['store'],
@@ -134,7 +133,7 @@ export default function LayoutApp({ children }: { children: React.ReactNode }) {
           <SearchIcon className="text-primary" />
         </div>*/}
         <div className="flex justify-end w-2/4 space-x-4 items-center">
-          {session.data?.user ? <PopoverUser /> : <Link href={`/authenticator`} className="flex cursor-pointer rounded-3xl items-center justify-center space-x-2">
+          {<Link href={`/authenticator`} className="flex cursor-pointer rounded-3xl items-center justify-center space-x-2">
             <UserCircle className="w-8 h-8 text-muted-foreground" />
             <div className="flex flex-col ">
               <h1 className="text-sm text-muted-foreground ">Entre</h1>
